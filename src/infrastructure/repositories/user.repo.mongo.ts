@@ -40,4 +40,8 @@ export class MongoUserRepository implements UserRepository {
     const doc = await User.findByIdAndUpdate(user._id, user, { new: true });
     return doc;
   }
+
+  async markVerified(userId: string): Promise<void> {
+    await User.updateOne({ _id: userId }, { isVerified: true });
+  }
 }

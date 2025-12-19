@@ -6,4 +6,5 @@ export interface UserRepository {
   findByEmail(email: string): Promise<UserResponse | null>;
   findAll(): Promise<UserResponse[] | []>;
   updateUser(user: updateUser): Promise<null | UserResponse>;
+  markVerified(userId: string): Promise<void>;
 }
