@@ -1,16 +1,17 @@
 import { OtpRepository } from "../../../domain/repositories/IOtp.repo";
 import { UserRepository } from "../../../domain/repositories/IUser.repo";
-import { IEmailService } from "../../../domain/services/email.interface.service";
+// import { IEmailService } from "../../../domain/services/email.interface.service";
 import { IOtpService } from "../../../domain/services/otp.interface.service";
 import { IPasswordService } from "../../../domain/services/password.interface.service";
 import { createUser } from "../../../domain/types/IUser.types";
+import { EmailQueueService } from "../../queue/EmailQueueService";
 
 export class RegisterUserCase {
   constructor(
     private userRepo: UserRepository,
     private passwordService: IPasswordService,
     private otpService: IOtpService,
-    private emailService: IEmailService,
+    private emailService: EmailQueueService,
     private otpRepo: OtpRepository
   ) {}
 
@@ -37,7 +38,7 @@ export class RegisterUserCase {
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
-    await this.emailService.sendOtp(newUser.email, otp);
+    await this.emailService.sendOtpEmail(newUser.email, Number(otp));
 
     return { message: "OTP sent" };
   }

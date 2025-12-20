@@ -3,7 +3,6 @@ import { IUser } from "../../../../domain/types/IUser.types";
 import UserRoles from "../../../../domain/constants/UserRole";
 
 const userSchema = new Schema<IUser>({
-  id: { type: String, required: true },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   phone: { type: String, required: true, unique: true },
