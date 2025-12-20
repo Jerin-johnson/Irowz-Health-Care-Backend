@@ -1,11 +1,12 @@
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
+import { ITokenService } from "../../domain/services/jwt.interface.service";
 
 interface TokenPayload {
   userId: string;
   role: string;
 }
 
-export class JwtTokenService {
+export class JwtTokenService implements ITokenService {
   private readonly ACCESS_SECRET: Secret;
   private readonly REFRESH_SECRET: Secret;
 

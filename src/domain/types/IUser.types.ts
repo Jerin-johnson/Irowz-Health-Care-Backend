@@ -15,9 +15,18 @@ export interface IUser {
 export type updateUser = Partial<IUser>;
 export type createUser = Omit<
   IUser,
-  "_id" | "createdAt" | "updatedAt" | "updateAt"
+  "_id" | "createdAt" | "updatedAt" | "updateAt" | "profileImage"
 >;
 export type UserResponse = Pick<
   IUser,
-  "_id" | "name" | "email" | "role" | "profileImage" | "isVerified"
+  | "_id"
+  | "name"
+  | "email"
+  | "role"
+  | "profileImage"
+  | "isVerified"
+  | "isBlocked"
+  | "password"
 >;
+
+export type LoginUser = Pick<IUser, "email" | "password">;
