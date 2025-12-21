@@ -1,7 +1,5 @@
-import { Otp } from "../types/IOtp.types";
-
 export interface OtpRepository {
-  save(otp: Otp): Promise<void>;
-  findByUserId(userId: string): Promise<null | Otp>;
+  save(userId: string, otpHash: string, ttlSeconds: number): Promise<void>;
+  findByUserId(userId: string): Promise<{ otpHash: string } | null>;
   deleteByUserId(userId: string): Promise<void>;
 }

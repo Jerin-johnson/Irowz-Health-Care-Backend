@@ -5,8 +5,8 @@ export const validate =
   (schema: ZodSchema) => (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse({
       body: req.body,
-      query: req.query,
-      params: req.params,
+      // query: req.query,
+      // params: req.params,
     });
 
     if (!result.success) {
@@ -19,8 +19,8 @@ export const validate =
     const data = result.data as any;
 
     req.body = data.body ?? req.body;
-    req.query = data.query ?? req.query;
-    req.params = data.params ?? req.params;
+    // req.query = data.query ?? req.query;
+    // req.params = data.params ?? req.params;
 
     next();
   };

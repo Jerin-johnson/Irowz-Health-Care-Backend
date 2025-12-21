@@ -1,5 +1,7 @@
 import { IEmailService } from "../../domain/services/email.interface.service";
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
 
 export class EmailNotificationService implements IEmailService {
   private transporter;
@@ -17,6 +19,7 @@ export class EmailNotificationService implements IEmailService {
   }
 
   async sendOtp(email: string, otp: string): Promise<void> {
+    console.log("email has sended", email, otp);
     await this.transporter.sendMail({
       from: `"My Healthcare SaaS" <${process.env.SMTP_USER}>`,
       to: email,

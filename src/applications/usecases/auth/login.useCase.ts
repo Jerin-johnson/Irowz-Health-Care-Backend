@@ -10,11 +10,11 @@ export class LoginUseCase {
     private TokenService: ITokenService
   ) {}
 
-  async excute(input: LoginUser) {
+  async execute(input: LoginUser) {
     const user = await this.UserRepo.findByEmail(input.email);
 
-    if (!user || !user.isVerified || !user.isBlocked)
-      throw new Error("User not exist...please login");
+    if (!user) throw new Error("User not exist");
+    if (!user.isVerified || user.isBlocked) throw new Error("Restricted entry");
 
     const validPassword = await this.PasswordService.compare(
       input.password,

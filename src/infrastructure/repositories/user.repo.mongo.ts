@@ -12,6 +12,7 @@ export class MongoUserRepository implements UserRepository {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      password: user.password,
       role: user.role,
       isBlocked: user.isBlocked,
       isVerified: user.isVerified,

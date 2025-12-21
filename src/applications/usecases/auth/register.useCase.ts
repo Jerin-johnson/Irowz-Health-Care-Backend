@@ -20,6 +20,8 @@ export class RegisterUserCase {
 
     if (existUser) throw new Error("User Already exists");
     const hashPassword = await this.passwordService.hash(input.password);
+
+    console.log("the input", input);
     const newUser = await this.userRepo.create({
       ...input,
       password: hashPassword,
@@ -32,14 +34,10 @@ export class RegisterUserCase {
     const otp = this.otpService.generate();
     const otpHash = await this.otpService.hash(otp);
 
-    await this.otpRepo.save({
-      userId: newUser._id,
-      otpHash: otpHash,
-      expiresAt: new Date(Date.now() + 5 * 60 * 1000),
-    });
+    await this.otpRepo.save(newUser._id, otpHash, 70);
 
     await this.emailService.sendOtpEmail(newUser.email, Number(otp));
 
-    return { message: "OTP sent" };
+    return { message: "OTP sent", userId: newUser._id };
   }
 }

@@ -15,8 +15,8 @@ export class VerfiyOtpUseCase {
     const UserOtpRecord = await this.OtpRepo.findByUserId(userId);
 
     if (!UserOtpRecord) throw new Error("No Otp record find");
-    if (UserOtpRecord.expiresAt < new Date()) throw new Error("OTP expired");
 
+    // const otpHash = await this.OtpService.hash(otp);
     const valid = await this.OtpService.compare(otp, UserOtpRecord.otpHash);
     if (!valid) throw new Error("Invalid OTP");
     const user = await this.UserRepo.findById(userId);
