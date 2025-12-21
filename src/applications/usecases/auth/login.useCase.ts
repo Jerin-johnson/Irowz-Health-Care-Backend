@@ -10,11 +10,15 @@ export class LoginUseCase {
     private TokenService: ITokenService
   ) {}
 
-  async execute(input: LoginUser) {
+  async execute(input: LoginUser, allowedRoles: string[]) {
     const user = await this.UserRepo.findByEmail(input.email);
 
     if (!user) throw new Error("User not exist");
     if (!user.isVerified || user.isBlocked) throw new Error("Restricted entry");
+
+    if (!allowedRoles.includes(user.role)) {
+      throw new Error("Invalid Access Request");
+    }
 
     const validPassword = await this.PasswordService.compare(
       input.password,
@@ -32,6 +36,7 @@ export class LoginUseCase {
         userId: user._id,
         role: user.role,
       }),
+      userRole: user.role,
     };
   }
 }

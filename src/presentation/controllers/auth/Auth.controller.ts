@@ -10,8 +10,8 @@ export class AuthController {
     private VerfiyOtpUseCase: VerfiyOtpUseCase
   ) {}
 
-  login = async (req: Request, res: Response) => {
-    const result = await this.loginUseCase.execute(req.body);
+  login = (allowedRoles: string[]) => async (req: Request, res: Response) => {
+    const result = await this.loginUseCase.execute(req.body, allowedRoles);
 
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
@@ -22,6 +22,7 @@ export class AuthController {
     res.status(200).json({
       success: true,
       accessToken: result.accessToken,
+      userRole: result.userRole,
     });
   };
 

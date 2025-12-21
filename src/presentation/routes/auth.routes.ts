@@ -4,6 +4,7 @@ import { asyncHandler } from "../middlewares/asyncHandler";
 import { validate } from "../middlewares/validate.middleware";
 import { loginSchema } from "../validators/auth/login.schema";
 import { registerSchema } from "../validators/auth/register.schema";
+import UserRoles from "../../domain/constants/UserRole";
 
 export class AuthRoute {
   private router: Router;
@@ -13,10 +14,11 @@ export class AuthRoute {
   }
 
   register(): Router {
+    //Patient login and register all that
     this.router.post(
       "/login",
       validate(loginSchema),
-      asyncHandler(this.authController.login)
+      asyncHandler(this.authController.login([UserRoles.PATIENT]))
     );
 
     this.router.post(
@@ -26,7 +28,30 @@ export class AuthRoute {
     );
 
     this.router.post("/verify-otp", this.authController.verifyOtp);
-    // this.router.post("/refresh-token", ...)
+    // this.router.post("/refresh-token", ...);
+
+    //doctor login
+    this.router.post(
+      "/doctor/login",
+      validate(loginSchema),
+      asyncHandler(this.authController.login([UserRoles.DOCTOR]))
+    );
+
+    //hostpal_admin
+
+    this.router.post(
+      "/hospital-admin/login",
+      validate(loginSchema),
+      asyncHandler(this.authController.login([UserRoles.HOSPITAL_ADMIN]))
+    );
+
+    //login super admin
+
+    this.router.post(
+      "/super-admin/login",
+      validate(loginSchema),
+      asyncHandler(this.authController.login([UserRoles.SUPER_ADMIN]))
+    );
 
     return this.router;
   }
