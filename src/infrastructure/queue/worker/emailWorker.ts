@@ -1,12 +1,13 @@
 import { Worker } from "bullmq";
 import { EmailNotificationService } from "../../services/email.service";
+import { queueRedisConnection } from "../../redis/ioredis.connection";
 
 const emailService = new EmailNotificationService();
 
-export const redisConnection = {
-  host: "127.0.0.1",
-  port: 6379,
-};
+// export const redisConnection = {
+//   host: "127.0.0.1",
+//   port: 6379,
+// };
 
 const worker = new Worker(
   "email-queue",
@@ -15,7 +16,7 @@ const worker = new Worker(
     const { to, otp } = job.data;
     await emailService.sendOtp(to, otp);
   },
-  { connection: redisConnection }
+  { connection: queueRedisConnection }
 );
 
 worker.on("completed", (job) => {

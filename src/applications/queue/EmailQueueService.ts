@@ -9,4 +9,3 @@ export class EmailQueueService {
     });
   }
 }
-//t only adds a job to Redis bull mq

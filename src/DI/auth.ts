@@ -1,6 +1,5 @@
 import { LoginUseCase } from "../applications/usecases/auth/login.useCase";
 import { RegisterUserCase } from "../applications/usecases/auth/register.useCase";
-import { MongoUserRepository } from "../infrastructure/repositories/user.repo.mongo";
 import { AuthController } from "../presentation/controllers/auth/Auth.controller";
 import { AuthRoute } from "../presentation/routes/auth.routes";
 import {
@@ -12,8 +11,8 @@ import {
 import { RedisOtpRepository } from "../infrastructure/repositories/RedisOtp.repository";
 import { EmailQueueService } from "../applications/queue/EmailQueueService";
 import { VerfiyOtpUseCase } from "../applications/usecases/auth/verfiyOtpUseCase";
+import { mongoUserRepository } from "./repositers";
 
-const mongoUserRepository = new MongoUserRepository();
 const redisOtpRepository = new RedisOtpRepository();
 
 // queque service
