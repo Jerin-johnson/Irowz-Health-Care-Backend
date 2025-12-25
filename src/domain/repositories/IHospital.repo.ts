@@ -5,7 +5,7 @@ export interface Hospital {
   registrationNumber: string;
   officialEmail: string;
   phone: string;
-  type: "GENERAL" | "SPECIALTY";
+  type?: "GENERAL" | "SPECIALTY";
   licenseDocumentUrl: string;
   city: string;
   state: string;

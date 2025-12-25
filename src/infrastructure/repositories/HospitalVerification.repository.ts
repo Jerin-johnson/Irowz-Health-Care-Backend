@@ -1,11 +1,11 @@
 import { HospitalVerificationModel } from "../database/mongo/models/HospitalVerification.model";
 import {
   HospitalVerification,
+  HospitalVerificationStatus,
   IHospitalVerificationRepository,
   ResumbitHospitalVerficationRepository,
 } from "../../domain/repositories/IHospitalVerification.repo";
 import mongoose from "mongoose";
-import { tryCatch } from "bullmq";
 
 export class HospitalVerificationRepositoryImpl implements IHospitalVerificationRepository {
   async create(data: any) {
@@ -31,14 +31,27 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     status: "APPROVED" | "REJECTED",
     adminRemarks?: string
   ) {
-    await HospitalVerificationModel.findByIdAndUpdate(id, {
-      status,
-      adminRemarks,
-      reviewedAt: new Date(),
-    });
+    const result = await HospitalVerificationModel.findByIdAndUpdate(
+      id,
+      {
+        status,
+        adminRemarks,
+        reviewedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!result) return;
+
+    return this.map(result);
   }
 
-  async findAllPending() {
+  async findAllPending(status = "PENDING", search: string) {
+    let query = { status };
+    if (search) {
+      // query.hos;
+      console.log(search);
+    }
     const records = await HospitalVerificationModel.find({
       status: "PENDING",
     });
@@ -67,6 +80,18 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     if (!updated) {
       throw new Error(`Hospital verification not found for id ${id}`);
     }
+  }
+
+  async findHosptialVerficationStatus(
+    hositpalId: string
+  ): Promise<HospitalVerificationStatus | null> {
+    const status = await HospitalVerificationModel.findOne({
+      _id: hositpalId,
+    }).select("status");
+
+    if (!status) return null;
+
+    return status.status;
   }
 
   private map(doc: any) {

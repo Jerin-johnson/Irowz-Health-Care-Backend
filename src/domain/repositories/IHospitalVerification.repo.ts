@@ -1,5 +1,4 @@
 export type HospitalVerificationStatus = "PENDING" | "APPROVED" | "REJECTED";
-
 export interface HospitalVerification {
   _id?: string;
   userId: string;
@@ -44,9 +43,12 @@ export interface IHospitalVerificationRepository {
     id: string,
     status: HospitalVerificationStatus,
     adminRemarks?: string
-  ): Promise<void>;
+  ): Promise<void | HospitalVerification>;
 
-  findAllPending(): Promise<HospitalVerification[]>;
+  findAllPending(
+    status?: string,
+    search?: string
+  ): Promise<HospitalVerification[]>;
 
   resumbit(
     userId: string,
@@ -54,4 +56,8 @@ export interface IHospitalVerificationRepository {
   ): Promise<HospitalVerification>;
 
   update(id: string, data: Partial<HospitalVerification>): Promise<void>;
+
+  findHosptialVerficationStatus(
+    hositpalId: string
+  ): Promise<HospitalVerificationStatus | null>;
 }

@@ -30,7 +30,6 @@ const HospitalSchema = new Schema(
     type: {
       type: String,
       enum: ["GENERAL", "SPECIALTY"],
-      required: true,
     },
 
     licenseDocumentUrl: { type: String, required: true },
