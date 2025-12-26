@@ -1,3 +1,4 @@
+import { email } from "zod";
 import { OtpRepository } from "../../../domain/repositories/IOtp.repo";
 import { UserRepository } from "../../../domain/repositories/IUser.repo";
 import { ITokenService } from "../../../domain/services/jwt.interface.service";
@@ -11,8 +12,8 @@ export class VerfiyOtpUseCase {
     private TokenService: ITokenService
   ) {}
 
-  async execute(userId: string, otp: string) {
-    const UserOtpRecord = await this.OtpRepo.findByUserId(userId);
+  async execute(userId: string, email: string, otp: string) {
+    const UserOtpRecord = await this.OtpRepo.findByUserEmail(email);
 
     if (!UserOtpRecord) throw new Error("No Otp record find");
 
@@ -23,7 +24,7 @@ export class VerfiyOtpUseCase {
 
     if (!user) throw new Error("User not found");
     await this.UserRepo.markVerified(userId);
-    await this.OtpRepo.deleteByUserId(userId);
+    await this.OtpRepo.deleteByEmail(email);
 
     return {
       accessToken: this.TokenService.generateAccessToken({
@@ -34,6 +35,7 @@ export class VerfiyOtpUseCase {
         userId: user._id,
         role: user.role,
       }),
+      userRole: user.role,
       message: "Verified successfully",
     };
   }

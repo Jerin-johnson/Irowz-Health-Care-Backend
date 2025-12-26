@@ -27,8 +27,8 @@ export class HospitalOnBoradingController {
   };
 
   ressubmitVerficationRequest = async (req: Request, res: Response) => {
-    const user = req.user as { id: string; role: string };
-    const userId = user.id;
+    const user = req.user as { userId: string; role: string };
+    const userId = user.userId;
     const result = this.ResubmitHospitalVerificationUseCase.execute(
       userId,
       req.body

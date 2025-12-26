@@ -1,5 +1,5 @@
 export interface OtpRepository {
-  save(userId: string, otpHash: string, ttlSeconds: number): Promise<void>;
-  findByUserId(userId: string): Promise<{ otpHash: string } | null>;
-  deleteByUserId(userId: string): Promise<void>;
+  save(email: string, otpHash: string, ttlSeconds: number): Promise<void>;
+  findByUserEmail(email: string): Promise<{ otpHash: string } | null>;
+  deleteByEmail(email: string): Promise<void>;
 }

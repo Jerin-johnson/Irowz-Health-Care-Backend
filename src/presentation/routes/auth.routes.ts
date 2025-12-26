@@ -28,7 +28,6 @@ export class AuthRoute {
     );
 
     this.router.post("/verify-otp", this.authController.verifyOtp);
-    // this.router.post("/refresh-token", ...);
 
     //doctor login
     this.router.post(
@@ -52,6 +51,18 @@ export class AuthRoute {
       validate(loginSchema),
       asyncHandler(this.authController.login([UserRoles.SUPER_ADMIN]))
     );
+
+    this.router.get(
+      "/refresh-token",
+      asyncHandler(this.authController.refreshToken)
+    );
+
+    this.router.post(
+      "/resend-otp",
+      asyncHandler(this.authController.resendOtp)
+    );
+
+    this.router.get("/logout", asyncHandler(this.authController.logout));
 
     return this.router;
   }

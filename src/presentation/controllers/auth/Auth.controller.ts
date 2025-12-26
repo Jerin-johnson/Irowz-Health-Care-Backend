@@ -2,12 +2,16 @@ import { Request, Response } from "express";
 import { LoginUseCase } from "../../../applications/usecases/auth/login.useCase";
 import { RegisterUserCase } from "../../../applications/usecases/auth/register.useCase";
 import { VerfiyOtpUseCase } from "../../../applications/usecases/auth/verfiyOtpUseCase";
+import { RefreshTokenUseCase } from "../../../applications/usecases/auth/ReFreshJwtTokenUseCase";
+import { ReSendOtpUseCase } from "../../../applications/usecases/auth/ReSendOtpUseCase";
 
 export class AuthController {
   constructor(
     private loginUseCase: LoginUseCase,
     private RegisterUseCase: RegisterUserCase,
-    private VerfiyOtpUseCase: VerfiyOtpUseCase
+    private VerfiyOtpUseCase: VerfiyOtpUseCase,
+    private RefreshTokenUseCase: RefreshTokenUseCase,
+    private ResendOtpUseCase: ReSendOtpUseCase
   ) {}
 
   login = (allowedRoles: string[]) => async (req: Request, res: Response) => {
@@ -22,7 +26,10 @@ export class AuthController {
     res.status(200).json({
       success: true,
       accessToken: result.accessToken,
-      userRole: result.userRole,
+      role: result.role,
+      name: result.name,
+      email: result.email,
+      userId: result.userId,
     });
   };
 
@@ -32,8 +39,50 @@ export class AuthController {
   };
 
   verifyOtp = async (req: Request, res: Response) => {
-    const { userId, otp } = req.body;
-    const result = await this.VerfiyOtpUseCase.execute(userId, otp);
-    return res.status(200).json({ success: true, ...result });
+    const { userId, email, otp } = req.body;
+
+    if (!userId || !email || !otp) {
+      return res
+        .status(400)
+        .json({ success: false, message: "fields are missing" });
+    }
+
+    const result = await this.VerfiyOtpUseCase.execute(userId, email, otp);
+    res.cookie("refreshToken", result.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
+
+    res.status(200).json({
+      success: true,
+      accessToken: result.accessToken,
+      userRole: result.userRole,
+    });
+  };
+
+  refreshToken = async (req: Request, res: Response) => {
+    const token = req.cookies.refreshToken;
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const result = await this.RefreshTokenUseCase.execute(token);
+    return res.json({ success: true, ...result });
+  };
+
+  resendOtp = async (req: Request, res: Response) => {
+    const email = req?.body?.email;
+    if (!email) throw new Error("The request is not valid");
+    const result = await this.ResendOtpUseCase.execute(email);
+    return res.json({ success: true, ...result });
+  };
+
+  logout = async (req: Request, res: Response) => {
+    res.clearCookie("refreshToken");
+    return res
+      .status(200)
+      .json({ success: true, message: "User logout successfully" });
   };
 }

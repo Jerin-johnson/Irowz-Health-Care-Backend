@@ -1,3 +1,4 @@
+import { email } from "zod";
 import { UserRepository } from "../../../domain/repositories/IUser.repo";
 import { ITokenService } from "../../../domain/services/jwt.interface.service";
 import { IPasswordService } from "../../../domain/services/password.interface.service";
@@ -28,6 +29,9 @@ export class LoginUseCase {
     if (!validPassword) throw new Error("Invalid creditionals");
 
     return {
+      userId: user._id,
+      name: user.name,
+      email: user.email,
       accessToken: this.TokenService.generateAccessToken({
         userId: user._id,
         role: user.role,
@@ -36,7 +40,7 @@ export class LoginUseCase {
         userId: user._id,
         role: user.role,
       }),
-      userRole: user.role,
+      role: user.role,
     };
   }
 }

@@ -53,7 +53,7 @@ export class JwtTokenService implements ITokenService {
       }
       return null;
     } catch (err) {
-      // Catching TokenExpiredError or JsonWebTokenError
+      throw new Error("The token is invalid");
       return null;
     }
   }

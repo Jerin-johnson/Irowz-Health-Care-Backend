@@ -1,3 +1,4 @@
+import { email } from "zod";
 import { OtpRepository } from "../../../domain/repositories/IOtp.repo";
 import { UserRepository } from "../../../domain/repositories/IUser.repo";
 // import { IEmailService } from "../../../domain/services/email.interface.service";
@@ -34,10 +35,15 @@ export class RegisterUserCase {
     const otp = this.otpService.generate();
     const otpHash = await this.otpService.hash(otp);
 
-    await this.otpRepo.save(newUser._id, otpHash, 70);
+    await this.otpRepo.save(newUser.email, otpHash, 70);
 
     await this.emailService.sendOtpEmail(newUser.email, Number(otp));
 
-    return { message: "OTP sent", userId: newUser._id };
+    return {
+      message: "OTP sent",
+      userId: newUser._id,
+      email: newUser.email,
+      name: newUser.name,
+    };
   }
 }

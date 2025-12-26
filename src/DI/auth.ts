@@ -1,6 +1,7 @@
 import { LoginUseCase } from "../applications/usecases/auth/login.useCase";
 import { RegisterUserCase } from "../applications/usecases/auth/register.useCase";
 import { AuthController } from "../presentation/controllers/auth/Auth.controller";
+import { RefreshTokenUseCase } from "../applications/usecases/auth/ReFreshJwtTokenUseCase";
 import { AuthRoute } from "../presentation/routes/auth.routes";
 import {
   jwtTokenService,
@@ -12,6 +13,7 @@ import { RedisOtpRepository } from "../infrastructure/repositories/RedisOtp.repo
 import { EmailQueueService } from "../applications/queue/EmailQueueService";
 import { VerfiyOtpUseCase } from "../applications/usecases/auth/verfiyOtpUseCase";
 import { mongoUserRepository } from "./repositers";
+import { ReSendOtpUseCase } from "../applications/usecases/auth/ReSendOtpUseCase";
 
 const redisOtpRepository = new RedisOtpRepository();
 
@@ -38,10 +40,20 @@ const verfiyOtpUseCase = new VerfiyOtpUseCase(
   otpService,
   jwtTokenService
 );
+
+const resendOtpUseCase = new ReSendOtpUseCase(
+  otpService,
+  emailQuequeService,
+  redisOtpRepository
+);
+
+const refreshTokenUseCase = new RefreshTokenUseCase(jwtTokenService);
 const authController = new AuthController(
   loginUseCase,
   registerUseCase,
-  verfiyOtpUseCase
+  verfiyOtpUseCase,
+  refreshTokenUseCase,
+  resendOtpUseCase
 );
 
 export const authRoute = new AuthRoute(authController);
