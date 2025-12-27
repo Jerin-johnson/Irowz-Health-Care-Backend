@@ -32,6 +32,8 @@ export class SubmitHositalVerficationRequest {
       mimeType,
     } = input;
 
+    console.log("the input", input);
+
     const existerHosptialAdmin = await this.userRepo.findByEmail(officialEmail);
 
     if (existerHosptialAdmin) {
@@ -78,7 +80,15 @@ export class SubmitHositalVerficationRequest {
     });
 
     return {
-      message: "Hospital verification request submitted",
+      data: {
+        userId: HospitalAdminUser._id,
+        role: HospitalAdminUser.role,
+        verificationId: HospitalVerficationRequest._id,
+        name: HospitalVerficationRequest.hospitalName,
+        city: HospitalVerficationRequest.city,
+        email: HospitalVerficationRequest.officialEmail,
+        registrationNumber: HospitalVerficationRequest.registrationNumber,
+      },
     };
   }
 }

@@ -17,6 +17,7 @@ export class LoginUseCase {
     if (!user) throw new Error("User not exist");
     if (!user.isVerified || user.isBlocked) throw new Error("Restricted entry");
 
+    console.log(allowedRoles, user.role);
     if (!allowedRoles.includes(user.role)) {
       throw new Error("Invalid Access Request");
     }
