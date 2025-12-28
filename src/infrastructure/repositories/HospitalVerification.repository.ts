@@ -6,6 +6,7 @@ import {
   ResumbitHospitalVerficationRepository,
 } from "../../domain/repositories/IHospitalVerification.repo";
 import mongoose from "mongoose";
+import { HosptialRequestVerficationStatus } from "../../domain/constants/HosptialRequestVerficationStatus";
 
 export class HospitalVerificationRepositoryImpl implements IHospitalVerificationRepository {
   async create(data: any) {
@@ -47,11 +48,11 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
   }
 
   async findAllPending(status = "PENDING", search: string) {
-    let query = { status };
-    if (search) {
-      // query.hos;
-      console.log(search);
-    }
+    // let query = { status };
+    // if (search) {
+    //   // query.hos;
+    //   console.log(search);
+    // }
     const records = await HospitalVerificationModel.find({
       status: "PENDING",
     });
@@ -92,6 +93,50 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     if (!status) return null;
 
     return status.status;
+  }
+
+  async countByStatus(
+    status: HosptialRequestVerficationStatus
+  ): Promise<number> {
+    return HospitalVerificationModel.countDocuments({ status });
+  }
+
+  async countApprovedToday(): Promise<number> {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+
+    return HospitalVerificationModel.countDocuments({
+      status: HosptialRequestVerficationStatus.APPROVED,
+      reviewedAt: { $gte: start, $lte: end },
+    });
+  }
+
+  async getPaginated(filters: any, pagination: any) {
+    const query: any = {};
+
+    if (filters.status) query.status = filters.status;
+    if (filters.city) query.city = filters.city;
+
+    if (filters.search) {
+      query.$or = [
+        { hospitalName: { $regex: filters.search, $options: "i" } },
+        { registrationNumber: { $regex: filters.search, $options: "i" } },
+      ];
+    }
+
+    const [data, total] = await Promise.all([
+      HospitalVerificationModel.find(query)
+        .skip(pagination.skip)
+        .limit(pagination.limit)
+        .sort({ submittedAt: -1 })
+        .lean(),
+      HospitalVerificationModel.countDocuments(query),
+    ]);
+
+    return { data, total };
   }
 
   private map(doc: any) {

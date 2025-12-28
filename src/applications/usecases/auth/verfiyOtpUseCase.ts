@@ -34,6 +34,8 @@ export class VerfiyOtpUseCase {
       refreshToken: this.TokenService.generateRefreshToken({
         userId: user._id,
         role: user.role,
+        email: user.email,
+        name: user.name,
       }),
       userRole: user.role,
       message: "Verified successfully",

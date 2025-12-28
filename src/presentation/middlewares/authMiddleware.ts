@@ -10,6 +10,8 @@ export const authMiddleware = (
   try {
     const authHeader = req.headers.authorization;
 
+    console.log("auth middleware", authHeader);
+
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         success: false,
@@ -28,10 +30,11 @@ export const authMiddleware = (
       userId: payload.userId,
       role: payload.role,
     };
-
+    console.log(req.user);
     next();
   } catch (error) {
-    return res.status(403).json({
+    console.log(error);
+    return res.status(401).json({
       success: false,
       message: "Invalid or expired token",
     });

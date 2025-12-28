@@ -1,60 +1,56 @@
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
-import { ITokenService } from "../../domain/services/jwt.interface.service";
-
-interface TokenPayload {
-  userId: string;
-  role: string;
-}
+import {
+  ITokenService,
+  TokenPayload,
+} from "../../domain/services/jwt.interface.service";
 
 export class JwtTokenService implements ITokenService {
   private readonly ACCESS_SECRET: Secret;
   private readonly REFRESH_SECRET: Secret;
 
-  private readonly ACCESS_EXPIRES_IN: SignOptions["expiresIn"];
-  private readonly REFRESH_EXPIRES_IN: SignOptions["expiresIn"];
+  private readonly ACCESS_EXPIRES_IN: SignOptions["expiresIn"] = "15m";
+  private readonly REFRESH_EXPIRES_IN: SignOptions["expiresIn"] = "7d";
 
   constructor() {
-    const access = process.env.JWT_ACCESS_SECRET;
-    const refresh = process.env.JWT_REFRESH_SECRET;
-
-    if (!access || !refresh) {
-      throw new Error("Missing JWT Secrets in environment variables.");
+    if (!process.env.JWT_ACCESS_SECRET || !process.env.JWT_REFRESH_SECRET) {
+      throw new Error("JWT secrets are not configured");
     }
 
-    this.ACCESS_SECRET = access;
-    this.REFRESH_SECRET = refresh;
-
-    this.ACCESS_EXPIRES_IN = "15m";
-    this.REFRESH_EXPIRES_IN = "7d";
+    this.ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
+    this.REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
   }
 
   generateAccessToken(payload: TokenPayload): string {
-    return jwt.sign({ ...payload }, this.ACCESS_SECRET, {
+    return jwt.sign(payload, this.ACCESS_SECRET, {
       expiresIn: this.ACCESS_EXPIRES_IN,
     });
   }
 
   generateRefreshToken(payload: TokenPayload): string {
-    return jwt.sign({ ...payload }, this.REFRESH_SECRET, {
+    return jwt.sign(payload, this.REFRESH_SECRET, {
       expiresIn: this.REFRESH_EXPIRES_IN,
     });
   }
 
-  verifyAccessToken(token: string): TokenPayload | null {
-    try {
-      const decoded = jwt.verify(token, this.ACCESS_SECRET);
+  verifyAccessToken(token: string): TokenPayload {
+    return this.verify(token, this.ACCESS_SECRET);
+  }
 
-      if (
-        typeof decoded === "object" &&
-        decoded !== null &&
-        "userId" in decoded
-      ) {
-        return decoded as TokenPayload;
+  verifyRefreshToken(token: string): TokenPayload {
+    return this.verify(token, this.REFRESH_SECRET);
+  }
+
+  private verify(token: string, secret: Secret): TokenPayload {
+    try {
+      const decoded = jwt.verify(token, secret);
+
+      if (typeof decoded !== "object" || !("userId" in decoded)) {
+        throw new Error("Invalid token payload");
       }
-      return null;
-    } catch (err) {
-      throw new Error("The token is invalid");
-      return null;
+
+      return decoded as TokenPayload;
+    } catch (error) {
+      throw new Error("Invalid or expired token");
     }
   }
 }

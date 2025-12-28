@@ -68,8 +68,16 @@ export class AuthController {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const result = await this.RefreshTokenUseCase.execute(token);
-    return res.json({ success: true, ...result });
+    const { refreshToken, accessToken, user } =
+      await this.RefreshTokenUseCase.execute(token);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
+
+    return res.json({ success: true, accessToken, user });
   };
 
   resendOtp = async (req: Request, res: Response) => {

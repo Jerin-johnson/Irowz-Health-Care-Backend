@@ -1,3 +1,5 @@
+import { HosptialRequestVerficationStatus } from "../constants/HosptialRequestVerficationStatus";
+
 export type HospitalVerificationStatus = "PENDING" | "APPROVED" | "REJECTED";
 export interface HospitalVerification {
   _id?: string;
@@ -60,4 +62,22 @@ export interface IHospitalVerificationRepository {
   findHosptialVerficationStatus(
     hositpalId: string
   ): Promise<HospitalVerificationStatus | null>;
+
+  countByStatus(status: HosptialRequestVerficationStatus): Promise<number>;
+  countApprovedToday(): Promise<number>;
+
+  getPaginated(
+    filters: {
+      search?: string;
+      status?: HosptialRequestVerficationStatus;
+      city?: string;
+    },
+    pagination: {
+      skip: number;
+      limit: number;
+    }
+  ): Promise<{
+    data: any[];
+    total: number;
+  }>;
 }

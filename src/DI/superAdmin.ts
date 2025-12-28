@@ -8,6 +8,8 @@ import {
 import { HospitalVerficationController } from "../presentation/controllers/superAdmin/HosptialVerfication.controller";
 import { SuperAdminRoutes } from "../presentation/routes/super_admin.routes";
 import { GetALLVerficationRequest } from "../applications/usecases/superAdmin/hositpalVerfication/GetALLVerfication.useCase";
+import { GetHospitalStatsUseCase } from "../applications/usecases/superAdmin/hositpalVerfication/GetHospitalStats.usecase";
+import { GetVerficationRequestById } from "../applications/usecases/superAdmin/hositpalVerfication/GetVerficationRequestById";
 const approveVerficationRequest = new ApproveVerficationRequest(
   hosptialVerficatinRepo,
   hosptialRepository,
@@ -21,10 +23,19 @@ const rejectVerficationRequest = new RejectVerficationRequest(
 const getAllVerficationRequest = new GetALLVerficationRequest(
   hosptialVerficatinRepo
 );
+
+const getHospitalStatsUseCase = new GetHospitalStatsUseCase(
+  hosptialVerficatinRepo
+);
+const getVerficationRequestById = new GetVerficationRequestById(
+  hosptialVerficatinRepo
+);
 const hospitalVerficationController = new HospitalVerficationController(
   approveVerficationRequest,
   rejectVerficationRequest,
-  getAllVerficationRequest
+  getAllVerficationRequest,
+  getHospitalStatsUseCase,
+  getVerficationRequestById
 );
 
 export const superAdminRoutes = new SuperAdminRoutes(

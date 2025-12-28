@@ -1,16 +1,37 @@
-import { tr } from "zod/v4/locales";
-import { IHospitalRepository } from "../../../../domain/repositories/IHospital.repo";
 import { IHospitalVerificationRepository } from "../../../../domain/repositories/IHospitalVerification.repo";
-import { UserRepository } from "../../../../domain/repositories/IUser.repo";
 
+import { HosptialRequestVerficationStatus } from "../../../../domain/constants/HosptialRequestVerficationStatus";
+
+interface GetHospitalRequestsInput {
+  search?: string;
+  status?: HosptialRequestVerficationStatus;
+  city?: string;
+  page: number;
+  limit: number;
+}
 export class GetALLVerficationRequest {
   constructor(
     private HosptialVerficationRepo: IHospitalVerificationRepository
   ) {}
 
-  async execute(status?: string, search?: string) {
-    const result = await this.HosptialVerficationRepo.findAllPending();
+  async execute(input: GetHospitalRequestsInput) {
+    const { page, limit, ...filters } = input;
 
-    return { data: result };
+    const skip = (page - 1) * limit;
+
+    const { data, total } = await this.HosptialVerficationRepo.getPaginated(
+      filters,
+      { skip, limit }
+    );
+
+    return {
+      data,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 }

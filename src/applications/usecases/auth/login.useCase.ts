@@ -36,10 +36,14 @@ export class LoginUseCase {
       accessToken: this.TokenService.generateAccessToken({
         userId: user._id,
         role: user.role,
+        name: user.name,
+        email: user.email,
       }),
       refreshToken: this.TokenService.generateRefreshToken({
         userId: user._id,
         role: user.role,
+        name: user.name,
+        email: user.email,
       }),
       role: user.role,
     };
