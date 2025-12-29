@@ -47,6 +47,15 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     return this.map(result);
   }
 
+  async findByIdStatus(
+    id: string
+  ): Promise<{ adminRemarks: string; status: string }> {
+    const record = await HospitalVerificationModel.findById(id)
+      .select("adminRemarks status")
+      .lean();
+    return record as { adminRemarks: string; status: string };
+  }
+
   async findAllPending(status = "PENDING", search: string) {
     // let query = { status };
     // if (search) {

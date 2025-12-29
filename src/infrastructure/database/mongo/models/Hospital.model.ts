@@ -13,6 +13,7 @@ export interface HospitalDocument extends Document {
   latitude?: number;
   longitude?: number;
   isVerified: boolean;
+  isBlocked?: boolean;
   verifiedAt?: Date;
   isActive: boolean;
 }
@@ -44,6 +45,7 @@ const HospitalSchema = new Schema(
     verifiedAt: { type: Date },
 
     isActive: { type: Boolean, default: true },
+    isBlocked: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

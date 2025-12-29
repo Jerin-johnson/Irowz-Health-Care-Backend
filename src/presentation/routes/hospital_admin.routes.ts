@@ -26,6 +26,11 @@ export class HospitalAdminRoutes {
       asyncHandler(this.HospitalOnBoradingController.submitVerficationRequest)
     );
 
+    this.router.get(
+      "/verification/status/:id",
+      asyncHandler(this.HospitalOnBoradingController.checkStatusById)
+    );
+
     return this.router;
   }
 }

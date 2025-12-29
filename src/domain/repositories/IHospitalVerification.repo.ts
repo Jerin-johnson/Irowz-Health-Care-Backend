@@ -38,8 +38,9 @@ export interface IHospitalVerificationRepository {
   create(data: any): Promise<HospitalVerification>;
 
   findPendingByUserId(userId: string): Promise<HospitalVerification | null>;
-
   findById(id: string): Promise<HospitalVerification | null>;
+
+  findByIdStatus(id: string): Promise<{ adminRemarks: string; status: string }>;
 
   updateStatus(
     id: string,

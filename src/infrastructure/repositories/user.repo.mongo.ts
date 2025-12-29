@@ -27,8 +27,13 @@ export class MongoUserRepository implements UserRepository {
     return doc;
   }
 
-  async findByEmail(email: string): Promise<UserResponse | null> {
-    const doc = await User.findOne({ email });
+  async findByEmail(
+    email: string,
+    phone: string | number
+  ): Promise<UserResponse | null> {
+    const doc = await User.findOne({
+      $or: [{ email }, { phone: String(phone) }],
+    });
     return doc;
   }
 
@@ -44,5 +49,9 @@ export class MongoUserRepository implements UserRepository {
 
   async markVerified(userId: string): Promise<void> {
     await User.updateOne({ _id: userId }, { isVerified: true });
+  }
+
+  async BlockByUserId(userId: string, status: boolean): Promise<void> {
+    await User.updateOne({ _id: userId }, { isBlocked: status });
   }
 }

@@ -7,6 +7,9 @@ export class HospitalRepositoryImpl implements IHospitalRepository {
     return this.map(hospital);
   }
 
+  async BlockBYUserId(userId: string, status: boolean): Promise<void> {
+    await HospitalModel.updateOne({ userId: userId }, { isBlocked: status });
+  }
   async findByUserId(userId: string) {
     const hospital = await HospitalModel.findOne({ userId });
     return hospital ? this.map(hospital) : null;
@@ -17,6 +20,35 @@ export class HospitalRepositoryImpl implements IHospitalRepository {
       isVerified: true,
       verifiedAt: new Date(),
     });
+  }
+
+  async getPaginated(filters: any, pagination: any) {
+    const query: any = {};
+
+    if (filters.isActive != undefined) query.isActive = filters.isActive;
+    if (filters.city) query.city = filters.city;
+
+    if (filters.search) {
+      query.$or = [
+        { name: { $regex: filters.search, $options: "i" } },
+        { registrationNumber: { $regex: filters.search, $options: "i" } },
+      ];
+    }
+    console.log("the filter", filters);
+    console.log(query);
+    const [data, total, totalHospitals, IsActiveHospitalCount] =
+      await Promise.all([
+        HospitalModel.find(query)
+          .skip(pagination.skip)
+          .limit(pagination.limit)
+          .sort({ submittedAt: -1 })
+          .lean(),
+        HospitalModel.countDocuments(query),
+        HospitalModel.countDocuments({}),
+        HospitalModel.countDocuments({ isBlocked: false }),
+      ]);
+
+    return { data, total, totalHospitals, IsActiveHospitalCount };
   }
 
   private map(doc: any) {

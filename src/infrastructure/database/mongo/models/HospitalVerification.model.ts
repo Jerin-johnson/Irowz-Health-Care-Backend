@@ -13,6 +13,7 @@ export interface HospitalVerificationDocument extends Document {
   licenseDocumentUrl: string;
   status: "PENDING" | "APPROVED" | "REJECTED";
   adminRemarks?: string;
+
   submittedAt: Date;
   reviewedAt?: Date;
 }

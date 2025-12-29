@@ -10,6 +10,9 @@ import { SuperAdminRoutes } from "../presentation/routes/super_admin.routes";
 import { GetALLVerficationRequest } from "../applications/usecases/superAdmin/hositpalVerfication/GetALLVerfication.useCase";
 import { GetHospitalStatsUseCase } from "../applications/usecases/superAdmin/hositpalVerfication/GetHospitalStats.usecase";
 import { GetVerficationRequestById } from "../applications/usecases/superAdmin/hositpalVerfication/GetVerficationRequestById";
+import { GetALLHosptialLists } from "../applications/usecases/superAdmin/hosptialMangement/GetAllHospital.useCase";
+import { HospitalMangementController } from "../presentation/controllers/superAdmin/HosptialMangementController";
+import { BlockOrUnblockHospitalUseCase } from "../applications/usecases/superAdmin/hosptialMangement/BlockOrUnBlockHospital.useCase";
 const approveVerficationRequest = new ApproveVerficationRequest(
   hosptialVerficatinRepo,
   hosptialRepository,
@@ -38,6 +41,19 @@ const hospitalVerficationController = new HospitalVerficationController(
   getVerficationRequestById
 );
 
+//hospital mangement controller
+
+const getALLHosptialLists = new GetALLHosptialLists(hosptialRepository);
+const blockOrUnblockHospitalUseCase = new BlockOrUnblockHospitalUseCase(
+  mongoUserRepository,
+  hosptialRepository
+);
+const hospitalMangementController = new HospitalMangementController(
+  getALLHosptialLists,
+  blockOrUnblockHospitalUseCase
+);
+
 export const superAdminRoutes = new SuperAdminRoutes(
-  hospitalVerficationController
+  hospitalVerficationController,
+  hospitalMangementController
 );

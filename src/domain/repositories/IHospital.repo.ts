@@ -25,5 +25,23 @@ export interface IHospitalRepository {
 
   findByUserId(userId: string): Promise<Hospital | null>;
 
+  BlockBYUserId(userId: string, status: boolean): Promise<void>;
+
   activateHospital(hospitalId: string): Promise<void>;
+  getPaginated(
+    filters: {
+      search?: string;
+      isActive?: boolean;
+      city?: string;
+    },
+    pagination: {
+      skip: number;
+      limit: number;
+    }
+  ): Promise<{
+    data: any[];
+    total: number;
+    totalHospitals: number;
+    IsActiveHospitalCount: number;
+  }>;
 }

@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import { SubmitHositalVerficationRequest } from "../../../applications/usecases/hosptialOnBorading/SubmitHospitalVerification.usecase";
 import { ResubmitHospitalVerificationUseCase } from "../../../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
+import { CheckHospitalVerfcationStatusById } from "../../../applications/usecases/hosptialOnBorading/checkStatusById";
 export class HospitalOnBoradingController {
   constructor(
     private SubmitHospitalVerificationUseCase: SubmitHositalVerficationRequest,
-    private ResubmitHospitalVerificationUseCase: ResubmitHospitalVerificationUseCase
+    private ResubmitHospitalVerificationUseCase: ResubmitHospitalVerificationUseCase,
+    private checkStatusBYId: CheckHospitalVerfcationStatusById
   ) {}
 
   submitVerficationRequest = async (req: Request, res: Response) => {
@@ -34,5 +36,16 @@ export class HospitalOnBoradingController {
       req.body
     );
     return res.json({ success: true, ...result });
+  };
+
+  checkStatusById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json("The request is invalid");
+    }
+    const result = await this.checkStatusBYId.execute(id);
+
+    return res.status(200).json({ success: true, ...result });
   };
 }

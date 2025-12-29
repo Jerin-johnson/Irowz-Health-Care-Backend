@@ -34,11 +34,14 @@ export class SubmitHositalVerficationRequest {
 
     console.log("the input", input);
 
-    const existerHosptialAdmin = await this.userRepo.findByEmail(officialEmail);
+    const existerHosptialAdmin = await this.userRepo.findByEmail(
+      officialEmail,
+      phone
+    );
 
     if (existerHosptialAdmin) {
       throw new Error(
-        "the email is already register and check the status of email"
+        "the email or phone number is already register and check the status of email"
       );
     }
 
