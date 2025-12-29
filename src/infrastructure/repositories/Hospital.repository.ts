@@ -7,6 +7,14 @@ export class HospitalRepositoryImpl implements IHospitalRepository {
     return this.map(hospital);
   }
 
+  async findByAdminUserId(userId: string): Promise<{ _id: string } | null> {
+    const hospital = await HospitalModel.findOne({ userId: userId })
+      .select("_id")
+      .lean<{ _id: string }>();
+
+    return hospital ?? null;
+  }
+
   async BlockBYUserId(userId: string, status: boolean): Promise<void> {
     await HospitalModel.updateOne({ userId: userId }, { isBlocked: status });
   }

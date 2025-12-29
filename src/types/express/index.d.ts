@@ -6,6 +6,9 @@ declare global {
       user?: {
         userId: string;
         role: UserRole;
+        hospitalId?: string;
+        doctorId?: string;
+        patientId?: string;
       };
     }
   }

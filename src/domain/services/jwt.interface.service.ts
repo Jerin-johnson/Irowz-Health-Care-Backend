@@ -3,6 +3,9 @@ export interface TokenPayload {
   role: string;
   name?: string;
   email?: string;
+  hosptialId?: string;
+  patientId?: string;
+  doctorId?: string;
 }
 
 export interface ITokenService {

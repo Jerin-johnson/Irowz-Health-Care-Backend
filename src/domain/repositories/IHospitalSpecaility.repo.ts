@@ -16,6 +16,7 @@ export interface IHospitalSpecialtyRepository {
 
   updateById(
     id: string,
+    hospitalId: string,
     data: Partial<Omit<IHospitalSpecialty, "_id" | "hospitalId">>
   ): Promise<IHospitalSpecialty | null>;
 

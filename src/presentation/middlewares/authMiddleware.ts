@@ -30,6 +30,16 @@ export const authMiddleware = (
       userId: payload.userId,
       role: payload.role,
     };
+    if (payload.hosptialId) {
+      req.user.hospitalId = payload.hosptialId;
+    }
+    if (payload.patientId) {
+      req.user.patientId = payload.patientId;
+    }
+
+    if (payload.doctorId) {
+      req.user.doctorId = payload.doctorId;
+    }
     console.log(req.user);
     next();
   } catch (error) {

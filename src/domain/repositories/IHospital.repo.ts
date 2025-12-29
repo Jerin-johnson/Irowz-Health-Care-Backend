@@ -26,7 +26,7 @@ export interface IHospitalRepository {
   findByUserId(userId: string): Promise<Hospital | null>;
 
   BlockBYUserId(userId: string, status: boolean): Promise<void>;
-
+  findByAdminUserId(userId: string): Promise<{ _id: string } | null>;
   activateHospital(hospitalId: string): Promise<void>;
   getPaginated(
     filters: {

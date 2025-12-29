@@ -18,6 +18,16 @@ export class RefreshTokenUseCase {
       email: decoded.email,
     };
 
+    if (decoded.hosptialId) {
+      payload.hosptialId = decoded.hosptialId;
+    }
+    if (decoded.patientId) {
+      payload.patientId = decoded.patientId;
+    }
+
+    if (decoded.doctorId) {
+      payload.doctorId = decoded.doctorId;
+    }
     //  Rotate tokens
     const newAccessToken = this.TokenService.generateAccessToken(payload);
 
@@ -33,6 +43,9 @@ export class RefreshTokenUseCase {
         role: decoded.role,
         name: decoded.name,
         email: decoded.email,
+        hospitalId: decoded.hosptialId,
+        patientId: decoded.patientId,
+        doctorId: decoded.doctorId,
       },
     };
   }

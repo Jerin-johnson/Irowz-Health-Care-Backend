@@ -4,6 +4,7 @@ import { HospitalVerficationController } from "../controllers/superAdmin/Hosptia
 import { asyncHandler } from "../middlewares/asyncHandler";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { HospitalMangementController } from "../controllers/superAdmin/HosptialMangementController";
+import { authorizeRoles } from "../middlewares/role.middleware";
 
 export class SuperAdminRoutes {
   private router: Router;
@@ -15,7 +16,8 @@ export class SuperAdminRoutes {
   }
 
   register(): Router {
-    // hosptial verfication routes
+    this.router.use(authMiddleware, authorizeRoles(UserRoles.SUPER_ADMIN));
+
     this.router.get(
       "/hospital-verifications/stats",
       asyncHandler(this.HosptialVerifcationController.getStats)

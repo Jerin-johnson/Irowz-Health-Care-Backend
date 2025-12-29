@@ -47,22 +47,24 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
   ===================================================== */
 
   async updateById(
-    id: string,
-    data: Partial<Omit<IHospitalSpecialty, "_id" | "hospitalId">>
-  ): Promise<IHospitalSpecialty | null> {
-    const updated = await HospitalSpecialtyModel.findByIdAndUpdate(
-      id,
+    specialtyId: string,
+    hospitalId: string,
+    data: { name: string; description: string }
+  ) {
+    return HospitalSpecialtyModel.findOneAndUpdate(
+      { _id: specialtyId, hospitalId },
       { $set: data },
-      { new: true }
-    ).lean();
-
-    return updated;
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
   }
 
   async getPaginated(
     filters: {
       search?: string;
-      status?: boolean;
+      isActive?: boolean;
     },
     pagination: {
       skip: number;
@@ -83,8 +85,8 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
       };
     }
 
-    if (typeof filters.status === "boolean") {
-      query.isActive = filters.status;
+    if (typeof filters.isActive === "boolean") {
+      query.isActive = filters.isActive;
     }
 
     const dataPromise = HospitalSpecialtyModel.find(query)

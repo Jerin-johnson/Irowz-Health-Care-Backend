@@ -30,6 +30,7 @@ export class AuthController {
       name: result.name,
       email: result.email,
       userId: result.userId,
+      hospitalId: result.hospitalId,
     });
   };
 
@@ -77,6 +78,7 @@ export class AuthController {
       sameSite: "strict",
     });
 
+    console.log("the access token is invoked", user);
     return res.json({ success: true, accessToken, user });
   };
 
