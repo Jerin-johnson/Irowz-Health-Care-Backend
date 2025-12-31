@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IHospitalSpecialty } from "../../infrastructure/database/mongo/models/HospitalSpeciality.model";
 export interface IHospitalSpecialtyRepository {
   create(
@@ -6,6 +7,8 @@ export interface IHospitalSpecialtyRepository {
 
   findById(id: string): Promise<IHospitalSpecialty | null>;
 
+  blockOrUnblock(id: string, data: { isActive: boolean }): Promise<void>;
+
   findByHospital(
     hospitalId: string,
     options?: {
@@ -13,6 +16,10 @@ export interface IHospitalSpecialtyRepository {
       search?: string;
     }
   ): Promise<IHospitalSpecialty[]>;
+
+  getAllSpeciality(
+    hospitalId: string
+  ): Promise<{ _id: string | Types.ObjectId; name: string }[]>;
 
   updateById(
     id: string,
@@ -24,6 +31,7 @@ export interface IHospitalSpecialtyRepository {
     filters: {
       search?: string;
       status?: boolean;
+      hospitalId: string;
     },
     pagination: {
       skip: number;

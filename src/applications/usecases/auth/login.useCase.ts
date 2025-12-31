@@ -1,3 +1,4 @@
+import { IDoctorRepository } from "../../../domain/repositories/IDoctor.repo";
 import { IHospitalRepository } from "../../../domain/repositories/IHospital.repo";
 import { UserRepository } from "../../../domain/repositories/IUser.repo";
 import {
@@ -12,7 +13,8 @@ export class LoginUseCase {
     private UserRepo: UserRepository,
     private PasswordService: IPasswordService,
     private TokenService: ITokenService,
-    private HosptialRepo: IHospitalRepository
+    private HosptialRepo: IHospitalRepository,
+    private DoctorRepo: IDoctorRepository
   ) {}
 
   async execute(input: LoginUser, allowedRoles: string[]) {
@@ -47,12 +49,16 @@ export class LoginUseCase {
       tokenPayload.hosptialId = hospital._id;
     }
 
-    // if (user.role === "DOCTOR") {
-    //   const doctor = await this.DoctorRepo.findByUserId(user._id);
-    //   if (!doctor) throw new Error("Doctor profile not found");
-    //   tokenPayload.doctorId = doctor._id;
-    //   tokenPayload.hospitalId = doctor.hospitalId;
-    // }
+    if (user.role === "DOCTOR") {
+      const doctor = await this.DoctorRepo.findByUserId(user._id);
+      console.log("doctor Id ", doctor);
+      if (!doctor) throw new Error("Doctor profile not found");
+      tokenPayload.doctorId = doctor._id.toString();
+      tokenPayload.hosptialId = doctor.hospitalId.toString();
+    }
+
+    tokenPayload.forcePasswordReset = user.forcePasswordReset ? true : false;
+    console.log("The token payload", tokenPayload);
 
     // if (user.role === "PATIENT") {
     //   const patient = await this.PatientRepo.findByUserId(user._id);
@@ -68,6 +74,8 @@ export class LoginUseCase {
       accessToken: this.TokenService.generateAccessToken(tokenPayload),
       refreshToken: this.TokenService.generateRefreshToken(tokenPayload),
       hospitalId: tokenPayload.hosptialId,
+      forcePasswordReset: user.forcePasswordReset ? true : false,
+      doctorId: tokenPayload.doctorId,
     };
   }
 }

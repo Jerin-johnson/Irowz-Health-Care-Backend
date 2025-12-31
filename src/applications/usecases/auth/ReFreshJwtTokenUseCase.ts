@@ -28,6 +28,11 @@ export class RefreshTokenUseCase {
     if (decoded.doctorId) {
       payload.doctorId = decoded.doctorId;
     }
+
+    if (decoded.forcePasswordReset) {
+      payload.forcePasswordReset = decoded.forcePasswordReset;
+    }
+
     //  Rotate tokens
     const newAccessToken = this.TokenService.generateAccessToken(payload);
 
@@ -46,6 +51,7 @@ export class RefreshTokenUseCase {
         hospitalId: decoded.hosptialId,
         patientId: decoded.patientId,
         doctorId: decoded.doctorId,
+        forcePasswordReset: payload.forcePasswordReset ? true : false,
       },
     };
   }

@@ -6,6 +6,7 @@ export interface TokenPayload {
   hosptialId?: string;
   patientId?: string;
   doctorId?: string;
+  forcePasswordReset?: boolean;
 }
 
 export interface ITokenService {

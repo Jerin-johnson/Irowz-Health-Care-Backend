@@ -6,6 +6,7 @@ export interface IUser {
   password: string;
   role: string;
   profileImage: string;
+  forcePasswordReset?: boolean;
   isBlocked: boolean;
   isVerified: boolean;
   createdAt: Date;
@@ -27,6 +28,7 @@ export type UserResponse = Pick<
   | "isVerified"
   | "isBlocked"
   | "password"
+  | "forcePasswordReset"
 >;
 
 export type LoginUser = Pick<IUser, "email" | "password">;

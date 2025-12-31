@@ -16,6 +16,7 @@ export class MongoUserRepository implements UserRepository {
       role: user.role,
       isBlocked: user.isBlocked,
       isVerified: user.isVerified,
+      forcePasswordReset: user.forcePasswordReset || false,
     });
 
     return await doc.save();

@@ -1,28 +1,46 @@
 import { Worker } from "bullmq";
-import { EmailNotificationService } from "../../services/email.service";
 import { queueRedisConnection } from "../../redis/ioredis.connection";
+import { EmailNotificationService } from "../../services/email.service";
 
 const emailService = new EmailNotificationService();
-
-// export const redisConnection = {
-//   host: "127.0.0.1",
-//   port: 6379,
-// };
 
 const worker = new Worker(
   "email-queue",
   async (job) => {
-    console.log("hai job ready");
-    const { to, otp } = job.data;
-    await emailService.sendOtp(to, otp);
+    console.log("📨 Email job received:", job.name);
+
+    const { type, to, data } = job.data;
+
+    switch (type) {
+      case "OTP":
+        await emailService.sendOtp(to, data.otp);
+        break;
+
+      case "DOCTOR_CREDENTIALS":
+        await emailService.sendDoctorCredentials(
+          to,
+          data.fullName,
+          data.password
+        );
+        break;
+
+      case "RESET_PASSWORD":
+        await emailService.sendResetPassword(to, data.resetLink);
+        break;
+
+      default:
+        throw new Error(`Unknown email type: ${type}`);
+    }
   },
-  { connection: queueRedisConnection }
+  {
+    connection: queueRedisConnection,
+  }
 );
 
 worker.on("completed", (job) => {
-  console.log(" Job completed:", job.id);
+  console.log("✅ Email job completed:", job.id);
 });
 
 worker.on("failed", (job, err) => {
-  console.error(" Job failed:", job?.id, err);
+  console.error("❌ Email job failed:", job?.id, err);
 });

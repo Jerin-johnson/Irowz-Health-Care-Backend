@@ -12,19 +12,24 @@ import {
 import { RedisOtpRepository } from "../infrastructure/repositories/RedisOtp.repository";
 import { EmailQueueService } from "../applications/queue/EmailQueueService";
 import { VerfiyOtpUseCase } from "../applications/usecases/auth/verfiyOtpUseCase";
-import { hosptialRepository, mongoUserRepository } from "./repositers";
+import {
+  doctorRepo,
+  hosptialRepository,
+  mongoUserRepository,
+} from "./repositers";
 import { ReSendOtpUseCase } from "../applications/usecases/auth/ReSendOtpUseCase";
 
 const redisOtpRepository = new RedisOtpRepository();
 
 // queque service
 
-const emailQuequeService = new EmailQueueService();
+export const emailQuequeService = new EmailQueueService();
 const loginUseCase = new LoginUseCase(
   mongoUserRepository,
   passwordService,
   jwtTokenService,
-  hosptialRepository
+  hosptialRepository,
+  doctorRepo
 );
 
 const registerUseCase = new RegisterUserCase(

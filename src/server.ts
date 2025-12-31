@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 5000;
 
 async function startServer() {
   try {
-    // infrastructure
     await connectRedis();
     await connectDB();
 

@@ -4,6 +4,7 @@ import {
   mongoUserRepository,
   hosptialVerficatinRepo,
   hospitalSpecialityRepo,
+  doctorRepo,
 } from "./repositers";
 import { passwordService, pdfUPloadQueueService } from "./service";
 import { ResubmitHospitalVerificationUseCase } from "../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
@@ -14,6 +15,12 @@ import { SpecialtyMangmentController } from "../presentation/controllers/hospita
 import { GetAllSpecialtyUseCase } from "../applications/usecases/hospitalAdmin/specialityMangement/GetAllSpecialitySearch.usecase";
 import { BlockOrUnblockSpecialtyUseCase } from "../applications/usecases/hospitalAdmin/specialityMangement/BlockOrUnblockSpeciality.useCase";
 import { EditSpecialityUseCase } from "../applications/usecases/hospitalAdmin/specialityMangement/EditSpecialty.useCase";
+import { AdminCreateDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/AdminCreateDoctorUseCase";
+import { DoctorMangmentController } from "../presentation/controllers/hospitalAdmin/DoctorMangment.Controller";
+import { emailQuequeService } from "./auth";
+import { GetAllDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/GetDoctor.useCase";
+import { GetAllSpecialtyNameUseCase } from "../applications/usecases/hospitalAdmin/specialityMangement/GetAllSpecialityName.userCae";
+import { BlockOrUnblockDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/BlockOrUnBlockDoctor.UseCase";
 
 const submitHositalVerficationRequest = new SubmitHositalVerficationRequest(
   mongoUserRepository,
@@ -49,14 +56,42 @@ const blockOrUnblockSpecialtyUseCase = new BlockOrUnblockSpecialtyUseCase(
 );
 
 const editSpecialityUseCase = new EditSpecialityUseCase(hospitalSpecialityRepo);
+
+const getAllSpecialtyNameUseCase = new GetAllSpecialtyNameUseCase(
+  hospitalSpecialityRepo
+);
+
 const specialityMangementController = new SpecialtyMangmentController(
   addHospitalSpecialtyUseCase,
   getAllSpecialtyUseCase,
   blockOrUnblockSpecialtyUseCase,
-  editSpecialityUseCase
+  editSpecialityUseCase,
+  getAllSpecialtyNameUseCase
+);
+
+const adminCreateDoctorUseCase = new AdminCreateDoctorUseCase(
+  mongoUserRepository,
+  doctorRepo,
+  emailQuequeService,
+  hospitalSpecialityRepo,
+  passwordService
+);
+
+const getAllDoctorUseCase = new GetAllDoctorUseCase(doctorRepo);
+
+const blockOrUnblockDoctorUseCase = new BlockOrUnblockDoctorUseCase(
+  doctorRepo,
+  mongoUserRepository
+);
+
+const doctorMangmentController = new DoctorMangmentController(
+  adminCreateDoctorUseCase,
+  getAllDoctorUseCase,
+  blockOrUnblockDoctorUseCase
 );
 
 export const hospitalAdminRoutes = new HospitalAdminRoutes(
   hospitalOnBoradingController,
-  specialityMangementController
+  specialityMangementController,
+  doctorMangmentController
 );

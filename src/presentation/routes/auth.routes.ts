@@ -14,7 +14,7 @@ export class AuthRoute {
   }
 
   register(): Router {
-    //Patient login and register all that
+    //Patient login
     this.router.post(
       "/login",
       validate(loginSchema),

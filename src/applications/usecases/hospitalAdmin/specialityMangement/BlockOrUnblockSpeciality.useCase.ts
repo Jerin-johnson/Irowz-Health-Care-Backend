@@ -8,7 +8,7 @@ export class BlockOrUnblockSpecialtyUseCase {
   async execute(data: { id: string; status: string }) {
     const finalStatus = data.status == "true" ? true : false;
 
-    await this.specialtyRepository.updateById(data.id, {
+    await this.specialtyRepository.blockOrUnblock(data.id, {
       isActive: finalStatus,
     });
 

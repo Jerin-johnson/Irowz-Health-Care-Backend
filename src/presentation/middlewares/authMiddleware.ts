@@ -40,6 +40,11 @@ export const authMiddleware = (
     if (payload.doctorId) {
       req.user.doctorId = payload.doctorId;
     }
+
+    if (payload.forcePasswordReset) {
+      req.user.forcePasswordReset = payload.forcePasswordReset;
+    }
+
     console.log(req.user);
     next();
   } catch (error) {

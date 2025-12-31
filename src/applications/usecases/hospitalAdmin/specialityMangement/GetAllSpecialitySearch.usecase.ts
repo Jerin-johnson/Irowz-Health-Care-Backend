@@ -1,6 +1,7 @@
 import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IHospitalSpecaility.repo";
 
 interface GetSpecialty {
+  hospitalId: string;
   search?: string;
   isActive?: boolean | null;
   specialty?: string;

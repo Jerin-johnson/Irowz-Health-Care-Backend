@@ -9,6 +9,7 @@ declare global {
         hospitalId?: string;
         doctorId?: string;
         patientId?: string;
+        forcePasswordReset?: string;
       };
     }
   }

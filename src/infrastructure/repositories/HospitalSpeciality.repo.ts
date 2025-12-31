@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IHospitalSpecialtyRepository } from "../../domain/repositories/IHospitalSpecaility.repo";
 import {
   HospitalSpecialtyModel,
@@ -61,10 +62,32 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
     );
   }
 
+  async blockOrUnblock(id: string, data: { isActive: boolean }): Promise<void> {
+    await HospitalSpecialtyModel.findOneAndUpdate(
+      { _id: id },
+      { $set: data },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+  }
+  async getAllSpeciality(
+    hospitalId: string
+  ): Promise<{ _id: string | Types.ObjectId; name: string }[]> {
+    const result = await HospitalSpecialtyModel.find({
+      hospitalId: hospitalId,
+    })
+      .select("_id name")
+      .lean();
+    return result;
+  }
+
   async getPaginated(
     filters: {
       search?: string;
       isActive?: boolean;
+      hospitalId: string;
     },
     pagination: {
       skip: number;
@@ -76,7 +99,7 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
     totalSpecialityCount: number;
     activeSpecialityCount: number;
   }> {
-    const query: any = {};
+    const query: any = { hospitalId: filters.hospitalId };
 
     if (filters.search) {
       query.name = {
@@ -96,10 +119,11 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
       .lean();
 
     const totalPromise = HospitalSpecialtyModel.countDocuments(query);
-    const totalSpecialityCountPromise = HospitalSpecialtyModel.countDocuments(
-      {}
-    );
+    const totalSpecialityCountPromise = HospitalSpecialtyModel.countDocuments({
+      hospitalId: filters.hospitalId,
+    });
     const activeSpecialityCountPromise = HospitalSpecialtyModel.countDocuments({
+      hospitalId: filters.hospitalId,
       isActive: true,
     });
 

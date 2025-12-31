@@ -6,6 +6,7 @@ import { errorHandler } from "./presentation/middlewares/errorHandle";
 import { superAdminRoutes } from "./DI/superAdmin";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { doctorRoutes } from "./DI/doctor";
 const app = express();
 
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 app.use("/api/auth", authRoute.register());
 app.use("/api/hospital-admin", hospitalAdminRoutes.register());
+app.use("/api/doctor", doctorRoutes.register());
 app.use("/api/super-admin", superAdminRoutes.register());
 app.use(errorHandler);
 

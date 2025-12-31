@@ -32,4 +32,40 @@ export class EmailNotificationService implements IEmailService {
       `,
     });
   }
+
+  // ---------------- DOCTOR CREDENTIALS ----------------
+  async sendDoctorCredentials(
+    email: string,
+    fullName: string,
+    password: string
+  ): Promise<void> {
+    console.log("sending email to doctor", email, fullName, password);
+    await this.transporter.sendMail({
+      from: `"My Healthcare SaaS" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: "Your Doctor Account Credentials",
+      html: `
+        <h3>Welcome Dr. ${fullName}</h3>
+        <p>Your doctor account has been created.</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Password:</strong> ${password}</p>
+        <p>Please log in and change your password immediately.</p>
+      `,
+    });
+  }
+
+  // ---------------- RESET PASSWORD ----------------
+  async sendResetPassword(email: string, resetLink: string): Promise<void> {
+    await this.transporter.sendMail({
+      from: `"My Healthcare SaaS" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: "Reset Your Password",
+      html: `
+        <h3>Password Reset</h3>
+        <p>Click the link below to reset your password:</p>
+        <a href="${resetLink}">Reset Password</a>
+        <p>This link expires in 15 minutes.</p>
+      `,
+    });
+  }
 }

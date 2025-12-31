@@ -17,6 +17,11 @@ const userSchema = new Schema<IUser>({
   isBlocked: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
+  forcePasswordReset: {
+    type: Boolean,
+    default: false,
+  },
+
   updatedAt: { type: Date, default: Date.now },
 });
 

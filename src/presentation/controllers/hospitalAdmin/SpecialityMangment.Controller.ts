@@ -3,13 +3,16 @@ import { AddHospitalSpecialtyUseCase } from "../../../applications/usecases/hosp
 import { GetAllSpecialtyUseCase } from "../../../applications/usecases/hospitalAdmin/specialityMangement/GetAllSpecialitySearch.usecase";
 import { BlockOrUnblockSpecialtyUseCase } from "../../../applications/usecases/hospitalAdmin/specialityMangement/BlockOrUnblockSpeciality.useCase";
 import { EditSpecialityUseCase } from "../../../applications/usecases/hospitalAdmin/specialityMangement/EditSpecialty.useCase";
+import { success } from "zod";
+import { GetAllSpecialtyNameUseCase } from "../../../applications/usecases/hospitalAdmin/specialityMangement/GetAllSpecialityName.userCae";
 
 export class SpecialtyMangmentController {
   constructor(
     private readonly createHospitalSpecialtyUseCase: AddHospitalSpecialtyUseCase,
     private readonly GetAllSpecialtyUseCase: GetAllSpecialtyUseCase,
     private readonly BlockOrUnblockSpecialtyUseCase: BlockOrUnblockSpecialtyUseCase,
-    private readonly EditSpecialityUseCase: EditSpecialityUseCase
+    private readonly EditSpecialityUseCase: EditSpecialityUseCase,
+    private readonly GetAllSpecialtyNameUseCase: GetAllSpecialtyNameUseCase
   ) {}
 
   createSpecilty = async (req: Request, res: Response) => {
@@ -38,6 +41,12 @@ export class SpecialtyMangmentController {
 
   getAllHospital = async (req: Request, res: Response) => {
     const { page = "1", limit = "10", search, isActive } = req.query;
+    const hosptialId = req.user?.hospitalId;
+
+    if (!hosptialId)
+      return res
+        .status(401)
+        .json({ success: false, message: "unAthrozied User" });
     console.log(req.query, "query");
     console.log(isActive);
 
@@ -47,6 +56,7 @@ export class SpecialtyMangmentController {
     }
 
     const result = await this.GetAllSpecialtyUseCase.execute({
+      hospitalId: hosptialId,
       search: search as string | undefined,
       isActive: isActivePresent ? (isActive === "false" ? false : true) : null,
       page: Number(page),
@@ -79,5 +89,14 @@ export class SpecialtyMangmentController {
       }
     );
     res.status(200).json({ ...updated, success: true });
+  };
+
+  GetAllSpecialtyName = async (req: Request, res: Response) => {
+    const hospitalId = req.user!.hospitalId;
+
+    const data = await this.GetAllSpecialtyNameUseCase.execute(
+      hospitalId as string
+    );
+    res.status(200).json({ data, success: true });
   };
 }

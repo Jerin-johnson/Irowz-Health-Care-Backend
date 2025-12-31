@@ -8,12 +8,15 @@ import { SpecialtyMangmentController } from "../controllers/hospitalAdmin/Specia
 import { authMiddleware } from "../middlewares/authMiddleware";
 import UserRoles from "../../domain/constants/UserRole";
 import { authorizeRoles } from "../middlewares/role.middleware";
+import { DoctorMangmentController } from "../controllers/hospitalAdmin/DoctorMangment.Controller";
+import { AdminCreateDoctorSchema } from "../validators/hosptial/AdminCreateDoctor";
 export class HospitalAdminRoutes {
   private router: Router;
 
   constructor(
     private readonly HospitalOnBoradingController: HospitalOnBoradingController,
-    private readonly SpecialtyMangmentController: SpecialtyMangmentController
+    private readonly SpecialtyMangmentController: SpecialtyMangmentController,
+    private readonly DoctorMangmentController: DoctorMangmentController
   ) {
     this.router = Router();
   }
@@ -50,6 +53,11 @@ export class HospitalAdminRoutes {
       asyncHandler(this.SpecialtyMangmentController.getAllHospital)
     );
 
+    this.router.get(
+      "/speciality/names",
+      asyncHandler(this.SpecialtyMangmentController.GetAllSpecialtyName)
+    );
+
     this.router.patch(
       "/speciality/:id",
       asyncHandler(this.SpecialtyMangmentController.editSpecialty)
@@ -58,6 +66,24 @@ export class HospitalAdminRoutes {
     this.router.patch(
       "/speciality/toggle/status",
       asyncHandler(this.SpecialtyMangmentController.BlockOrUnblockSpecialty)
+    );
+
+    //Doctor Mangement
+
+    this.router.post(
+      "/doctor",
+      validate(AdminCreateDoctorSchema),
+      asyncHandler(this.DoctorMangmentController.createDoctor)
+    );
+
+    this.router.get(
+      "/doctor",
+      asyncHandler(this.DoctorMangmentController.getDoctors)
+    );
+
+    this.router.patch(
+      "/doctor/toggle/status",
+      asyncHandler(this.DoctorMangmentController.BlockOrUnblockDoctor)
     );
 
     return this.router;
