@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { DoctorProfileMapper } from "../../dtos/doctorProfile.mapper";
 import { IGetDoctorProfileUseCase } from "../../../domain/usecase/doctor/doctorProfile/IGetDoctorProfileUseCase.usecase";
 import { IResetDoctorPasswordUseCase } from "../../../domain/usecase/doctor/doctorProfile/IResetDoctorPasswordUseCase.usecase";
+import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 
 export class DoctorProfileMangementController {
   constructor(
@@ -18,7 +19,9 @@ export class DoctorProfileMangementController {
 
     const responseDto = DoctorProfileMapper.toView(doctor);
 
-    return res.status(200).json({ success: true, data: responseDto });
+    return res
+      .status(HttpStatusCode.OK)
+      .json({ success: true, data: responseDto });
   };
 
   resetDoctorPassword = async (req: Request, res: Response) => {
@@ -36,6 +39,6 @@ export class DoctorProfileMangementController {
       newPassword
     );
 
-    return res.status(200).json({ success: true, ...result });
+    return res.status(HttpStatusCode.OK).json({ success: true, ...result });
   };
 }

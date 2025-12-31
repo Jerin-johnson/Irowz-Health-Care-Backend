@@ -3,6 +3,7 @@ import { AdminCreateDoctorDTO } from "../../../applications/dtos/hosptialAdmin/d
 import { IAdminCreateDoctorUseCase } from "../../../domain/usecase/hosptialAdmin/doctorMangement/IAdminCreateDoctorUseCase.usecase";
 import { IGetAllDoctorUseCase } from "../../../domain/usecase/hosptialAdmin/doctorMangement/IGetAllDoctorUseCase.usecase";
 import { IBlockOrUnblockDoctorUseCase } from "../../../domain/usecase/hosptialAdmin/doctorMangement/IBlockOrUnblockDoctorUseCase.usecase";
+import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 
 export class DoctorMangmentController {
   constructor(
@@ -15,7 +16,7 @@ export class DoctorMangmentController {
     const hospitalId = req.user?.hospitalId;
 
     if (!hospitalId) {
-      return res.status(401).json({
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({
         success: false,
         message: "Unauthorized",
       });
@@ -42,7 +43,7 @@ export class DoctorMangmentController {
 
     const result = await this._AdminCreateDoctorUseCase.execute(dto);
 
-    return res.status(201).json({
+    return res.status(HttpStatusCode.CREATED).json({
       success: true,
       message: "Doctor created successfully",
       data: result,
@@ -53,7 +54,7 @@ export class DoctorMangmentController {
     const hospitalId = req.user?.hospitalId;
 
     if (!hospitalId) {
-      return res.status(401).json({
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({
         success: false,
         message: "Unauthorized",
       });
@@ -76,7 +77,7 @@ export class DoctorMangmentController {
       isActive: isActive !== undefined ? isActive === "true" : undefined,
     });
 
-    return res.status(200).json({
+    return res.status(HttpStatusCode.OK).json({
       success: true,
       message: "Doctors fetched successfully",
       ...data,
@@ -110,7 +111,7 @@ export class DoctorMangmentController {
       status: String(isActive),
     });
 
-    return res.status(200).json({
+    return res.status(HttpStatusCode.OK).json({
       success: true,
       ...result,
     });

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { jwtTokenService } from "../../DI/service";
+import { HttpStatusCode } from "../../domain/constants/HttpStatusCode";
 
 export const authMiddleware = (
   req: Request,
@@ -13,7 +14,7 @@ export const authMiddleware = (
     console.log("auth middleware", authHeader);
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({
         success: false,
         message: "Authorization token missing",
       });

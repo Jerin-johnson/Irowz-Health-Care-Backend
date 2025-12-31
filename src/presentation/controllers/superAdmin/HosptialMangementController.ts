@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import { IGetAllHospitalListsUseCase } from "../../../domain/usecase/superAdmin/hospitalMangement/IGetAllHospitalListsUseCase.usecase";
 import { IBlockOrUnblockHospitalUseCase } from "../../../domain/usecase/superAdmin/hospitalMangement/IBlockOrUnblockHospitalUseCase.usecase";
+import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 
 export class HospitalMangementController {
   constructor(
@@ -20,7 +21,7 @@ export class HospitalMangementController {
       page: Number(page),
       limit: Number(limit),
     });
-    res.status(200).json({ ...result, success: true });
+    res.status(HttpStatusCode.OK).json({ ...result, success: true });
   };
 
   BlockOrUnBlockHospital = async (req: Request, res: Response) => {
@@ -31,6 +32,6 @@ export class HospitalMangementController {
       userId,
       String(status)
     );
-    res.status(200).json({ ...result, success: true });
+    res.status(HttpStatusCode.OK).json({ ...result, success: true });
   };
 }

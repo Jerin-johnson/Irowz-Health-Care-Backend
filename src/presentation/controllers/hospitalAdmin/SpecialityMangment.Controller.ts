@@ -4,6 +4,7 @@ import { IGetAllSpecialtyUseCase } from "../../../domain/usecase/hosptialAdmin/s
 import { IBlockOrUnblockSpecialtyUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IBlockOrUnblockSpecialtyUseCase.usecase";
 import { IEditSpecialityUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IEditSpecialityUseCase.usecase";
 import { IGetAllSpecialtyNameUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IGetAllSpecialtyNameUseCase.usecase";
+import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 
 export class SpecialtyMangmentController {
   constructor(
@@ -19,7 +20,7 @@ export class SpecialtyMangmentController {
     const hospitalId = req.user?.hospitalId;
 
     if (!hospitalId) {
-      return res.status(401).json({
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({
         success: false,
         message: "Unauthorized",
       });
@@ -31,7 +32,7 @@ export class SpecialtyMangmentController {
       description,
     });
 
-    return res.status(201).json({
+    return res.status(HttpStatusCode.CREATED).json({
       success: true,
       message: "Hospital specialty created successfully",
       data: specialty,
@@ -44,7 +45,7 @@ export class SpecialtyMangmentController {
 
     if (!hosptialId)
       return res
-        .status(401)
+        .status(HttpStatusCode.UNAUTHORIZED)
         .json({ success: false, message: "unAthrozied User" });
     console.log(req.query, "query");
     console.log(isActive);
@@ -61,7 +62,7 @@ export class SpecialtyMangmentController {
       page: Number(page),
       limit: Number(limit),
     });
-    res.status(200).json({ ...result, success: true });
+    res.status(HttpStatusCode.OK).json({ ...result, success: true });
   };
 
   BlockOrUnblockSpecialty = async (req: Request, res: Response) => {
@@ -71,7 +72,7 @@ export class SpecialtyMangmentController {
       id: specailtyId,
       status: String(isActive),
     });
-    res.status(200).json({ ...result, success: true });
+    res.status(HttpStatusCode.OK).json({ ...result, success: true });
   };
 
   editSpecialty = async (req: Request, res: Response) => {
@@ -87,7 +88,7 @@ export class SpecialtyMangmentController {
         description,
       }
     );
-    res.status(200).json({ ...updated, success: true });
+    res.status(HttpStatusCode.OK).json({ ...updated, success: true });
   };
 
   GetAllSpecialtyName = async (req: Request, res: Response) => {
@@ -96,6 +97,6 @@ export class SpecialtyMangmentController {
     const data = await this.GetAllSpecialtyNameUseCase.execute(
       hospitalId as string
     );
-    res.status(200).json({ data, success: true });
+    res.status(HttpStatusCode.OK).json({ data, success: true });
   };
 }

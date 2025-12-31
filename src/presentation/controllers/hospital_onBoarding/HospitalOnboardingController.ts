@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ISubmitHospitalVerificationRequestUseCase } from "../../../domain/usecase/hospitalOnBoarding/ISubmitHospitalVerificationRequest.usecase";
 import { ResubmitHospitalVerificationUseCase } from "../../../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
 import { ICheckHospitalVerificationStatusByIdUseCase } from "../../../domain/usecase/hospitalOnBoarding/ICheckHospitalVerificationStatusById.usecase";
+import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 
 export class HospitalOnBoradingController {
   constructor(
@@ -43,10 +44,12 @@ export class HospitalOnBoradingController {
     const { id } = req.params;
 
     if (!id) {
-      return res.status(400).json("The request is invalid");
+      return res
+        .status(HttpStatusCode.BAD_GATEWAY)
+        .json("The request is invalid");
     }
     const result = await this.checkStatusBYId.execute(id);
 
-    return res.status(200).json({ success: true, ...result });
+    return res.status(HttpStatusCode.OK).json({ success: true, ...result });
   };
 }

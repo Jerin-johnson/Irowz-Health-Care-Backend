@@ -4,6 +4,7 @@ import { IRegisterUserUseCase } from "../../../domain/usecase/auth/IRegisterUser
 import { IVerifyOtpUseCase } from "../../../domain/usecase/auth/IVerifyOtpUseCase.usecase";
 import { IRefreshTokenUseCase } from "../../../domain/usecase/auth/IRefreshToken.useCase";
 import { IReSendOtpUseCase } from "../../../domain/usecase/auth/IResendOtp.useCase";
+import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 
 export class AuthController {
   constructor(
@@ -23,7 +24,7 @@ export class AuthController {
       sameSite: "strict",
     });
 
-    res.status(200).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       accessToken: result.accessToken,
       role: result.role,
@@ -45,7 +46,7 @@ export class AuthController {
 
     if (!userId || !email || !otp) {
       return res
-        .status(400)
+        .status(HttpStatusCode.BAD_REQUEST)
         .json({ success: false, message: "fields are missing" });
     }
 
@@ -56,7 +57,7 @@ export class AuthController {
       sameSite: "strict",
     });
 
-    res.status(200).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       accessToken: result.accessToken,
       userRole: result.userRole,
@@ -67,7 +68,9 @@ export class AuthController {
     const token = req.cookies.refreshToken;
 
     if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(HttpStatusCode.UNAUTHORIZED)
+        .json({ message: "Unauthorized" });
     }
 
     const { refreshToken, accessToken, user } =
@@ -93,7 +96,7 @@ export class AuthController {
   logout = async (req: Request, res: Response) => {
     res.clearCookie("refreshToken");
     return res
-      .status(200)
+      .status(HttpStatusCode.OK)
       .json({ success: true, message: "User logout successfully" });
   };
 }

@@ -5,6 +5,7 @@ import { IRejectVerificationRequestUseCase } from "../../../domain/usecase/super
 import { IGetAllVerificationRequestUseCase } from "../../../domain/usecase/superAdmin/hospitalVerfication/IGetAllVerificationRequestUseCase.usecase";
 import { IGetHospitalStatsUseCase } from "../../../domain/usecase/superAdmin/hospitalVerfication/IGetHospitalStatsUseCase.usecase";
 import { IGetVerificationRequestByIdUseCase } from "../../../domain/usecase/superAdmin/hospitalVerfication/IGetVerificationRequestByIdUseCase.usecase";
+import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 
 export class HospitalVerficationController {
   constructor(
@@ -26,19 +27,19 @@ export class HospitalVerficationController {
       limit: Number(limit),
     });
 
-    res.status(200).json({ ...result, success: true });
+    res.status(HttpStatusCode.OK).json({ ...result, success: true });
   };
 
   getVerficationRequestById = async (req: Request, res: Response) => {
     const HosptialRequestId = req.params.id;
     const result =
       await this.GetVerficationRequestById.execute(HosptialRequestId);
-    return res.status(200).json({ ...result, success: true });
+    return res.status(HttpStatusCode.OK).json({ ...result, success: true });
   };
 
   getStats = async (_req: Request, res: Response) => {
     const stats = await this.GetHospitalStatsUseCase.execute();
-    return res.status(200).json({ ...stats, success: true });
+    return res.status(HttpStatusCode.OK).json({ ...stats, success: true });
   };
 
   approve = async (req: Request, res: Response) => {
@@ -50,7 +51,7 @@ export class HospitalVerficationController {
       adminRemarks ? adminRemarks : ""
     );
 
-    return res.status(200).json({ success: true, ...result });
+    return res.status(HttpStatusCode.OK).json({ success: true, ...result });
   };
 
   reject = async (req: Request, res: Response) => {
@@ -62,6 +63,6 @@ export class HospitalVerficationController {
       adminRemarks
     );
 
-    return res.status(200).json({ success: true, ...result });
+    return res.status(HttpStatusCode.OK).json({ success: true, ...result });
   };
 }

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../../infrastructure/database/mongo/models/User.model";
+import { HttpStatusCode } from "../../domain/constants/HttpStatusCode";
 
 export const checkUserBlocked = async (
   req: Request,
@@ -10,7 +11,7 @@ export const checkUserBlocked = async (
     const userId = req.user?.userId;
 
     if (!userId) {
-      return res.status(401).json({
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({
         success: false,
         message: "Unauthorized",
       });
@@ -19,7 +20,7 @@ export const checkUserBlocked = async (
     const user = await User.findById(userId).select("isBlocked");
 
     if (!user) {
-      return res.status(401).json({
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({
         success: false,
         message: "User not found",
       });
@@ -27,7 +28,7 @@ export const checkUserBlocked = async (
 
     if (user.isBlocked) {
       res.clearCookie("refreshToken");
-      return res.status(403).json({
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({
         success: false,
         message: "Your account has been blocked",
       });
