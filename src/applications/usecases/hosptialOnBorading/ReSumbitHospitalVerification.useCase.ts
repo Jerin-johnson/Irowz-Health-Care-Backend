@@ -2,11 +2,11 @@ import {
   CreateHospitalVerificationRepository,
   IHospitalVerificationRepository,
 } from "../../../domain/repositories/IHospitalVerification.repo";
-import { UserRepository } from "../../../domain/repositories/IUser.repo";
+import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 
 export class ResubmitHospitalVerificationUseCase {
   constructor(
-    private userRepo: UserRepository,
+    private userRepo: IUserRepository,
     private hospitalVerificationRepo: IHospitalVerificationRepository
   ) {}
 

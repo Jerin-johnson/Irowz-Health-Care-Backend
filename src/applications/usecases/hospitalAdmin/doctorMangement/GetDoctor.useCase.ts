@@ -1,4 +1,5 @@
 import { IDoctorRepository } from "../../../../domain/repositories/IDoctor.repo";
+import { IGetAllDoctorUseCase } from "../../../../domain/usecase/hosptialAdmin/doctorMangement/IGetAllDoctorUseCase.usecase";
 
 interface GetAllDoctorInput {
   hospitalId: string;
@@ -9,7 +10,7 @@ interface GetAllDoctorInput {
   limit?: number;
 }
 
-export class GetAllDoctorUseCase {
+export class GetAllDoctorUseCase implements IGetAllDoctorUseCase {
   constructor(private readonly doctorRepo: IDoctorRepository) {}
 
   async execute(input: GetAllDoctorInput) {

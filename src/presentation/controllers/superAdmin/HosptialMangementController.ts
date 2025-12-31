@@ -1,12 +1,11 @@
 import { Response, Request } from "express";
-import { GetALLHosptialLists } from "../../../applications/usecases/superAdmin/hosptialMangement/GetAllHospital.useCase";
-import { BlockOrUnblockHospitalUseCase } from "../../../applications/usecases/superAdmin/hosptialMangement/BlockOrUnBlockHospital.useCase";
-import { stat } from "node:fs";
+import { IGetAllHospitalListsUseCase } from "../../../domain/usecase/superAdmin/hospitalMangement/IGetAllHospitalListsUseCase.usecase";
+import { IBlockOrUnblockHospitalUseCase } from "../../../domain/usecase/superAdmin/hospitalMangement/IBlockOrUnblockHospitalUseCase.usecase";
 
 export class HospitalMangementController {
   constructor(
-    private GetALLHosptialLists: GetALLHosptialLists,
-    private BlockOrUnblockHospitalUseCase: BlockOrUnblockHospitalUseCase
+    private GetALLHosptialLists: IGetAllHospitalListsUseCase,
+    private BlockOrUnblockHospitalUseCase: IBlockOrUnblockHospitalUseCase
   ) {}
 
   getAllHospital = async (req: Request, res: Response) => {

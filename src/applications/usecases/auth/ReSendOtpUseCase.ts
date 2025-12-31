@@ -1,13 +1,13 @@
 import { email } from "zod";
 import { OtpRepository } from "../../../domain/repositories/IOtp.repo";
-import { UserRepository } from "../../../domain/repositories/IUser.repo";
+
 // import { IEmailService } from "../../../domain/services/email.interface.service";
 import { IOtpService } from "../../../domain/services/otp.interface.service";
-import { IPasswordService } from "../../../domain/services/password.interface.service";
-import { createUser } from "../../../domain/types/IUser.types";
-import { EmailQueueService } from "../../queue/EmailQueueService";
 
-export class ReSendOtpUseCase {
+import { EmailQueueService } from "../../queue/EmailQueueService";
+import { IReSendOtpUseCase } from "../../../domain/usecase/auth/IResendOtp.useCase";
+
+export class ReSendOtpUseCase implements IReSendOtpUseCase {
   constructor(
     private otpService: IOtpService,
     private emailService: EmailQueueService,

@@ -1,5 +1,5 @@
 import { EmailQueueService } from "../../../queue/EmailQueueService";
-import { UserRepository } from "../../../../domain/repositories/IUser.repo";
+import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
 import { IDoctorRepository } from "../../../../domain/repositories/IDoctor.repo";
 import UserRoles from "../../../../domain/constants/UserRole";
 import { createUser } from "../../../../domain/types/IUser.types";
@@ -7,10 +7,11 @@ import { generatePlainPassword } from "../../../utils/password";
 import { AdminCreateDoctorDTO } from "../../../dtos/hosptialAdmin/doctorMangement/admin-create-doctor.dto";
 import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IHospitalSpecaility.repo";
 import { IPasswordService } from "../../../../domain/services/password.interface.service";
+import { IAdminCreateDoctorUseCase } from "../../../../domain/usecase/hosptialAdmin/doctorMangement/IAdminCreateDoctorUseCase.usecase";
 
-export class AdminCreateDoctorUseCase {
+export class AdminCreateDoctorUseCase implements IAdminCreateDoctorUseCase {
   constructor(
-    private readonly userRepo: UserRepository,
+    private readonly userRepo: IUserRepository,
     private readonly doctorRepo: IDoctorRepository,
     private readonly queueService: EmailQueueService,
     private readonly specialtyRepository: IHospitalSpecialtyRepository,

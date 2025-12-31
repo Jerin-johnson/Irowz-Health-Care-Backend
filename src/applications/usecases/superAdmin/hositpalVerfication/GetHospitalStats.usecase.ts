@@ -1,8 +1,9 @@
 import { IHospitalVerificationRepository } from "../../../../domain/repositories/IHospitalVerification.repo";
 
 import { HosptialRequestVerficationStatus } from "../../../../domain/constants/HosptialRequestVerficationStatus";
+import { IGetHospitalStatsUseCase } from "../../../../domain/usecase/superAdmin/hospitalVerfication/IGetHospitalStatsUseCase.usecase";
 
-export class GetHospitalStatsUseCase {
+export class GetHospitalStatsUseCase implements IGetHospitalStatsUseCase {
   constructor(private readonly repository: IHospitalVerificationRepository) {}
 
   async execute() {

@@ -1,4 +1,5 @@
 import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IHospitalSpecaility.repo";
+import { IGetAllSpecialtyUseCase } from "../../../../domain/usecase/hosptialAdmin/specialityMangement/IGetAllSpecialtyUseCase.usecase";
 
 interface GetSpecialty {
   hospitalId: string;
@@ -8,7 +9,7 @@ interface GetSpecialty {
   page: number;
   limit: number;
 }
-export class GetAllSpecialtyUseCase {
+export class GetAllSpecialtyUseCase implements IGetAllSpecialtyUseCase {
   constructor(private HospitalSpeicalityRepo: IHospitalSpecialtyRepository) {}
 
   async execute(input: GetSpecialty) {

@@ -1,9 +1,10 @@
 import { IHospitalRepository } from "../../../../domain/repositories/IHospital.repo";
-import { UserRepository } from "../../../../domain/repositories/IUser.repo";
+import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
+import { IBlockOrUnblockHospitalUseCase } from "../../../../domain/usecase/superAdmin/hospitalMangement/IBlockOrUnblockHospitalUseCase.usecase";
 
-export class BlockOrUnblockHospitalUseCase {
+export class BlockOrUnblockHospitalUseCase implements IBlockOrUnblockHospitalUseCase {
   constructor(
-    private userRepo: UserRepository,
+    private userRepo: IUserRepository,
     private hospitalRepo: IHospitalRepository
   ) {}
 

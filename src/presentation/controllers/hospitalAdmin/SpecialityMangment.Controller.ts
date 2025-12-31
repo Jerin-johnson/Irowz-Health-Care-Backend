@@ -1,18 +1,17 @@
 import { Request, Response } from "express";
-import { AddHospitalSpecialtyUseCase } from "../../../applications/usecases/hospitalAdmin/specialityMangement/AddSpeciality.useCase";
-import { GetAllSpecialtyUseCase } from "../../../applications/usecases/hospitalAdmin/specialityMangement/GetAllSpecialitySearch.usecase";
-import { BlockOrUnblockSpecialtyUseCase } from "../../../applications/usecases/hospitalAdmin/specialityMangement/BlockOrUnblockSpeciality.useCase";
-import { EditSpecialityUseCase } from "../../../applications/usecases/hospitalAdmin/specialityMangement/EditSpecialty.useCase";
-import { success } from "zod";
-import { GetAllSpecialtyNameUseCase } from "../../../applications/usecases/hospitalAdmin/specialityMangement/GetAllSpecialityName.userCae";
+import { IAddHospitalSpecialtyUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IAddHospitalSpecialtyUseCase.usecase";
+import { IGetAllSpecialtyUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IGetAllSpecialtyUseCase.usecase";
+import { IBlockOrUnblockSpecialtyUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IBlockOrUnblockSpecialtyUseCase.usecase";
+import { IEditSpecialityUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IEditSpecialityUseCase.usecase";
+import { IGetAllSpecialtyNameUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IGetAllSpecialtyNameUseCase.usecase";
 
 export class SpecialtyMangmentController {
   constructor(
-    private readonly createHospitalSpecialtyUseCase: AddHospitalSpecialtyUseCase,
-    private readonly GetAllSpecialtyUseCase: GetAllSpecialtyUseCase,
-    private readonly BlockOrUnblockSpecialtyUseCase: BlockOrUnblockSpecialtyUseCase,
-    private readonly EditSpecialityUseCase: EditSpecialityUseCase,
-    private readonly GetAllSpecialtyNameUseCase: GetAllSpecialtyNameUseCase
+    private readonly createHospitalSpecialtyUseCase: IAddHospitalSpecialtyUseCase,
+    private readonly GetAllSpecialtyUseCase: IGetAllSpecialtyUseCase,
+    private readonly BlockOrUnblockSpecialtyUseCase: IBlockOrUnblockSpecialtyUseCase,
+    private readonly EditSpecialityUseCase: IEditSpecialityUseCase,
+    private readonly GetAllSpecialtyNameUseCase: IGetAllSpecialtyNameUseCase
   ) {}
 
   createSpecilty = async (req: Request, res: Response) => {

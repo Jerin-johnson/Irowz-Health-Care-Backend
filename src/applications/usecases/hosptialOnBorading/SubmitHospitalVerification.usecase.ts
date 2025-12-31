@@ -3,14 +3,15 @@ import {
   HospitalVerification,
   IHospitalVerificationRepository,
 } from "../../../domain/repositories/IHospitalVerification.repo";
-import { UserRepository } from "../../../domain/repositories/IUser.repo";
+import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 import { IPasswordService } from "../../../domain/services/password.interface.service";
 import UserRoles from "../../../domain/constants/UserRole";
 import { PdfUploadQueueService } from "../../queue/PdfUPloadQueueService.";
+import { ISubmitHospitalVerificationRequestUseCase } from "../../../domain/usecase/hospitalOnBoarding/ISubmitHospitalVerificationRequest.usecase";
 
-export class SubmitHositalVerficationRequest {
+export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificationRequestUseCase {
   constructor(
-    private userRepo: UserRepository,
+    private userRepo: IUserRepository,
     private HosptialVerficatinRepo: IHospitalVerificationRepository,
     private PasswordService: IPasswordService,
     private pdfUploadQueue: PdfUploadQueueService

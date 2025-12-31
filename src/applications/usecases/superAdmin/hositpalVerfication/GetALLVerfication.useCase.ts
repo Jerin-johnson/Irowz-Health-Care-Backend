@@ -1,6 +1,7 @@
 import { IHospitalVerificationRepository } from "../../../../domain/repositories/IHospitalVerification.repo";
 
 import { HosptialRequestVerficationStatus } from "../../../../domain/constants/HosptialRequestVerficationStatus";
+import { IGetAllVerificationRequestUseCase } from "../../../../domain/usecase/superAdmin/hospitalVerfication/IGetAllVerificationRequestUseCase.usecase";
 
 interface GetHospitalRequestsInput {
   search?: string;
@@ -9,7 +10,7 @@ interface GetHospitalRequestsInput {
   page: number;
   limit: number;
 }
-export class GetALLVerficationRequest {
+export class GetALLVerficationRequest implements IGetAllVerificationRequestUseCase {
   constructor(
     private HosptialVerficationRepo: IHospitalVerificationRepository
   ) {}

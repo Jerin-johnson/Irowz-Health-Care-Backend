@@ -1,6 +1,7 @@
 import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IHospitalSpecaility.repo";
+import { IGetAllSpecialtyNameUseCase } from "../../../../domain/usecase/hosptialAdmin/specialityMangement/IGetAllSpecialtyNameUseCase.usecase";
 
-export class GetAllSpecialtyNameUseCase {
+export class GetAllSpecialtyNameUseCase implements IGetAllSpecialtyNameUseCase {
   constructor(private HospitalSpeicalityRepo: IHospitalSpecialtyRepository) {}
 
   async execute(hospitalId: string) {

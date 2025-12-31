@@ -1,12 +1,12 @@
-import { email } from "zod";
 import { OtpRepository } from "../../../domain/repositories/IOtp.repo";
-import { UserRepository } from "../../../domain/repositories/IUser.repo";
+import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 import { ITokenService } from "../../../domain/services/jwt.interface.service";
 import { IOtpService } from "../../../domain/services/otp.interface.service";
+import { IVerifyOtpUseCase } from "../../../domain/usecase/auth/IVerifyOtpUseCase.usecase";
 
-export class VerfiyOtpUseCase {
+export class VerfiyOtpUseCase implements IVerifyOtpUseCase {
   constructor(
-    private UserRepo: UserRepository,
+    private UserRepo: IUserRepository,
     private OtpRepo: OtpRepository,
     private OtpService: IOtpService,
     private TokenService: ITokenService

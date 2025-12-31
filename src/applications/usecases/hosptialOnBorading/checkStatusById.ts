@@ -1,6 +1,7 @@
 import { IHospitalVerificationRepository } from "../../../domain/repositories/IHospitalVerification.repo";
+import { ICheckHospitalVerificationStatusByIdUseCase } from "../../../domain/usecase/hospitalOnBoarding/ICheckHospitalVerificationStatusById.usecase";
 
-export class CheckHospitalVerfcationStatusById {
+export class CheckHospitalVerfcationStatusById implements ICheckHospitalVerificationStatusByIdUseCase {
   constructor(
     private HosptialVerficatinRepo: IHospitalVerificationRepository
   ) {}

@@ -1,7 +1,8 @@
 import { IHospitalRepository } from "../../../../domain/repositories/IHospital.repo";
 import { IHospitalVerificationRepository } from "../../../../domain/repositories/IHospitalVerification.repo";
+import { IRejectVerificationRequestUseCase } from "../../../../domain/usecase/superAdmin/hospitalVerfication/IRejectVerificationRequestUseCase.usecase";
 
-export class RejectVerficationRequest {
+export class RejectVerficationRequest implements IRejectVerificationRequestUseCase {
   constructor(
     private HosptialVerficationRepo: IHospitalVerificationRepository
   ) {}

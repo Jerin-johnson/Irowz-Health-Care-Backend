@@ -2,8 +2,9 @@ import {
   ITokenService,
   TokenPayload,
 } from "../../../domain/services/jwt.interface.service";
+import { IRefreshTokenUseCase } from "../../../domain/usecase/auth/IRefreshToken.useCase";
 
-export class RefreshTokenUseCase {
+export class RefreshTokenUseCase implements IRefreshTokenUseCase {
   constructor(private TokenService: ITokenService) {}
 
   async execute(token: string) {

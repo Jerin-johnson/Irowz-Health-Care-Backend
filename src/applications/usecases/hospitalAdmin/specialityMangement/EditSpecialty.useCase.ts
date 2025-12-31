@@ -1,6 +1,7 @@
 import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IHospitalSpecaility.repo";
+import { IEditSpecialityUseCase } from "../../../../domain/usecase/hosptialAdmin/specialityMangement/IEditSpecialityUseCase.usecase";
 
-export class EditSpecialityUseCase {
+export class EditSpecialityUseCase implements IEditSpecialityUseCase {
   constructor(
     private readonly specialtyRepository: IHospitalSpecialtyRepository
   ) {}

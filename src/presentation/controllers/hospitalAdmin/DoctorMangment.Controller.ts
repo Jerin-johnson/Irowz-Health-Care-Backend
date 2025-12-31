@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { AdminCreateDoctorUseCase } from "../../../applications/usecases/hospitalAdmin/doctorMangement/AdminCreateDoctorUseCase";
 import { AdminCreateDoctorDTO } from "../../../applications/dtos/hosptialAdmin/doctorMangement/admin-create-doctor.dto";
-import { GetAllDoctorUseCase } from "../../../applications/usecases/hospitalAdmin/doctorMangement/GetDoctor.useCase";
-import { BlockOrUnblockDoctorUseCase } from "../../../applications/usecases/hospitalAdmin/doctorMangement/BlockOrUnBlockDoctor.UseCase";
+import { IAdminCreateDoctorUseCase } from "../../../domain/usecase/hosptialAdmin/doctorMangement/IAdminCreateDoctorUseCase.usecase";
+import { IGetAllDoctorUseCase } from "../../../domain/usecase/hosptialAdmin/doctorMangement/IGetAllDoctorUseCase.usecase";
+import { IBlockOrUnblockDoctorUseCase } from "../../../domain/usecase/hosptialAdmin/doctorMangement/IBlockOrUnblockDoctorUseCase.usecase";
 
 export class DoctorMangmentController {
   constructor(
-    private readonly _AdminCreateDoctorUseCase: AdminCreateDoctorUseCase,
-    private readonly _getAllDoctorUseCase: GetAllDoctorUseCase,
-    private readonly _BlockOrUnblockDoctorUseCase: BlockOrUnblockDoctorUseCase
+    private readonly _AdminCreateDoctorUseCase: IAdminCreateDoctorUseCase,
+    private readonly _getAllDoctorUseCase: IGetAllDoctorUseCase,
+    private readonly _BlockOrUnblockDoctorUseCase: IBlockOrUnblockDoctorUseCase
   ) {}
 
   createDoctor = async (req: Request, res: Response) => {

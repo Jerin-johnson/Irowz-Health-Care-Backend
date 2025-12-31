@@ -1,6 +1,6 @@
 import { createUser, UserResponse, updateUser } from "../types/IUser.types";
 
-export interface UserRepository {
+export interface IUserRepository {
   create(user: createUser): Promise<UserResponse | null>;
   findById(id: string): Promise<UserResponse | null>;
   findByEmail(

@@ -1,14 +1,12 @@
-import { success } from "zod";
-
 import { Request, Response } from "express";
 import { DoctorProfileMapper } from "../../dtos/doctorProfile.mapper";
-import { GetDoctorProfileUseCase } from "../../../applications/usecases/doctor/doctorProfile/GetDoctorProfile.UseCase";
-import { ResetDoctorPasswordUseCase } from "../../../applications/usecases/doctor/doctorProfile/ResetPassword.UseCase";
+import { IGetDoctorProfileUseCase } from "../../../domain/usecase/doctor/doctorProfile/IGetDoctorProfileUseCase.usecase";
+import { IResetDoctorPasswordUseCase } from "../../../domain/usecase/doctor/doctorProfile/IResetDoctorPasswordUseCase.usecase";
 
 export class DoctorProfileMangementController {
   constructor(
-    private readonly _GetDoctorProfileUseCase: GetDoctorProfileUseCase,
-    private readonly _ResetDoctorPassword: ResetDoctorPasswordUseCase
+    private readonly _GetDoctorProfileUseCase: IGetDoctorProfileUseCase,
+    private readonly _ResetDoctorPassword: IResetDoctorPasswordUseCase
   ) {}
 
   getDoctorProfile = async (req: Request, res: Response) => {

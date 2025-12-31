@@ -1,4 +1,4 @@
-import { UserRepository } from "../../domain/repositories/IUser.repo";
+import { IUserRepository } from "../../domain/repositories/IUser.repo";
 import {
   createUser,
   updateUser,
@@ -6,7 +6,7 @@ import {
 } from "../../domain/types/IUser.types";
 import User from "../database/mongo/models/User.model";
 
-export class MongoUserRepository implements UserRepository {
+export class MongoUserRepository implements IUserRepository {
   async create(user: createUser): Promise<UserResponse | null> {
     const doc = new User({
       name: user.name,

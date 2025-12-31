@@ -1,4 +1,5 @@
 import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IHospitalSpecaility.repo";
+import { IAddHospitalSpecialtyUseCase } from "../../../../domain/usecase/hosptialAdmin/specialityMangement/IAddHospitalSpecialtyUseCase.usecase";
 import { IHospitalSpecialty } from "../../../../infrastructure/database/mongo/models/HospitalSpeciality.model";
 
 interface CreateHospitalSpecialtyDTO {
@@ -7,7 +8,7 @@ interface CreateHospitalSpecialtyDTO {
   description: string;
 }
 
-export class AddHospitalSpecialtyUseCase {
+export class AddHospitalSpecialtyUseCase implements IAddHospitalSpecialtyUseCase {
   constructor(
     private readonly specialtyRepository: IHospitalSpecialtyRepository
   ) {}

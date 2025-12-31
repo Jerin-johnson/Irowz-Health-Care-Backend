@@ -1,9 +1,10 @@
-import { UserRepository } from "../../../../domain/repositories/IUser.repo";
+import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
 import { IPasswordService } from "../../../../domain/services/password.interface.service";
+import { IResetDoctorPasswordUseCase } from "../../../../domain/usecase/doctor/doctorProfile/IResetDoctorPasswordUseCase.usecase";
 
-export class ResetDoctorPasswordUseCase {
+export class ResetDoctorPasswordUseCase implements IResetDoctorPasswordUseCase {
   constructor(
-    private readonly _UserRepo: UserRepository,
+    private readonly _UserRepo: IUserRepository,
     private readonly _PasswordService: IPasswordService
   ) {}
 

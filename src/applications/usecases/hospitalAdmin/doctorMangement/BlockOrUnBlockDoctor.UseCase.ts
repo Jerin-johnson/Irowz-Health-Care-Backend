@@ -1,10 +1,11 @@
 import { IDoctorRepository } from "../../../../domain/repositories/IDoctor.repo";
-import { UserRepository } from "../../../../domain/repositories/IUser.repo";
+import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
+import { IBlockOrUnblockDoctorUseCase } from "../../../../domain/usecase/hosptialAdmin/doctorMangement/IBlockOrUnblockDoctorUseCase.usecase";
 
-export class BlockOrUnblockDoctorUseCase {
+export class BlockOrUnblockDoctorUseCase implements IBlockOrUnblockDoctorUseCase {
   constructor(
     private readonly DoctorRepository: IDoctorRepository,
-    private readonly UserRepo: UserRepository
+    private readonly UserRepo: IUserRepository
   ) {}
 
   async execute(data: { doctorId: string; status: string }) {

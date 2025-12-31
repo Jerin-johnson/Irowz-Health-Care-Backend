@@ -1,18 +1,18 @@
-import { json, success } from "zod";
-import { ApproveVerficationRequest } from "../../../applications/usecases/superAdmin/hositpalVerfication/ApproveVerfication.useCase";
-import { RejectVerficationRequest } from "../../../applications/usecases/superAdmin/hositpalVerfication/RejectVerfication.useCase";
 import { Request, Response } from "express";
-import { GetALLVerficationRequest } from "../../../applications/usecases/superAdmin/hositpalVerfication/GetALLVerfication.useCase";
-import { GetHospitalStatsUseCase } from "../../../applications/usecases/superAdmin/hositpalVerfication/GetHospitalStats.usecase";
 import { HosptialRequestVerficationStatus } from "../../../domain/constants/HosptialRequestVerficationStatus";
-import { GetVerficationRequestById } from "../../../applications/usecases/superAdmin/hositpalVerfication/GetVerficationRequestById";
+import { IApproveVerificationRequestUseCase } from "../../../domain/usecase/superAdmin/hospitalVerfication/IApproveVerificationRequestUseCase.usecase";
+import { IRejectVerificationRequestUseCase } from "../../../domain/usecase/superAdmin/hospitalVerfication/IRejectVerificationRequestUseCase.usecase";
+import { IGetAllVerificationRequestUseCase } from "../../../domain/usecase/superAdmin/hospitalVerfication/IGetAllVerificationRequestUseCase.usecase";
+import { IGetHospitalStatsUseCase } from "../../../domain/usecase/superAdmin/hospitalVerfication/IGetHospitalStatsUseCase.usecase";
+import { IGetVerificationRequestByIdUseCase } from "../../../domain/usecase/superAdmin/hospitalVerfication/IGetVerificationRequestByIdUseCase.usecase";
+
 export class HospitalVerficationController {
   constructor(
-    private ApproveVerficationRequest: ApproveVerficationRequest,
-    private RejectVerficationRequest: RejectVerficationRequest,
-    private GetALLVerficationRequest: GetALLVerficationRequest,
-    private GetHospitalStatsUseCase: GetHospitalStatsUseCase,
-    private GetVerficationRequestById: GetVerficationRequestById
+    private ApproveVerficationRequest: IApproveVerificationRequestUseCase,
+    private RejectVerficationRequest: IRejectVerificationRequestUseCase,
+    private GetALLVerficationRequest: IGetAllVerificationRequestUseCase,
+    private GetHospitalStatsUseCase: IGetHospitalStatsUseCase,
+    private GetVerficationRequestById: IGetVerificationRequestByIdUseCase
   ) {}
 
   getAllVerficationRequest = async (req: Request, res: Response) => {

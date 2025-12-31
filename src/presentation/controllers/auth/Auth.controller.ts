@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { LoginUseCase } from "../../../applications/usecases/auth/login.useCase";
-import { RegisterUserCase } from "../../../applications/usecases/auth/register.useCase";
-import { VerfiyOtpUseCase } from "../../../applications/usecases/auth/verfiyOtpUseCase";
-import { RefreshTokenUseCase } from "../../../applications/usecases/auth/ReFreshJwtTokenUseCase";
-import { ReSendOtpUseCase } from "../../../applications/usecases/auth/ReSendOtpUseCase";
+import { ILoginUseCase } from "../../../domain/usecase/auth/ILogin.useCase";
+import { IRegisterUserUseCase } from "../../../domain/usecase/auth/IRegisterUser.useCase";
+import { IVerifyOtpUseCase } from "../../../domain/usecase/auth/IVerifyOtpUseCase.usecase";
+import { IRefreshTokenUseCase } from "../../../domain/usecase/auth/IRefreshToken.useCase";
+import { IReSendOtpUseCase } from "../../../domain/usecase/auth/IResendOtp.useCase";
 
 export class AuthController {
   constructor(
-    private loginUseCase: LoginUseCase,
-    private RegisterUseCase: RegisterUserCase,
-    private VerfiyOtpUseCase: VerfiyOtpUseCase,
-    private RefreshTokenUseCase: RefreshTokenUseCase,
-    private ResendOtpUseCase: ReSendOtpUseCase
+    private loginUseCase: ILoginUseCase,
+    private RegisterUseCase: IRegisterUserUseCase,
+    private VerfiyOtpUseCase: IVerifyOtpUseCase,
+    private RefreshTokenUseCase: IRefreshTokenUseCase,
+    private ResendOtpUseCase: IReSendOtpUseCase
   ) {}
 
   login = (allowedRoles: string[]) => async (req: Request, res: Response) => {

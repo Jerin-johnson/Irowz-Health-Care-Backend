@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
-import { SubmitHositalVerficationRequest } from "../../../applications/usecases/hosptialOnBorading/SubmitHospitalVerification.usecase";
+import { ISubmitHospitalVerificationRequestUseCase } from "../../../domain/usecase/hospitalOnBoarding/ISubmitHospitalVerificationRequest.usecase";
 import { ResubmitHospitalVerificationUseCase } from "../../../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
-import { CheckHospitalVerfcationStatusById } from "../../../applications/usecases/hosptialOnBorading/checkStatusById";
+import { ICheckHospitalVerificationStatusByIdUseCase } from "../../../domain/usecase/hospitalOnBoarding/ICheckHospitalVerificationStatusById.usecase";
+
 export class HospitalOnBoradingController {
   constructor(
-    private SubmitHospitalVerificationUseCase: SubmitHositalVerficationRequest,
+    private SubmitHospitalVerificationUseCase: ISubmitHospitalVerificationRequestUseCase,
     private ResubmitHospitalVerificationUseCase: ResubmitHospitalVerificationUseCase,
-    private checkStatusBYId: CheckHospitalVerfcationStatusById
+    private checkStatusBYId: ICheckHospitalVerificationStatusByIdUseCase
   ) {}
 
   submitVerficationRequest = async (req: Request, res: Response) => {

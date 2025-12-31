@@ -1,13 +1,14 @@
 import { tr } from "zod/v4/locales";
 import { IHospitalRepository } from "../../../../domain/repositories/IHospital.repo";
 import { IHospitalVerificationRepository } from "../../../../domain/repositories/IHospitalVerification.repo";
-import { UserRepository } from "../../../../domain/repositories/IUser.repo";
+import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
+import { IApproveVerificationRequestUseCase } from "../../../../domain/usecase/superAdmin/hospitalVerfication/IApproveVerificationRequestUseCase.usecase";
 
-export class ApproveVerficationRequest {
+export class ApproveVerficationRequest implements IApproveVerificationRequestUseCase {
   constructor(
     private HosptialVerficationRepo: IHospitalVerificationRepository,
     private HosptialRepo: IHospitalRepository,
-    private userRepo: UserRepository
+    private userRepo: IUserRepository
   ) {}
 
   async execute(hositpalId: string, adminRemarks?: string) {
