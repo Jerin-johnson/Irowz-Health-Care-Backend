@@ -25,6 +25,11 @@ export class DoctorRoutes {
       this._DoctorProfileMangementController.getDoctorProfile
     );
 
+    this._router.patch(
+      "/password",
+      this._DoctorProfileMangementController.resetDoctorPassword
+    );
+
     return this._router;
   }
 }
