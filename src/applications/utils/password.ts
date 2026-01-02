@@ -6,7 +6,7 @@ export function generatePlainPassword(length = 10): string {
   }
 
   const letters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-  const numbers = "23456789"; // avoid 0,1 confusion
+  const numbers = "23456789";
 
   const allChars = letters + numbers;
 

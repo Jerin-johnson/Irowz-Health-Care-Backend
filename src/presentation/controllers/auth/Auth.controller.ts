@@ -16,12 +16,15 @@ export class AuthController {
   ) {}
 
   login = (allowedRoles: string[]) => async (req: Request, res: Response) => {
-    const result = await this.loginUseCase.execute(req.body, allowedRoles);
+    const result = await this.loginUseCase.execute(
+      req.body as { email: string; password: string },
+      allowedRoles
+    );
 
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
     });
 
     res.status(HttpStatusCode.OK).json({
@@ -42,7 +45,11 @@ export class AuthController {
   };
 
   verifyOtp = async (req: Request, res: Response) => {
-    const { userId, email, otp } = req.body;
+    const { userId, email, otp } = req.body as {
+      email: string;
+      userId: string;
+      otp: string;
+    };
 
     if (!userId || !email || !otp) {
       return res
@@ -54,7 +61,7 @@ export class AuthController {
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
     });
 
     res.status(HttpStatusCode.OK).json({
@@ -65,7 +72,7 @@ export class AuthController {
   };
 
   refreshToken = async (req: Request, res: Response) => {
-    const token = req.cookies.refreshToken;
+    const token = req.cookies.refreshToken as string;
 
     if (!token) {
       return res
@@ -79,7 +86,7 @@ export class AuthController {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
     });
 
     console.log("the access token is invoked", user);
@@ -87,7 +94,7 @@ export class AuthController {
   };
 
   resendOtp = async (req: Request, res: Response) => {
-    const email = req?.body?.email;
+    const { email } = req?.body as { email: string };
     if (!email) throw new Error("The request is not valid");
     const result = await this.ResendOtpUseCase.execute(email);
     return res.json({ success: true, ...result });

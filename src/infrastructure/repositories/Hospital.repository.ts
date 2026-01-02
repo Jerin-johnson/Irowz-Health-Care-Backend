@@ -49,7 +49,7 @@ export class HospitalRepositoryImpl implements IHospitalRepository {
         HospitalModel.find(query)
           .skip(pagination.skip)
           .limit(pagination.limit)
-          .sort({ submittedAt: -1 })
+          .sort({ verifiedAt: -1 })
           .lean(),
         HospitalModel.countDocuments(query),
         HospitalModel.countDocuments({}),

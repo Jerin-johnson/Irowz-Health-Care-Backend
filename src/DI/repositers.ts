@@ -1,7 +1,7 @@
 import { HospitalVerificationRepositoryImpl } from "../infrastructure/repositories/HospitalVerification.repository";
 import { MongoUserRepository } from "../infrastructure/repositories/user.repo.mongo";
 import { HospitalRepositoryImpl } from "../infrastructure/repositories/Hospital.repository";
-import { HospitalSpecialtyModel } from "../infrastructure/database/mongo/models/HospitalSpeciality.model";
+// import { HospitalSpecialtyModel } from "../infrastructure/database/mongo/models/HospitalSpeciality.model";
 import { HospitalSpecialtyRepositoryImpl } from "../infrastructure/repositories/HospitalSpeciality.repo";
 import { DoctorRepositoryImpl } from "../infrastructure/repositories/Doctor.repository";
 

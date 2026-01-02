@@ -1,0 +1,49 @@
+# version: "3.9"
+
+services:
+  backend:
+    build: .
+    container_name: healthcare-backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+      - redis
+
+  email-worker:
+    build: .
+    container_name: email-worker
+    command: npm run worker1
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+      - redis
+
+  pdf-worker:
+    build: .
+    container_name: pdf-worker
+    command: npm run worker2
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis/redis-stack:latest
+
+volumes:
+  mongo_data:

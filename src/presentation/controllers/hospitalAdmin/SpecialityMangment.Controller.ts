@@ -5,6 +5,7 @@ import { IBlockOrUnblockSpecialtyUseCase } from "../../../domain/usecase/hosptia
 import { IEditSpecialityUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IEditSpecialityUseCase.usecase";
 import { IGetAllSpecialtyNameUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IGetAllSpecialtyNameUseCase.usecase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
+import { createSpeciltyDtoInput } from "../../dtos/hosptial/createSpecailityDto";
 
 export class SpecialtyMangmentController {
   constructor(
@@ -16,7 +17,7 @@ export class SpecialtyMangmentController {
   ) {}
 
   createSpecilty = async (req: Request, res: Response) => {
-    const { name, description } = req.body;
+    const { name, description } = req.body as createSpeciltyDtoInput;
     const hospitalId = req.user?.hospitalId;
 
     if (!hospitalId) {
@@ -39,7 +40,7 @@ export class SpecialtyMangmentController {
     });
   };
 
-  getAllHospital = async (req: Request, res: Response) => {
+  getAllHospitalSpeciality = async (req: Request, res: Response) => {
     const { page = "1", limit = "10", search, isActive } = req.query;
     const hosptialId = req.user?.hospitalId;
 

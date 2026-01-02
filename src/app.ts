@@ -1,18 +1,27 @@
 import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 // import { mongoSanitizeMiddleware } from "./presentation/middlewares/mongoSanitize.middleware";
 import { authRoute } from "./DI/auth";
 import { hospitalAdminRoutes } from "./DI/hospitalAdmin";
 import { errorHandler } from "./presentation/middlewares/errorHandle";
 import { superAdminRoutes } from "./DI/superAdmin";
-import cookieParser from "cookie-parser";
-import cors from "cors";
+
 import { doctorRoutes } from "./DI/doctor";
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://desire-introspectible-monroe.ngrok-free.dev",
+    ],
+    credentials: true,
+  })
+);
 
 app.use((req, res, next) => {
   console.log("---- Incoming Request ----");

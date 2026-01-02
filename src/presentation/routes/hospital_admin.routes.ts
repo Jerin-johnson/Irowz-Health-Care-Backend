@@ -50,7 +50,7 @@ export class HospitalAdminRoutes {
 
     this.router.get(
       "/speciality",
-      asyncHandler(this.SpecialtyMangmentController.getAllHospital)
+      asyncHandler(this.SpecialtyMangmentController.getAllHospitalSpeciality)
     );
 
     this.router.get(
