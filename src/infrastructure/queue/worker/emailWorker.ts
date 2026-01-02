@@ -17,11 +17,7 @@ const worker = new Worker(
         break;
 
       case "DOCTOR_CREDENTIALS":
-        await emailService.sendDoctorCredentials(
-          to,
-          data.fullName,
-          data.password
-        );
+        await emailService.sendDoctorCredentials(to, data.fullName, data.password);
         break;
 
       case "RESET_PASSWORD":

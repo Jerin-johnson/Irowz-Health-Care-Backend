@@ -2,11 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import User from "../../infrastructure/database/mongo/models/User.model";
 import { HttpStatusCode } from "../../domain/constants/HttpStatusCode";
 
-export const checkUserBlocked = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const checkUserBlocked = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.userId;
 

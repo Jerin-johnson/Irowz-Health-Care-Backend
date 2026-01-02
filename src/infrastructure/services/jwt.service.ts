@@ -1,8 +1,5 @@
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
-import {
-  ITokenService,
-  TokenPayload,
-} from "../../domain/services/jwt.interface.service";
+import { ITokenService, TokenPayload } from "../../domain/services/jwt.interface.service";
 
 export class JwtTokenService implements ITokenService {
   private readonly ACCESS_SECRET: Secret;

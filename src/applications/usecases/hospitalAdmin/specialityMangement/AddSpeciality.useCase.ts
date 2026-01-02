@@ -9,9 +9,7 @@ interface CreateHospitalSpecialtyDTO {
 }
 
 export class AddHospitalSpecialtyUseCase implements IAddHospitalSpecialtyUseCase {
-  constructor(
-    private readonly specialtyRepository: IHospitalSpecialtyRepository
-  ) {}
+  constructor(private readonly specialtyRepository: IHospitalSpecialtyRepository) {}
 
   async execute(data: CreateHospitalSpecialtyDTO): Promise<IHospitalSpecialty> {
     if (!data.name.trim()) {

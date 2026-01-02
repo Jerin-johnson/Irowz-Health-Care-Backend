@@ -33,10 +33,7 @@ export class HospitalOnBoradingController {
   ressubmitVerficationRequest = async (req: Request, res: Response) => {
     const user = req.user as { userId: string; role: string };
     const userId = user.userId;
-    const result = this.ResubmitHospitalVerificationUseCase.execute(
-      userId,
-      req.body
-    );
+    const result = this.ResubmitHospitalVerificationUseCase.execute(userId, req.body);
     return res.json({ success: true, ...result });
   };
 
@@ -44,9 +41,7 @@ export class HospitalOnBoradingController {
     const { id } = req.params;
 
     if (!id) {
-      return res
-        .status(HttpStatusCode.BAD_GATEWAY)
-        .json("The request is invalid");
+      return res.status(HttpStatusCode.BAD_GATEWAY).json("The request is invalid");
     }
     const result = await this.checkStatusBYId.execute(id);
 

@@ -16,8 +16,7 @@ export class ResubmitHospitalVerificationUseCase {
       throw new Error("User not found");
     }
 
-    const existing =
-      await this.hospitalVerificationRepo.findPendingByUserId(userId);
+    const existing = await this.hospitalVerificationRepo.findPendingByUserId(userId);
 
     if (!existing) throw new Error("No record found on submission");
 

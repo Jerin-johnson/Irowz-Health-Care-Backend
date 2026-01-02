@@ -32,8 +32,7 @@ export class HospitalVerficationController {
 
   getVerficationRequestById = async (req: Request, res: Response) => {
     const HosptialRequestId = req.params.id;
-    const result =
-      await this.GetVerficationRequestById.execute(HosptialRequestId);
+    const result = await this.GetVerficationRequestById.execute(HosptialRequestId);
     return res.status(HttpStatusCode.OK).json({ ...result, success: true });
   };
 
@@ -58,10 +57,7 @@ export class HospitalVerficationController {
     const adminRemarks = req?.body?.adminRemarks;
     const { hospitalId } = req.params;
 
-    const result = await this.RejectVerficationRequest.execute(
-      hospitalId,
-      adminRemarks
-    );
+    const result = await this.RejectVerficationRequest.execute(hospitalId, adminRemarks);
 
     return res.status(HttpStatusCode.OK).json({ success: true, ...result });
   };

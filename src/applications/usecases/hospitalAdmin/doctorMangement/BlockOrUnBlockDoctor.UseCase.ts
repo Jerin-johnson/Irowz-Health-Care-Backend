@@ -11,17 +11,11 @@ export class BlockOrUnblockDoctorUseCase implements IBlockOrUnblockDoctorUseCase
   async execute(data: { doctorId: string; status: string }) {
     const finalStatus = data.status == "true" ? true : false;
 
-    console.log("final status", finalStatus);
-
-    const result = await this.DoctorRepository.toggleStatus(
-      data.doctorId,
-      finalStatus
-    );
+    const result = await this.DoctorRepository.toggleStatus(data.doctorId, finalStatus);
 
     console.log(result);
 
-    if (!result)
-      throw new Error("cannot able to change the status of the doctor");
+    if (!result) throw new Error("cannot able to change the status of the doctor");
 
     const user = await this.UserRepo.BlockByUserId(result.userId, !finalStatus);
 

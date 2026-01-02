@@ -12,16 +12,11 @@ export class ApproveVerficationRequest implements IApproveVerificationRequestUse
   ) {}
 
   async execute(hositpalId: string, adminRemarks?: string) {
-    const status =
-      await this.HosptialVerficationRepo.findHosptialVerficationStatus(
-        hositpalId
-      );
+    const status = await this.HosptialVerficationRepo.findHosptialVerficationStatus(hositpalId);
 
     if (status === "APPROVED") throw new Error("The staus is already approved");
     if (status != "PENDING")
-      throw new Error(
-        "The Invalid action since you alrady perfomed the action"
-      );
+      throw new Error("The Invalid action since you alrady perfomed the action");
     const result = await this.HosptialVerficationRepo.updateStatus(
       hositpalId,
       "APPROVED",

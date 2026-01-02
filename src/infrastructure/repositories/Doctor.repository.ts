@@ -1,9 +1,6 @@
 import { Types } from "mongoose";
 import { IDoctorRepository } from "../../domain/repositories/IDoctor.repo";
-import {
-  DoctorDocument,
-  DoctorModel,
-} from "../database/mongo/models/Doctor.model";
+import { DoctorDocument, DoctorModel } from "../database/mongo/models/Doctor.model";
 
 export class DoctorRepositoryImpl implements IDoctorRepository {
   async create(data: Partial<DoctorDocument>): Promise<DoctorDocument> {
@@ -125,24 +122,19 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
     const totalPipeline = [...pipeline, { $count: "count" }];
 
     // paginated data
-    pipeline.push(
-      { $sort: { createdAt: -1 } },
-      { $skip: skip },
-      { $limit: limit }
-    );
+    pipeline.push({ $sort: { createdAt: -1 } }, { $skip: skip }, { $limit: limit });
 
-    const [data, totalResult, totalDoctorCount, activeDoctorCount] =
-      await Promise.all([
-        DoctorModel.aggregate(pipeline),
-        DoctorModel.aggregate(totalPipeline),
-        DoctorModel.countDocuments({
-          hospitalId,
-        }),
-        DoctorModel.countDocuments({
-          hospitalId,
-          isActive: true,
-        }),
-      ]);
+    const [data, totalResult, totalDoctorCount, activeDoctorCount] = await Promise.all([
+      DoctorModel.aggregate(pipeline),
+      DoctorModel.aggregate(totalPipeline),
+      DoctorModel.countDocuments({
+        hospitalId,
+      }),
+      DoctorModel.countDocuments({
+        hospitalId,
+        isActive: true,
+      }),
+    ]);
 
     return {
       data,
@@ -178,15 +170,10 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
       ];
     }
 
-    return await DoctorModel.find(query)
-      .sort({ createdAt: -1 })
-      .populate("specialtyId");
+    return await DoctorModel.find(query).sort({ createdAt: -1 }).populate("specialtyId");
   }
 
-  async toggleStatus(
-    doctorId: Types.ObjectId,
-    isActive: boolean
-  ): Promise<any> {
+  async toggleStatus(doctorId: Types.ObjectId, isActive: boolean): Promise<any> {
     const updatedDoctor = await DoctorModel.findByIdAndUpdate(
       doctorId,
       { $set: { isActive } },

@@ -46,8 +46,7 @@ const HospitalVerificationSchema = new Schema(
   { timestamps: true }
 );
 
-export const HospitalVerificationModel =
-  mongoose.model<HospitalVerificationDocument>(
-    "HospitalVerification",
-    HospitalVerificationSchema
-  );
+export const HospitalVerificationModel = mongoose.model<HospitalVerificationDocument>(
+  "HospitalVerification",
+  HospitalVerificationSchema
+);

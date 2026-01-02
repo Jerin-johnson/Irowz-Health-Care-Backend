@@ -1,9 +1,5 @@
 import { IUserRepository } from "../../domain/repositories/IUser.repo";
-import {
-  createUser,
-  updateUser,
-  UserResponse,
-} from "../../domain/types/IUser.types";
+import { createUser, updateUser, UserResponse } from "../../domain/types/IUser.types";
 import User from "../database/mongo/models/User.model";
 
 export class MongoUserRepository implements IUserRepository {
@@ -28,10 +24,7 @@ export class MongoUserRepository implements IUserRepository {
     return doc;
   }
 
-  async findByEmail(
-    email: string,
-    phone: string | number
-  ): Promise<UserResponse | null> {
+  async findByEmail(email: string, phone: string | number): Promise<UserResponse | null> {
     const doc = await User.findOne({
       $or: [{ email }, { phone: String(phone) }],
     });

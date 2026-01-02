@@ -19,9 +19,7 @@ export interface Hospital {
 }
 
 export interface IHospitalRepository {
-  create(
-    data: Omit<Hospital, "id" | "createdAt" | "updatedAt">
-  ): Promise<Hospital>;
+  create(data: Omit<Hospital, "id" | "createdAt" | "updatedAt">): Promise<Hospital>;
 
   findByUserId(userId: string): Promise<Hospital | null>;
 

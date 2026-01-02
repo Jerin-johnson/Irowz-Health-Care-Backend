@@ -50,7 +50,4 @@ const HospitalSchema = new Schema(
   { timestamps: true }
 );
 
-export const HospitalModel = mongoose.model<HospitalDocument>(
-  "Hospital",
-  HospitalSchema
-);
+export const HospitalModel = mongoose.model<HospitalDocument>("Hospital", HospitalSchema);

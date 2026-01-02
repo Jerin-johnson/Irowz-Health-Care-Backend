@@ -2,9 +2,7 @@ import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IH
 import { IBlockOrUnblockSpecialtyUseCase } from "../../../../domain/usecase/hosptialAdmin/specialityMangement/IBlockOrUnblockSpecialtyUseCase.usecase";
 
 export class BlockOrUnblockSpecialtyUseCase implements IBlockOrUnblockSpecialtyUseCase {
-  constructor(
-    private readonly specialtyRepository: IHospitalSpecialtyRepository
-  ) {}
+  constructor(private readonly specialtyRepository: IHospitalSpecialtyRepository) {}
 
   async execute(data: { id: string; status: string }) {
     const finalStatus = data.status == "true" ? true : false;

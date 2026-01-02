@@ -21,30 +21,23 @@ export class AdminCreateDoctorUseCase implements IAdminCreateDoctorUseCase {
   async execute(input: AdminCreateDoctorDTO) {
     const plainPassword = generatePlainPassword();
 
-    const speciality = await this.specialtyRepository.findById(
-      input.specialtyId as string
-    );
+    const speciality = await this.specialtyRepository.findById(input.specialtyId as string);
     if (!speciality)
-      throw new Error(
-        "Such speciality does exist inside your hospital...please create one"
-      );
+      throw new Error("Such speciality does exist inside your hospital...please create one");
 
     const hashPassword = await this.passwordService.hash(plainPassword);
 
     const user = await this.userRepo.create({
-      name: input.fullName as string,
-      email: input.email as string,
-      phone: input.phone as string,
+      name: input.fullName,
+      email: input.email,
+      phone: input.phone,
       role: UserRoles.DOCTOR,
       password: hashPassword,
       isVerified: true,
       forcePasswordReset: true,
     } as createUser);
 
-    if (!user)
-      throw new Error(
-        "create of the user i.e doctor failed...please try again later"
-      );
+    if (!user) throw new Error("create of the user i.e doctor failed...please try again later");
 
     const doctor = await this.doctorRepo.create({
       userId: user._id as string,
@@ -60,11 +53,7 @@ export class AdminCreateDoctorUseCase implements IAdminCreateDoctorUseCase {
       isActive: true,
     });
 
-    await this.queueService.sendDoctorCredentialsEmail(
-      input.email,
-      input.fullName,
-      plainPassword
-    );
+    await this.queueService.sendDoctorCredentialsEmail(input.email, input.fullName, plainPassword);
 
     return {
       doctorId: doctor._id,

@@ -7,11 +7,7 @@ import { jwtTokenService, passwordService, otpService } from "./service";
 import { RedisOtpRepository } from "../infrastructure/repositories/RedisOtp.repository";
 import { EmailQueueService } from "../applications/queue/EmailQueueService";
 import { VerfiyOtpUseCase } from "../applications/usecases/auth/verfiyOtpUseCase";
-import {
-  doctorRepo,
-  hosptialRepository,
-  mongoUserRepository,
-} from "./repositers";
+import { doctorRepo, hosptialRepository, mongoUserRepository } from "./repositers";
 import { ReSendOtpUseCase } from "../applications/usecases/auth/ReSendOtpUseCase";
 
 const redisOtpRepository = new RedisOtpRepository();
@@ -40,11 +36,7 @@ const verfiyOtpUseCase = new VerfiyOtpUseCase(
   jwtTokenService
 );
 
-const resendOtpUseCase = new ReSendOtpUseCase(
-  otpService,
-  emailQuequeService,
-  redisOtpRepository
-);
+const resendOtpUseCase = new ReSendOtpUseCase(otpService, emailQuequeService, redisOtpRepository);
 
 const refreshTokenUseCase = new RefreshTokenUseCase(jwtTokenService);
 const authController = new AuthController(

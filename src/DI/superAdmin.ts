@@ -1,10 +1,6 @@
 import { ApproveVerficationRequest } from "../applications/usecases/superAdmin/hositpalVerfication/ApproveVerfication.useCase";
 import { RejectVerficationRequest } from "../applications/usecases/superAdmin/hositpalVerfication/RejectVerfication.useCase";
-import {
-  hosptialRepository,
-  hosptialVerficatinRepo,
-  mongoUserRepository,
-} from "./repositers";
+import { hosptialRepository, hosptialVerficatinRepo, mongoUserRepository } from "./repositers";
 import { HospitalVerficationController } from "../presentation/controllers/superAdmin/HosptialVerfication.controller";
 import { SuperAdminRoutes } from "../presentation/routes/super_admin.routes";
 import { GetALLVerficationRequest } from "../applications/usecases/superAdmin/hositpalVerfication/GetALLVerfication.useCase";
@@ -19,20 +15,12 @@ const approveVerficationRequest = new ApproveVerficationRequest(
   mongoUserRepository
 );
 
-const rejectVerficationRequest = new RejectVerficationRequest(
-  hosptialVerficatinRepo
-);
+const rejectVerficationRequest = new RejectVerficationRequest(hosptialVerficatinRepo);
 
-const getAllVerficationRequest = new GetALLVerficationRequest(
-  hosptialVerficatinRepo
-);
+const getAllVerficationRequest = new GetALLVerficationRequest(hosptialVerficatinRepo);
 
-const getHospitalStatsUseCase = new GetHospitalStatsUseCase(
-  hosptialVerficatinRepo
-);
-const getVerficationRequestById = new GetVerficationRequestById(
-  hosptialVerficatinRepo
-);
+const getHospitalStatsUseCase = new GetHospitalStatsUseCase(hosptialVerficatinRepo);
+const getVerficationRequestById = new GetVerficationRequestById(hosptialVerficatinRepo);
 const hospitalVerficationController = new HospitalVerficationController(
   approveVerficationRequest,
   rejectVerficationRequest,

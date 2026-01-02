@@ -81,23 +81,17 @@ export class SpecialtyMangmentController {
     const { name, description } = req.body;
     const hospitalId = req.user!.hospitalId;
 
-    const updated = await this.EditSpecialityUseCase.execute(
-      id,
-      hospitalId as string,
-      {
-        name,
-        description,
-      }
-    );
+    const updated = await this.EditSpecialityUseCase.execute(id, hospitalId as string, {
+      name,
+      description,
+    });
     res.status(HttpStatusCode.OK).json({ ...updated, success: true });
   };
 
   GetAllSpecialtyName = async (req: Request, res: Response) => {
     const hospitalId = req.user!.hospitalId;
 
-    const data = await this.GetAllSpecialtyNameUseCase.execute(
-      hospitalId as string
-    );
+    const data = await this.GetAllSpecialtyNameUseCase.execute(hospitalId as string);
     res.status(HttpStatusCode.OK).json({ data, success: true });
   };
 }

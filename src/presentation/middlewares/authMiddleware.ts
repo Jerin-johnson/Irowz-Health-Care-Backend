@@ -3,11 +3,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { jwtTokenService } from "../../DI/service";
 import { HttpStatusCode } from "../../domain/constants/HttpStatusCode";
 
-export const authMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
 

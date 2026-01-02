@@ -28,10 +28,7 @@ export class HospitalMangementController {
     const { userId, status } = req.body;
     console.log(userId, status);
     console.log(req.body);
-    const result = await this.BlockOrUnblockHospitalUseCase.execute(
-      userId,
-      String(status)
-    );
+    const result = await this.BlockOrUnblockHospitalUseCase.execute(userId, String(status));
     res.status(HttpStatusCode.OK).json({ ...result, success: true });
   };
 }

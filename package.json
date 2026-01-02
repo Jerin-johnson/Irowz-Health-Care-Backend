@@ -8,7 +8,9 @@
     "start": "node dist/server.js",
     "worker1": "node dist/infrastructure/queue/worker/emailWorker.js",
     "worker2": "node dist/infrastructure/queue/worker/pdfUpload.worker.js",
-    "build": "tsc"
+    "build": "tsc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [],
   "author": "",

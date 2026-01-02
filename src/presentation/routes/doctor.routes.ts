@@ -20,15 +20,9 @@ export class DoctorRoutes {
     this._router.use(authMiddleware, authorizeRoles(UserRoles.DOCTOR));
 
     // this._router.use(enforcePasswordReset);
-    this._router.get(
-      "/profile",
-      this._DoctorProfileMangementController.getDoctorProfile
-    );
+    this._router.get("/profile", this._DoctorProfileMangementController.getDoctorProfile);
 
-    this._router.patch(
-      "/password",
-      this._DoctorProfileMangementController.resetDoctorPassword
-    );
+    this._router.patch("/password", this._DoctorProfileMangementController.resetDoctorPassword);
 
     return this._router;
   }

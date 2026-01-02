@@ -128,9 +128,6 @@ const DoctorSchema = new Schema<DoctorDocument>(
   }
 );
 
-DoctorSchema.index(
-  { hospitalId: 1, medicalRegistrationNumber: 1 },
-  { unique: true }
-);
+DoctorSchema.index({ hospitalId: 1, medicalRegistrationNumber: 1 }, { unique: true });
 
 export const DoctorModel = model<DoctorDocument>("Doctor", DoctorSchema);

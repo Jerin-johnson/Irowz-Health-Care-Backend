@@ -6,10 +6,7 @@ import { doctorRepo, mongoUserRepository } from "./repositers";
 import { passwordService } from "./service";
 
 const getDoctorProfileUseCase = new GetDoctorProfileUseCase(doctorRepo);
-const resetDoctorPassword = new ResetDoctorPasswordUseCase(
-  mongoUserRepository,
-  passwordService
-);
+const resetDoctorPassword = new ResetDoctorPasswordUseCase(mongoUserRepository, passwordService);
 
 const doctorProfileMangementController = new DoctorProfileMangementController(
   getDoctorProfileUseCase,

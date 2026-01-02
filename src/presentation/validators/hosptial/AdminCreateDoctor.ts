@@ -10,9 +10,7 @@ export const AdminCreateDoctorSchema = z.object({
       .min(0, "Experience cannot be negative")
       .max(60, "Experience cannot exceed 60 years"),
 
-    consultationFee: z.coerce
-      .number()
-      .min(0, "Consultation fee must be positive"),
+    consultationFee: z.coerce.number().min(0, "Consultation fee must be positive"),
 
     bio: z
       .string()

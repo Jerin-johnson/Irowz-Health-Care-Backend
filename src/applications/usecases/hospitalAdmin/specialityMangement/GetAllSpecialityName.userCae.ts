@@ -5,8 +5,7 @@ export class GetAllSpecialtyNameUseCase implements IGetAllSpecialtyNameUseCase {
   constructor(private HospitalSpeicalityRepo: IHospitalSpecialtyRepository) {}
 
   async execute(hospitalId: string) {
-    const result =
-      await this.HospitalSpeicalityRepo.getAllSpeciality(hospitalId);
+    const result = await this.HospitalSpeicalityRepo.getAllSpeciality(hospitalId);
     return result;
   }
 }

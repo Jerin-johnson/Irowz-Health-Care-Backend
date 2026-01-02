@@ -44,10 +44,7 @@ export class SuperAdminRoutes {
     );
 
     // hospital mangament routes;
-    this.router.get(
-      "/hospital",
-      asyncHandler(this.HospitalMangementController.getAllHospital)
-    );
+    this.router.get("/hospital", asyncHandler(this.HospitalMangementController.getAllHospital));
 
     this.router.patch(
       "/hospital/toggle/status",

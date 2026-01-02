@@ -1,7 +1,4 @@
-import {
-  ITokenService,
-  TokenPayload,
-} from "../../../domain/services/jwt.interface.service";
+import { ITokenService, TokenPayload } from "../../../domain/services/jwt.interface.service";
 import { IRefreshTokenUseCase } from "../../../domain/usecase/auth/IRefreshToken.useCase";
 
 export class RefreshTokenUseCase implements IRefreshTokenUseCase {

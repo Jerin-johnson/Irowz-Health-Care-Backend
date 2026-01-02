@@ -4,10 +4,7 @@ export interface PaginationResult {
   page: number;
 }
 
-export const getPagination = (
-  page?: number,
-  limit?: number
-): PaginationResult => {
+export const getPagination = (page?: number, limit?: number): PaginationResult => {
   const safePage = page && page > 0 ? page : 1;
   const safeLimit = limit && limit > 0 && limit <= 100 ? limit : 10;
 

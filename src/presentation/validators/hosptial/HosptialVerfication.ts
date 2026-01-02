@@ -2,15 +2,11 @@ import { z } from "zod";
 
 export const hospitalVerificationBodySchema = z.object({
   body: z.object({
-    hospitalName: z
-      .string()
-      .min(2, "Hospital name must be at least 2 characters"),
+    hospitalName: z.string().min(2, "Hospital name must be at least 2 characters"),
 
     registrationNumber: z.string().min(3, "Registration number is required"),
 
-    hospitalAddress: z
-      .string()
-      .min(10, "Address must be at least 10 characters"),
+    hospitalAddress: z.string().min(10, "Address must be at least 10 characters"),
 
     city: z.string().min(2, "City is required"),
 

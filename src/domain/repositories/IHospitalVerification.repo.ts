@@ -29,10 +29,7 @@ export type CreateHospitalVerificationRepository = Omit<
   "createdAt" | "updatedAt"
 >;
 
-export type ResumbitHospitalVerficationRepository = Omit<
-  HospitalVerification,
-  "createdAt"
->;
+export type ResumbitHospitalVerficationRepository = Omit<HospitalVerification, "createdAt">;
 
 export interface IHospitalVerificationRepository {
   create(data: any): Promise<HospitalVerification>;
@@ -48,10 +45,7 @@ export interface IHospitalVerificationRepository {
     adminRemarks?: string
   ): Promise<void | HospitalVerification>;
 
-  findAllPending(
-    status?: string,
-    search?: string
-  ): Promise<HospitalVerification[]>;
+  findAllPending(status?: string, search?: string): Promise<HospitalVerification[]>;
 
   resumbit(
     userId: string,
@@ -60,9 +54,7 @@ export interface IHospitalVerificationRepository {
 
   update(id: string, data: Partial<HospitalVerification>): Promise<void>;
 
-  findHosptialVerficationStatus(
-    hositpalId: string
-  ): Promise<HospitalVerificationStatus | null>;
+  findHosptialVerficationStatus(hositpalId: string): Promise<HospitalVerificationStatus | null>;
 
   countByStatus(status: HosptialRequestVerficationStatus): Promise<number>;
   countApprovedToday(): Promise<number>;

@@ -127,13 +127,12 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
       isActive: true,
     });
 
-    const [data, total, totalSpecialityCount, activeSpecialityCount] =
-      await Promise.all([
-        dataPromise,
-        totalPromise,
-        totalSpecialityCountPromise,
-        activeSpecialityCountPromise,
-      ]);
+    const [data, total, totalSpecialityCount, activeSpecialityCount] = await Promise.all([
+      dataPromise,
+      totalPromise,
+      totalSpecialityCountPromise,
+      activeSpecialityCountPromise,
+    ]);
 
     return {
       data,

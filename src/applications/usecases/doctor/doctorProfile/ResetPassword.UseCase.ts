@@ -14,10 +14,7 @@ export class ResetDoctorPasswordUseCase implements IResetDoctorPasswordUseCase {
 
     if (!user) throw new Error("Doctor doesn't find");
 
-    const validPassword = await this._PasswordService.compare(
-      currentPassword,
-      user.password
-    );
+    const validPassword = await this._PasswordService.compare(currentPassword, user.password);
 
     if (!validPassword) throw new Error("Invalid password");
 

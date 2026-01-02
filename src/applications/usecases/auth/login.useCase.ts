@@ -1,10 +1,7 @@
 import { IDoctorRepository } from "../../../domain/repositories/IDoctor.repo";
 import { IHospitalRepository } from "../../../domain/repositories/IHospital.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
-import {
-  ITokenService,
-  TokenPayload,
-} from "../../../domain/services/jwt.interface.service";
+import { ITokenService, TokenPayload } from "../../../domain/services/jwt.interface.service";
 import { IPasswordService } from "../../../domain/services/password.interface.service";
 import { LoginUser } from "../../../domain/types/IUser.types";
 import { ILoginUseCase } from "../../../domain/usecase/auth/ILogin.useCase";
@@ -29,10 +26,7 @@ export class LoginUseCase implements ILoginUseCase {
       throw new Error("Invalid Access Request");
     }
 
-    const validPassword = await this.PasswordService.compare(
-      input.password,
-      user.password
-    );
+    const validPassword = await this.PasswordService.compare(input.password, user.password);
 
     if (!validPassword) throw new Error("Invalid creditionals");
 

@@ -35,10 +35,7 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
 
     console.log("the input", input);
 
-    const existerHosptialAdmin = await this.userRepo.findByEmail(
-      officialEmail,
-      phone
-    );
+    const existerHosptialAdmin = await this.userRepo.findByEmail(officialEmail, phone);
 
     if (existerHosptialAdmin) {
       throw new Error(
@@ -58,24 +55,21 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
       isVerified: false,
     });
 
-    if (!HospitalAdminUser)
-      throw new Error("cannot able to create hositpal admin user");
+    if (!HospitalAdminUser) throw new Error("cannot able to create hositpal admin user");
 
-    const HospitalVerficationRequest = await this.HosptialVerficatinRepo.create(
-      {
-        userId: HospitalAdminUser._id,
-        hospitalName: hospitalName,
-        registrationNumber: registrationNumber,
-        hospitalAddress: hospitalAddress,
-        city: city,
-        state: state,
-        pincode: pincode,
-        officialEmail: officialEmail,
-        phone: phone,
-        licenseDocumentUrl: "pending",
-        submittedAt: new Date(),
-      }
-    );
+    const HospitalVerficationRequest = await this.HosptialVerficatinRepo.create({
+      userId: HospitalAdminUser._id,
+      hospitalName: hospitalName,
+      registrationNumber: registrationNumber,
+      hospitalAddress: hospitalAddress,
+      city: city,
+      state: state,
+      pincode: pincode,
+      officialEmail: officialEmail,
+      phone: phone,
+      licenseDocumentUrl: "pending",
+      submittedAt: new Date(),
+    });
 
     await this.pdfUploadQueue.addUploadJob({
       hospitalId: HospitalVerficationRequest._id as string,

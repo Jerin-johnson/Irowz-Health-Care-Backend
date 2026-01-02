@@ -11,19 +11,17 @@ interface GetHospitalRequestsInput {
   limit: number;
 }
 export class GetALLVerficationRequest implements IGetAllVerificationRequestUseCase {
-  constructor(
-    private HosptialVerficationRepo: IHospitalVerificationRepository
-  ) {}
+  constructor(private HosptialVerficationRepo: IHospitalVerificationRepository) {}
 
   async execute(input: GetHospitalRequestsInput) {
     const { page, limit, ...filters } = input;
 
     const skip = (page - 1) * limit;
 
-    const { data, total } = await this.HosptialVerficationRepo.getPaginated(
-      filters,
-      { skip, limit }
-    );
+    const { data, total } = await this.HosptialVerficationRepo.getPaginated(filters, {
+      skip,
+      limit,
+    });
 
     return {
       data,

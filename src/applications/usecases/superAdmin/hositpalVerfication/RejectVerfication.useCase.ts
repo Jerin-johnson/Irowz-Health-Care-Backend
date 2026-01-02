@@ -3,20 +3,13 @@ import { IHospitalVerificationRepository } from "../../../../domain/repositories
 import { IRejectVerificationRequestUseCase } from "../../../../domain/usecase/superAdmin/hospitalVerfication/IRejectVerificationRequestUseCase.usecase";
 
 export class RejectVerficationRequest implements IRejectVerificationRequestUseCase {
-  constructor(
-    private HosptialVerficationRepo: IHospitalVerificationRepository
-  ) {}
+  constructor(private HosptialVerficationRepo: IHospitalVerificationRepository) {}
 
   async execute(hositpalId: string, adminRemarks?: string) {
-    const status =
-      await this.HosptialVerficationRepo.findHosptialVerficationStatus(
-        hositpalId
-      );
+    const status = await this.HosptialVerficationRepo.findHosptialVerficationStatus(hositpalId);
     if (!status) throw new Error("Invalid operation");
     if (status !== "PENDING")
-      throw new Error(
-        "Your already reviewed this record and updated the result"
-      );
+      throw new Error("Your already reviewed this record and updated the result");
     const result = await this.HosptialVerficationRepo.updateStatus(
       hositpalId,
       "REJECTED",

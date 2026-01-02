@@ -22,10 +22,7 @@ export interface IDoctorRepository {
     }
   ): Promise<DoctorDocument[]>;
 
-  toggleStatus(
-    doctorId: Types.ObjectId | string,
-    isActive: boolean
-  ): Promise<any>;
+  toggleStatus(doctorId: Types.ObjectId | string, isActive: boolean): Promise<any>;
   getPaginated(
     filters: {
       hospitalId: string;

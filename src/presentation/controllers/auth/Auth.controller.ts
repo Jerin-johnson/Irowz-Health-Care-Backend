@@ -75,13 +75,10 @@ export class AuthController {
     const token = req.cookies.refreshToken as string;
 
     if (!token) {
-      return res
-        .status(HttpStatusCode.UNAUTHORIZED)
-        .json({ message: "Unauthorized" });
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({ message: "Unauthorized" });
     }
 
-    const { refreshToken, accessToken, user } =
-      await this.RefreshTokenUseCase.execute(token);
+    const { refreshToken, accessToken, user } = await this.RefreshTokenUseCase.execute(token);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,

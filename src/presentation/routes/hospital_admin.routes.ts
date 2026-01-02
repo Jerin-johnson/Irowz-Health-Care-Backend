@@ -43,10 +43,7 @@ export class HospitalAdminRoutes {
 
     //speciality managment controller
 
-    this.router.post(
-      "/speciality",
-      asyncHandler(this.SpecialtyMangmentController.createSpecilty)
-    );
+    this.router.post("/speciality", asyncHandler(this.SpecialtyMangmentController.createSpecilty));
 
     this.router.get(
       "/speciality",
@@ -76,10 +73,7 @@ export class HospitalAdminRoutes {
       asyncHandler(this.DoctorMangmentController.createDoctor)
     );
 
-    this.router.get(
-      "/doctor",
-      asyncHandler(this.DoctorMangmentController.getDoctors)
-    );
+    this.router.get("/doctor", asyncHandler(this.DoctorMangmentController.getDoctors));
 
     this.router.patch(
       "/doctor/toggle/status",

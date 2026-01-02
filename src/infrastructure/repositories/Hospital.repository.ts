@@ -44,17 +44,16 @@ export class HospitalRepositoryImpl implements IHospitalRepository {
     }
     console.log("the filter", filters);
     console.log(query);
-    const [data, total, totalHospitals, IsActiveHospitalCount] =
-      await Promise.all([
-        HospitalModel.find(query)
-          .skip(pagination.skip)
-          .limit(pagination.limit)
-          .sort({ verifiedAt: -1 })
-          .lean(),
-        HospitalModel.countDocuments(query),
-        HospitalModel.countDocuments({}),
-        HospitalModel.countDocuments({ isBlocked: false }),
-      ]);
+    const [data, total, totalHospitals, IsActiveHospitalCount] = await Promise.all([
+      HospitalModel.find(query)
+        .skip(pagination.skip)
+        .limit(pagination.limit)
+        .sort({ verifiedAt: -1 })
+        .lean(),
+      HospitalModel.countDocuments(query),
+      HospitalModel.countDocuments({}),
+      HospitalModel.countDocuments({ isBlocked: false }),
+    ]);
 
     return { data, total, totalHospitals, IsActiveHospitalCount };
   }

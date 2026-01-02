@@ -27,11 +27,7 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     return record ? this.map(record) : null;
   }
 
-  async updateStatus(
-    id: string,
-    status: "APPROVED" | "REJECTED",
-    adminRemarks?: string
-  ) {
+  async updateStatus(id: string, status: "APPROVED" | "REJECTED", adminRemarks?: string) {
     const result = await HospitalVerificationModel.findByIdAndUpdate(
       id,
       {
@@ -47,9 +43,7 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     return this.map(result);
   }
 
-  async findByIdStatus(
-    id: string
-  ): Promise<{ adminRemarks: string; status: string }> {
+  async findByIdStatus(id: string): Promise<{ adminRemarks: string; status: string }> {
     const record = await HospitalVerificationModel.findById(id)
       .select("adminRemarks status")
       .lean();
@@ -72,10 +66,7 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     userId: string,
     input: Partial<ResumbitHospitalVerficationRepository>
   ): Promise<HospitalVerification> {
-    const record = await HospitalVerificationModel.findOneAndUpdate(
-      { userId },
-      { ...input }
-    );
+    const record = await HospitalVerificationModel.findOneAndUpdate({ userId }, { ...input });
     return this.map(record);
   }
 
@@ -104,9 +95,7 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     return status.status;
   }
 
-  async countByStatus(
-    status: HosptialRequestVerficationStatus
-  ): Promise<number> {
+  async countByStatus(status: HosptialRequestVerficationStatus): Promise<number> {
     return HospitalVerificationModel.countDocuments({ status });
   }
 

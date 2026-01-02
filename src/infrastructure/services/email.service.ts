@@ -34,11 +34,7 @@ export class EmailNotificationService implements IEmailService {
   }
 
   // ---------------- DOCTOR CREDENTIALS ----------------
-  async sendDoctorCredentials(
-    email: string,
-    fullName: string,
-    password: string
-  ): Promise<void> {
+  async sendDoctorCredentials(email: string, fullName: string, password: string): Promise<void> {
     console.log("sending email to doctor", email, fullName, password);
     await this.transporter.sendMail({
       from: `"My Healthcare SaaS" <${process.env.SMTP_USER}>`,

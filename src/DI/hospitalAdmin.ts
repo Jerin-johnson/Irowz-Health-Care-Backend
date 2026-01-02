@@ -28,11 +28,10 @@ const submitHositalVerficationRequest = new SubmitHositalVerficationRequest(
   passwordService,
   pdfUPloadQueueService
 );
-const resubmitHospitalVerificationUseCase =
-  new ResubmitHospitalVerificationUseCase(
-    mongoUserRepository,
-    hosptialVerficatinRepo
-  );
+const resubmitHospitalVerificationUseCase = new ResubmitHospitalVerificationUseCase(
+  mongoUserRepository,
+  hosptialVerficatinRepo
+);
 
 const checkHospitalVerfcationStatusById = new CheckHospitalVerfcationStatusById(
   hosptialVerficatinRepo
@@ -43,23 +42,15 @@ const hospitalOnBoradingController = new HospitalOnBoradingController(
   checkHospitalVerfcationStatusById
 );
 
-const addHospitalSpecialtyUseCase = new AddHospitalSpecialtyUseCase(
-  hospitalSpecialityRepo
-);
+const addHospitalSpecialtyUseCase = new AddHospitalSpecialtyUseCase(hospitalSpecialityRepo);
 
-const getAllSpecialtyUseCase = new GetAllSpecialtyUseCase(
-  hospitalSpecialityRepo
-);
+const getAllSpecialtyUseCase = new GetAllSpecialtyUseCase(hospitalSpecialityRepo);
 
-const blockOrUnblockSpecialtyUseCase = new BlockOrUnblockSpecialtyUseCase(
-  hospitalSpecialityRepo
-);
+const blockOrUnblockSpecialtyUseCase = new BlockOrUnblockSpecialtyUseCase(hospitalSpecialityRepo);
 
 const editSpecialityUseCase = new EditSpecialityUseCase(hospitalSpecialityRepo);
 
-const getAllSpecialtyNameUseCase = new GetAllSpecialtyNameUseCase(
-  hospitalSpecialityRepo
-);
+const getAllSpecialtyNameUseCase = new GetAllSpecialtyNameUseCase(hospitalSpecialityRepo);
 
 const specialityMangementController = new SpecialtyMangmentController(
   addHospitalSpecialtyUseCase,

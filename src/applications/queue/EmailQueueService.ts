@@ -35,11 +35,7 @@ export class EmailQueueService {
   /**
    * Doctor Credentials Email
    */
-  async sendDoctorCredentialsEmail(
-    email: string,
-    fullName: string,
-    password: string
-  ) {
+  async sendDoctorCredentialsEmail(email: string, fullName: string, password: string) {
     console.log("📧 Doctor credentials email queued");
 
     await this.enqueue({

@@ -2,14 +2,10 @@ import { IHospitalVerificationRepository } from "../../../../domain/repositories
 import { IGetVerificationRequestByIdUseCase } from "../../../../domain/usecase/superAdmin/hospitalVerfication/IGetVerificationRequestByIdUseCase.usecase";
 
 export class GetVerficationRequestById implements IGetVerificationRequestByIdUseCase {
-  constructor(
-    private HosptialVerficationRepo: IHospitalVerificationRepository
-  ) {}
+  constructor(private HosptialVerficationRepo: IHospitalVerificationRepository) {}
 
   async execute(hosptialVerficationId: string) {
-    const result = await this.HosptialVerficationRepo.findById(
-      hosptialVerficationId
-    );
+    const result = await this.HosptialVerficationRepo.findById(hosptialVerficationId);
     return result;
   }
 }

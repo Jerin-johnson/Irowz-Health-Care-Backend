@@ -13,14 +13,7 @@ export class DoctorMangmentController {
   ) {}
 
   createDoctor = async (req: Request, res: Response) => {
-    const hospitalId = req.user?.hospitalId;
-
-    if (!hospitalId) {
-      return res.status(HttpStatusCode.UNAUTHORIZED).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
+    const hospitalId = req.user?.hospitalId as string;
 
     const dto: AdminCreateDoctorDTO = {
       hospitalId,
@@ -32,9 +25,7 @@ export class DoctorMangmentController {
       medicalRegistrationNumber: String(req.body.medicalRegistrationNumber),
       medicalCouncil: req.body.medicalCouncil,
 
-      teleConsultationEnabled: Boolean(
-        req.body.teleConsultationEnabled ? true : false
-      ),
+      teleConsultationEnabled: Boolean(req.body.teleConsultationEnabled ? true : false),
 
       fullName: String(req.body.fullName),
       email: String(req.body.email),
@@ -60,13 +51,7 @@ export class DoctorMangmentController {
       });
     }
 
-    const {
-      page = "1",
-      limit = "10",
-      search,
-      isActive,
-      specialtyId,
-    } = req.query;
+    const { page = "1", limit = "10", search, isActive, specialtyId } = req.query;
 
     const data = await this._getAllDoctorUseCase.execute({
       hospitalId,

@@ -7,9 +7,7 @@ export function authorizeRoles(...allowedRoles: string[]) {
     if (!user) return res.status(401).json({ message: "Unauthorized" });
 
     if (!allowedRoles.includes(user.role))
-      return res
-        .status(403)
-        .json({ message: "Forbidden: insufficient privileges" });
+      return res.status(403).json({ message: "Forbidden: insufficient privileges" });
 
     next();
   };

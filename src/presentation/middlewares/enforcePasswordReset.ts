@@ -1,10 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-export const enforcePasswordReset = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const enforcePasswordReset = (req: Request, res: Response, next: NextFunction) => {
   const user = (req as any).user;
 
   console.log("The user object is req.user", user);
