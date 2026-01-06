@@ -1,5 +1,13 @@
-export interface DoctorSlotLock {
-  acquire(doctorId: string, date: string, startTime: string, ownerId: string): Promise<boolean>;
+export interface IDoctorSlotLock {
+  lockSlot(
+    doctorId: string,
+    date: string,
+    startTime: string,
+    userId: string,
+    ttlSeconds?: number
+  ): Promise<boolean>;
 
-  release(doctorId: string, date: string, startTime: string, ownerId: string): Promise<void>;
+  unlockSlot(doctorId: string, date: string, startTime: string): Promise<void>;
+
+  getLockedSlots(doctorId: string, date: string): Promise<string[]>;
 }

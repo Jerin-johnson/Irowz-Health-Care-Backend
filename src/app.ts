@@ -6,8 +6,9 @@ import { authRoute } from "./DI/auth";
 import { hospitalAdminRoutes } from "./DI/hospitalAdmin";
 import { errorHandler } from "./presentation/middlewares/errorHandle";
 import { superAdminRoutes } from "./DI/superAdmin";
-
 import { doctorRoutes } from "./DI/doctor";
+import { patientRoutes } from "./DI/patient";
+
 const app = express();
 
 app.use(express.json());
@@ -29,7 +30,7 @@ app.use((req, res, next) => {
   console.log("--------------------------");
   next();
 });
-
+app.use("/api/patient", patientRoutes.register());
 app.use("/api/auth", authRoute.register());
 app.use("/api/hospital-admin", hospitalAdminRoutes.register());
 app.use("/api/doctor", doctorRoutes.register());

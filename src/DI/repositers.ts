@@ -5,6 +5,7 @@ import { HospitalRepositoryImpl } from "../infrastructure/repositories/Hospital.
 import { HospitalSpecialtyRepositoryImpl } from "../infrastructure/repositories/HospitalSpeciality.repo";
 import { DoctorRepositoryImpl } from "../infrastructure/repositories/Doctor.repository";
 import { MongoDoctorAvailabilityRepository } from "../infrastructure/repositories/DoctorAvailability.Repository";
+import { DoctorAppointmentRepository } from "../infrastructure/repositories/DoctorAppointment.repository";
 
 export const mongoUserRepository = new MongoUserRepository();
 export const hosptialVerficatinRepo = new HospitalVerificationRepositoryImpl();
@@ -12,3 +13,4 @@ export const hosptialRepository = new HospitalRepositoryImpl();
 export const hospitalSpecialityRepo = new HospitalSpecialtyRepositoryImpl();
 export const doctorRepo = new DoctorRepositoryImpl();
 export const doctorAvailabilityRepository = new MongoDoctorAvailabilityRepository();
+export const doctorAppointmentRepository = new DoctorAppointmentRepository();
