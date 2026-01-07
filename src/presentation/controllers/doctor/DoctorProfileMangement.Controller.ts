@@ -3,11 +3,13 @@ import { DoctorProfileMapper } from "../../dtos/doctorProfile.mapper";
 import { IGetDoctorProfileUseCase } from "../../../domain/usecase/doctor/doctorProfile/IGetDoctorProfileUseCase.usecase";
 import { IResetDoctorPasswordUseCase } from "../../../domain/usecase/doctor/doctorProfile/IResetDoctorPasswordUseCase.usecase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
+import { EditDoctorProfileUseCase } from "../../../applications/usecases/doctor/doctorProfile/EditDoctorProfile.UseCase";
 
 export class DoctorProfileMangementController {
   constructor(
     private readonly _GetDoctorProfileUseCase: IGetDoctorProfileUseCase,
-    private readonly _ResetDoctorPassword: IResetDoctorPasswordUseCase
+    private readonly _ResetDoctorPassword: IResetDoctorPasswordUseCase,
+    private readonly _EditDoctorProfileUseCase: EditDoctorProfileUseCase
   ) {}
 
   getDoctorProfile = async (req: Request, res: Response) => {
@@ -34,6 +36,19 @@ export class DoctorProfileMangementController {
       newPassword
     );
 
+    return res.status(HttpStatusCode.OK).json({ success: true, ...result });
+  };
+
+  editDoctorProfile = async (req: Request, res: Response) => {
+    const doctorId = req.user?.doctorId as string;
+    const userId = req.user?.userId as string;
+
+    const result = await this._EditDoctorProfileUseCase.execute(
+      doctorId,
+      userId,
+      req.body,
+      req.file
+    );
     return res.status(HttpStatusCode.OK).json({ success: true, ...result });
   };
 }

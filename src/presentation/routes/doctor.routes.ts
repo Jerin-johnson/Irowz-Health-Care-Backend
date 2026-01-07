@@ -6,6 +6,7 @@ import { authorizeRoles } from "../middlewares/role.middleware";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { DoctorProfileMangementController } from "../controllers/doctor/DoctorProfileMangement.Controller";
 import { DoctorAvailabilityController } from "../controllers/doctor/DoctorAvailabilityController";
+import { profileImageUpload } from "../middlewares/profileImage.upload";
 // import { enforcePasswordReset } from "../middlewares/enforcePasswordReset";
 
 export class DoctorRoutes {
@@ -21,10 +22,15 @@ export class DoctorRoutes {
   register(): Router {
     this._router.use(authMiddleware, authorizeRoles(UserRoles.DOCTOR));
 
-    // this._router.use(enforcePasswordReset);
     this._router.get(
       "/profile",
       asyncHandler(this._DoctorProfileMangementController.getDoctorProfile)
+    );
+
+    this._router.patch(
+      "/profile",
+      profileImageUpload.single("profileImage"),
+      asyncHandler(this._DoctorProfileMangementController.editDoctorProfile)
     );
 
     this._router.patch(

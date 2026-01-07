@@ -7,7 +7,7 @@ export interface DoctorProfileViewDTO {
 
   hospitalName: string;
   specialtyName: string;
-
+  profileImage: string;
   bio: string;
   experienceYears: number;
   consultationFee: number;
@@ -20,13 +20,14 @@ export interface DoctorProfileViewDTO {
 
 export class DoctorProfileMapper {
   static toView(dto: any): DoctorProfileViewDTO {
+    console.log(dto);
     return {
       id: dto._id,
 
       fullName: dto.userId.name,
       email: dto.userId.email,
       phone: dto.userId.phone,
-
+      profileImage: dto.userId.profileImage,
       hospitalName: dto.hospitalId.name,
       specialtyName: dto.specialtyId.name,
 

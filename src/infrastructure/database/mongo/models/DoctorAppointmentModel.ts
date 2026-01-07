@@ -14,6 +14,26 @@ export interface DoctorAppointmentDocument {
 
   visitType: "IN_PERSON" | "ONLINE";
 
+  // Checkout snapshot
+  patientSnapshot: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+  };
+
+  addressSnapshot?: {
+    country: string;
+    state: string;
+    city: string;
+    zip: string;
+    street: string;
+    apartment?: string;
+  };
+
+  notes?: string;
+
+  // Payment snapshot
   consultationFee: number;
   discountAmount: number;
   taxAmount?: number;
@@ -21,7 +41,7 @@ export interface DoctorAppointmentDocument {
 
   paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED" | "PARTIALLY_REFUNDED";
 
-  paymentMethod?: "CARD" | "UPI" | "NET_BANKING" | "WALLET" | "CASH";
+  paymentMethod: "RAZORPAY";
   transactionId?: string;
 
   refund?: {
@@ -29,6 +49,8 @@ export interface DoctorAppointmentDocument {
     refundedAt: Date;
     reason?: string;
   };
+
+  razorpayOrderId?: string;
 
   status: "PENDING" | "BOOKED" | "CANCELLED" | "COMPLETED" | "NO_SHOW";
 
@@ -67,7 +89,6 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
     date: { type: String, required: true, index: true },
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
-
     timezone: { type: String, default: "Asia/Kolkata" },
 
     visitType: {
@@ -76,9 +97,30 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
       required: true,
     },
 
+    // 🔹 Checkout snapshot
+    patientSnapshot: {
+      firstName: { type: String, required: true },
+      lastName: { type: String, required: true },
+      phone: { type: String, required: true },
+      email: { type: String, required: true },
+    },
+
+    addressSnapshot: {
+      country: String,
+      state: String,
+      city: String,
+      zip: String,
+      street: String,
+      apartment: String,
+    },
+
+    razorpayOrderId: String,
+
+    notes: String,
+
     consultationFee: { type: Number, required: true },
     discountAmount: { type: Number, default: 0 },
-    taxAmount: { type: Number },
+    taxAmount: Number,
     totalAmount: { type: Number, required: true },
 
     paymentStatus: {
@@ -90,7 +132,8 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
 
     paymentMethod: {
       type: String,
-      enum: ["CARD", "UPI", "NET_BANKING", "WALLET", "CASH"],
+      enum: ["RAZORPAY"],
+      required: true,
     },
 
     transactionId: String,

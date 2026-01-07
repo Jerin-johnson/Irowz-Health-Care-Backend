@@ -30,8 +30,9 @@ app.use((req, res, next) => {
   console.log("--------------------------");
   next();
 });
-app.use("/api/patient", patientRoutes.register());
+
 app.use("/api/auth", authRoute.register());
+app.use("/api/patient", patientRoutes.register());
 app.use("/api/hospital-admin", hospitalAdminRoutes.register());
 app.use("/api/doctor", doctorRoutes.register());
 app.use("/api/super-admin", superAdminRoutes.register());

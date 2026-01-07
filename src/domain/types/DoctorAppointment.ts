@@ -4,7 +4,25 @@ export type VisitType = "IN_PERSON" | "ONLINE";
 
 export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED" | "PARTIALLY_REFUNDED";
 
-export type PaymentMethod = "CARD" | "UPI" | "NET_BANKING" | "WALLET" | "CASH";
+export type PaymentMethod = "RAZORPAY"; //  keep only what you support
+
+//  Snapshot of patient at booking time
+export interface PatientSnapshot {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+}
+
+//  Snapshot of address (mainly for in-person)
+export interface AddressSnapshot {
+  country: string;
+  state: string;
+  city: string;
+  zip: string;
+  street: string;
+  apartment?: string;
+}
 
 export interface DoctorAppointment {
   id: string;
@@ -14,23 +32,28 @@ export interface DoctorAppointment {
   patientId: string;
   hospitalId?: string;
 
-  // 🔹 Slot (booked)
+  // 🔹 Slot (order time)
   date: string; // YYYY-MM-DD
   startTime: string; // HH:mm
   endTime: string; // HH:mm
   timezone: string;
 
-  // 🔹 Medical
+  // 🔹 Visit
   visitType: VisitType;
 
-  // 🔹 Order / Payment Snapshot
-  consultationFee: number; // base price
-  discountAmount: number; // coupons/offers
+  // 🔹 Checkout snapshot (IMPORTANT)
+  patientSnapshot: PatientSnapshot;
+  addressSnapshot?: AddressSnapshot;
+  notes?: string;
+
+  // 🔹 Payment snapshot (ORDER)
+  consultationFee: number;
+  discountAmount?: number;
   taxAmount?: number;
-  totalAmount: number; // final paid
+  totalAmount: number;
 
   paymentStatus: PaymentStatus;
-  paymentMethod?: PaymentMethod;
+  paymentMethod: PaymentMethod;
   transactionId?: string;
 
   refund?: {
@@ -41,7 +64,6 @@ export interface DoctorAppointment {
 
   // 🔹 Lifecycle
   status: AppointmentStatus;
-
   cancelledAt?: Date;
   cancelReason?: string;
 

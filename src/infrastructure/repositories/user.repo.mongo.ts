@@ -28,6 +28,8 @@ export class MongoUserRepository implements IUserRepository {
     const doc = await User.findOne({
       $or: [{ email }, { phone: String(phone) }],
     });
+
+    console.log("doc from", doc);
     return doc;
   }
 
@@ -37,7 +39,13 @@ export class MongoUserRepository implements IUserRepository {
   }
 
   async updateUser(user: updateUser): Promise<null | UserResponse> {
-    const doc = await User.findByIdAndUpdate(user._id, user, { new: true });
+    const { _id, ...updateFields } = user;
+
+    if (!_id) {
+      throw new Error("User ID is required for update");
+    }
+
+    const doc = await User.findByIdAndUpdate(_id, updateFields, { new: true });
     return doc;
   }
 

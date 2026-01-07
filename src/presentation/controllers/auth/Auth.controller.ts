@@ -36,6 +36,7 @@ export class AuthController {
       userId: result.userId,
       hospitalId: result.hospitalId,
       forcePasswordReset: result.forcePasswordReset,
+      profileImage: result.profileImage,
     });
   };
 

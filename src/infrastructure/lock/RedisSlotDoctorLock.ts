@@ -30,4 +30,16 @@ export class RedisDoctorSlotLockService implements IDoctorSlotLock {
 
     return keys.map((k) => k.split(":").pop()!);
   }
+
+  async isLocked(
+    doctorId: string,
+    date: string,
+    startTime: string,
+    userId: string
+  ): Promise<boolean> {
+    const key = `lock:${doctorId}:${date}:${startTime}`;
+    const value = await redisClient.get(key);
+
+    return value === userId;
+  }
 }

@@ -38,7 +38,7 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
         path: "specialtyId",
         select: "name description",
       })
-      .populate({ path: "userId", select: "name email phone" })
+      .populate({ path: "userId", select: "name email phone profileImage" })
       .lean();
   }
 

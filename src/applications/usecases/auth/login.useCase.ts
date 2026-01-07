@@ -18,6 +18,8 @@ export class LoginUseCase implements ILoginUseCase {
   async execute(input: LoginUser, allowedRoles: string[]) {
     const user = await this.UserRepo.findByEmail(input.email);
 
+    console.log(user);
+
     if (!user) throw new Error("User not exist");
     if (!user.isVerified || user.isBlocked) throw new Error("Restricted entry");
 
@@ -71,6 +73,7 @@ export class LoginUseCase implements ILoginUseCase {
       hospitalId: tokenPayload.hosptialId,
       forcePasswordReset: user.forcePasswordReset ? true : false,
       doctorId: tokenPayload.doctorId,
+      profileImage: user.profileImage,
     };
   }
 }

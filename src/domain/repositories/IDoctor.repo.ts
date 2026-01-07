@@ -5,7 +5,7 @@ export interface IDoctorRepository {
   create(data: Partial<DoctorDocument>): Promise<DoctorDocument>;
 
   updateById(
-    doctorId: Types.ObjectId,
+    doctorId: Types.ObjectId | string,
     data: Partial<DoctorDocument>
   ): Promise<DoctorDocument | null>;
 

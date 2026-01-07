@@ -10,4 +10,6 @@ export interface IDoctorSlotLock {
   unlockSlot(doctorId: string, date: string, startTime: string): Promise<void>;
 
   getLockedSlots(doctorId: string, date: string): Promise<string[]>;
+
+  isLocked(doctorId: string, date: string, startTime: string, userId: string): Promise<boolean>;
 }

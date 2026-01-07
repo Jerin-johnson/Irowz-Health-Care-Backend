@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { asyncHandler } from "../middlewares/asyncHandler";
-import { DoctorBookingController } from "../controllers/patient/DoctorBooking.controller";
+import { DoctorBookingController } from "../controllers/patient/DoctorBooking.Controller";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
 export class PatientRoutes {
