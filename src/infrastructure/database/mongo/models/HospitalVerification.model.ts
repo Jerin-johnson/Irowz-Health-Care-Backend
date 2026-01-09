@@ -10,6 +10,8 @@ export interface HospitalVerificationDocument extends Document {
   pincode: string;
   officialEmail: string;
   phone: string;
+  latitude?: number;
+  longitude?: number;
   licenseDocumentUrl: string;
   status: "PENDING" | "APPROVED" | "REJECTED";
   adminRemarks?: string;
@@ -28,6 +30,8 @@ const HospitalVerificationSchema = new Schema(
     city: { type: String, required: true },
     state: { type: String, required: true },
     pincode: { type: String, required: true },
+    latitude: { type: Number },
+    longitude: { type: Number },
 
     officialEmail: { type: String, required: true },
     phone: { type: String, required: true },

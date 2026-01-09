@@ -1,6 +1,5 @@
 import {
   CreateHospitalVerificationRepository,
-  HospitalVerification,
   IHospitalVerificationRepository,
 } from "../../../domain/repositories/IHospitalVerification.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
@@ -8,6 +7,7 @@ import { IPasswordService } from "../../../domain/services/password.interface.se
 import UserRoles from "../../../domain/constants/UserRole";
 import { PdfUploadQueueService } from "../../queue/PdfUPloadQueueService.";
 import { ISubmitHospitalVerificationRequestUseCase } from "../../../domain/usecase/hospitalOnBoarding/ISubmitHospitalVerificationRequest.usecase";
+import { geocodeCityState } from "../../../infrastructure/services/geo.coding.service";
 
 export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificationRequestUseCase {
   constructor(
@@ -57,6 +57,17 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
 
     if (!HospitalAdminUser) throw new Error("cannot able to create hositpal admin user");
 
+    let latitude: number | undefined;
+    let longitude: number | undefined;
+
+    try {
+      const geo = await geocodeCityState(city, state);
+      latitude = geo.latitude;
+      longitude = geo.longitude;
+    } catch (err) {
+      console.error("Geocoding failed:", err);
+    }
+
     const HospitalVerficationRequest = await this.HosptialVerficatinRepo.create({
       userId: HospitalAdminUser._id,
       hospitalName: hospitalName,
@@ -69,6 +80,8 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
       phone: phone,
       licenseDocumentUrl: "pending",
       submittedAt: new Date(),
+      latitude,
+      longitude,
     });
 
     await this.pdfUploadQueue.addUploadJob({

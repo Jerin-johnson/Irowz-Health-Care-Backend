@@ -4,8 +4,8 @@ export interface CheckoutInput {
 
   date: string; // YYYY-MM-DD
   startTime: string; // HH:mm
-  endTime: string; // HH:mm
-  visitType: "ONLINE" | "IN_PERSON";
+  endTime?: string; // HH:mm
+  visitType?: "ONLINE" | "IN_PERSON";
 
   patientSnapshot: {
     firstName: string;

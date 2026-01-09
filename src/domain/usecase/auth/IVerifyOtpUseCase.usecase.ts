@@ -6,7 +6,7 @@ export interface IVerifyOtpUseCase {
   ): Promise<{
     accessToken: string;
     refreshToken: string;
-    userRole: string;
+    role: string;
     message: string;
   }>;
 }

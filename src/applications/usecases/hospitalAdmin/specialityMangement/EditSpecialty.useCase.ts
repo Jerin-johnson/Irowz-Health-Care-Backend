@@ -7,14 +7,24 @@ export class EditSpecialityUseCase implements IEditSpecialityUseCase {
   async execute(
     specialtyId: string,
     hospitalId: string,
-    data: { name: string; description: string }
+    data: { name: string; description: string; symptoms: string[] }
   ) {
-    const updated = await this.specialtyRepository.updateById(specialtyId, hospitalId, data);
+    const normalizedSymptoms = Array.from(
+      new Set(data.symptoms.map((s) => s.trim().toLowerCase()).filter(Boolean))
+    );
+
+    if (normalizedSymptoms.length === 0) {
+      throw new Error("Symptoms cannot be empty");
+    }
+    const updated = await this.specialtyRepository.updateById(specialtyId, hospitalId, {
+      ...data,
+      symptoms: normalizedSymptoms,
+    });
 
     if (!updated) {
       throw new Error("Specialty not found");
     }
 
-    return { message: "Blocked the hospital successfully" };
+    return { message: "updated speciality  hospital successfully" };
   }
 }

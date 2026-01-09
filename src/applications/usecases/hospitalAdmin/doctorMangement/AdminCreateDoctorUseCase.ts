@@ -8,6 +8,7 @@ import { AdminCreateDoctorDTO } from "../../../dtos/hosptialAdmin/doctorMangemen
 import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IHospitalSpecaility.repo";
 import { IPasswordService } from "../../../../domain/services/password.interface.service";
 import { IAdminCreateDoctorUseCase } from "../../../../domain/usecase/hosptialAdmin/doctorMangement/IAdminCreateDoctorUseCase.usecase";
+import { IHospitalRepository } from "../../../../domain/repositories/IHospital.repo";
 
 export class AdminCreateDoctorUseCase implements IAdminCreateDoctorUseCase {
   constructor(
@@ -15,7 +16,8 @@ export class AdminCreateDoctorUseCase implements IAdminCreateDoctorUseCase {
     private readonly doctorRepo: IDoctorRepository,
     private readonly queueService: EmailQueueService,
     private readonly specialtyRepository: IHospitalSpecialtyRepository,
-    private passwordService: IPasswordService
+    private passwordService: IPasswordService,
+    private _hosptialRepo: IHospitalRepository
   ) {}
 
   async execute(input: AdminCreateDoctorDTO) {
@@ -24,6 +26,15 @@ export class AdminCreateDoctorUseCase implements IAdminCreateDoctorUseCase {
     const speciality = await this.specialtyRepository.findById(input.specialtyId as string);
     if (!speciality)
       throw new Error("Such speciality does exist inside your hospital...please create one");
+
+    const hosptial = await this._hosptialRepo.findByHospitalId(String(input.hospitalId));
+    if (!hosptial) {
+      throw new Error("Hospital not found or not verified");
+    }
+
+    if (!hosptial.latitude || !hosptial.longitude) {
+      throw new Error("Hospital location not set");
+    }
 
     const hashPassword = await this.passwordService.hash(plainPassword);
 
@@ -39,6 +50,11 @@ export class AdminCreateDoctorUseCase implements IAdminCreateDoctorUseCase {
 
     if (!user) throw new Error("create of the user i.e doctor failed...please try again later");
 
+    const location = {
+      type: "Point",
+      coordinates: [hosptial.longitude, hosptial.latitude],
+    };
+
     const doctor = await this.doctorRepo.create({
       userId: user._id as string,
       hospitalId: input.hospitalId,
@@ -50,6 +66,7 @@ export class AdminCreateDoctorUseCase implements IAdminCreateDoctorUseCase {
       medicalCouncil: input.medicalCouncil,
       medicalCertificate: "null",
       teleConsultationEnabled: input.teleConsultationEnabled ?? false,
+      location,
       isActive: true,
     });
 

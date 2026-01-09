@@ -16,7 +16,6 @@ export function setupSocket(httpServer: any) {
     });
   });
 
-  // Redis → Socket bridge
   redisSubscriber.subscribe("slot-events");
 
   redisSubscriber.on("message", (_channel, message) => {

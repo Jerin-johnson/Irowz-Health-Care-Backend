@@ -56,6 +56,7 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     //   // query.hos;
     //   console.log(search);
     // }
+    console.log(status, search);
     const records = await HospitalVerificationModel.find({
       status: "PENDING",
     });
@@ -63,10 +64,13 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
   }
 
   async resumbit(
-    userId: string,
+    verficationId: string,
     input: Partial<ResumbitHospitalVerficationRepository>
   ): Promise<HospitalVerification> {
-    const record = await HospitalVerificationModel.findOneAndUpdate({ userId }, { ...input });
+    const record = await HospitalVerificationModel.findOneAndUpdate(
+      { _id: verficationId },
+      { ...input }
+    );
     return this.map(record);
   }
 
@@ -142,6 +146,8 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
       _id: doc._id.toString(),
       userId: doc.userId.toString(),
       hospitalName: doc.hospitalName,
+      latitude: doc.latitude,
+      longitude: doc.longitude,
       registrationNumber: doc.registrationNumber,
       hospitalAddress: doc.hospitalAddress,
       city: doc.city,

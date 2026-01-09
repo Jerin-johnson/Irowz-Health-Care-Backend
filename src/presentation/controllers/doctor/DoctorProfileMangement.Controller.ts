@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { DoctorProfileMapper } from "../../dtos/doctorProfile.mapper";
+import { DoctorProfileMapper } from "../../../applications/dtos/doctor/doctorProfile.mapper";
 import { IGetDoctorProfileUseCase } from "../../../domain/usecase/doctor/doctorProfile/IGetDoctorProfileUseCase.usecase";
 import { IResetDoctorPasswordUseCase } from "../../../domain/usecase/doctor/doctorProfile/IResetDoctorPasswordUseCase.usecase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";

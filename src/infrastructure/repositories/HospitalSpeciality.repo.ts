@@ -43,14 +43,10 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
     return HospitalSpecialtyModel.find(filter).sort({ createdAt: -1 }).lean();
   }
 
-  /* =====================================================
-     UPDATE BY ID
-  ===================================================== */
-
   async updateById(
     specialtyId: string,
     hospitalId: string,
-    data: { name: string; description: string }
+    data: { name: string; description: string; symptoms: string[] }
   ) {
     return HospitalSpecialtyModel.findOneAndUpdate(
       { _id: specialtyId, hospitalId },
@@ -140,5 +136,22 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
       totalSpecialityCount,
       activeSpecialityCount,
     };
+  }
+
+  getAllUSpecialityUnquie(): Promise<{ _id: string | Types.ObjectId; name: string }[]> {
+    return HospitalSpecialtyModel.aggregate([
+      {
+        $group: {
+          _id: "$name",
+          id: { $first: "$_id" },
+        },
+      },
+      {
+        $project: {
+          _id: "$id",
+          name: "$_id",
+        },
+      },
+    ]);
   }
 }

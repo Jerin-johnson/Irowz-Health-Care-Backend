@@ -37,7 +37,7 @@ export class VerfiyOtpUseCase implements IVerifyOtpUseCase {
         email: user.email,
         name: user.name,
       }),
-      userRole: user.role,
+      role: user.role,
       message: "Verified successfully",
     };
   }

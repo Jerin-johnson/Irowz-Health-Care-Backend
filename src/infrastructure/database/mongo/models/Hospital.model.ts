@@ -10,6 +10,7 @@ export interface HospitalDocument extends Document {
   licenseDocumentUrl: string;
   city: string;
   state: string;
+  address?: string;
   latitude?: number;
   longitude?: number;
   isVerified: boolean;
@@ -40,6 +41,7 @@ const HospitalSchema = new Schema(
 
     latitude: { type: Number },
     longitude: { type: Number },
+    address: { type: String },
 
     isVerified: { type: Boolean, default: false },
     verifiedAt: { type: Date },

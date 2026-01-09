@@ -14,9 +14,9 @@ export class HospitalAdminRoutes {
   private router: Router;
 
   constructor(
-    private readonly HospitalOnBoradingController: HospitalOnBoradingController,
-    private readonly SpecialtyMangmentController: SpecialtyMangmentController,
-    private readonly DoctorMangmentController: DoctorMangmentController
+    private readonly _HospitalOnBoradingController: HospitalOnBoradingController,
+    private readonly _SpecialtyMangmentController: SpecialtyMangmentController,
+    private readonly _DoctorMangmentController: DoctorMangmentController
   ) {
     this.router = Router();
   }
@@ -31,38 +31,49 @@ export class HospitalAdminRoutes {
         next();
       },
       validate(hospitalVerificationBodySchema),
-      asyncHandler(this.HospitalOnBoradingController.submitVerficationRequest)
+      asyncHandler(this._HospitalOnBoradingController.submitVerficationRequest)
+    );
+
+    this.router.post(
+      "/verification/reapply/:id",
+      licenseUpload.single("licenseDocument"),
+      (req, res, next) => {
+        console.log(req.body);
+        console.log(req.file);
+        next();
+      },
+      asyncHandler(this._HospitalOnBoradingController.ressubmitVerficationRequest)
     );
 
     this.router.get(
       "/verification/status/:id",
-      asyncHandler(this.HospitalOnBoradingController.checkStatusById)
+      asyncHandler(this._HospitalOnBoradingController.checkStatusById)
     );
 
     this.router.use(authMiddleware, authorizeRoles(UserRoles.HOSPITAL_ADMIN));
 
     //speciality managment controller
 
-    this.router.post("/speciality", asyncHandler(this.SpecialtyMangmentController.createSpecilty));
+    this.router.post("/speciality", asyncHandler(this._SpecialtyMangmentController.createSpecilty));
 
     this.router.get(
       "/speciality",
-      asyncHandler(this.SpecialtyMangmentController.getAllHospitalSpeciality)
+      asyncHandler(this._SpecialtyMangmentController.getAllHospitalSpeciality)
     );
 
     this.router.get(
       "/speciality/names",
-      asyncHandler(this.SpecialtyMangmentController.GetAllSpecialtyName)
+      asyncHandler(this._SpecialtyMangmentController.GetAllSpecialtyName)
     );
 
     this.router.patch(
       "/speciality/:id",
-      asyncHandler(this.SpecialtyMangmentController.editSpecialty)
+      asyncHandler(this._SpecialtyMangmentController.editSpecialty)
     );
 
     this.router.patch(
       "/speciality/toggle/status",
-      asyncHandler(this.SpecialtyMangmentController.BlockOrUnblockSpecialty)
+      asyncHandler(this._SpecialtyMangmentController.BlockOrUnblockSpecialty)
     );
 
     //Doctor Mangement
@@ -70,14 +81,14 @@ export class HospitalAdminRoutes {
     this.router.post(
       "/doctor",
       validate(AdminCreateDoctorSchema),
-      asyncHandler(this.DoctorMangmentController.createDoctor)
+      asyncHandler(this._DoctorMangmentController.createDoctor)
     );
 
-    this.router.get("/doctor", asyncHandler(this.DoctorMangmentController.getDoctors));
+    this.router.get("/doctor", asyncHandler(this._DoctorMangmentController.getDoctors));
 
     this.router.patch(
       "/doctor/toggle/status",
-      asyncHandler(this.DoctorMangmentController.BlockOrUnblockDoctor)
+      asyncHandler(this._DoctorMangmentController.BlockOrUnblockDoctor)
     );
 
     return this.router;

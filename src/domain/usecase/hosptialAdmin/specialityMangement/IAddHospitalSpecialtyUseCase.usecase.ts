@@ -5,5 +5,6 @@ export interface IAddHospitalSpecialtyUseCase {
     hospitalId: string;
     name: string;
     description: string;
+    symptoms: string[];
   }): Promise<IHospitalSpecialty>;
 }

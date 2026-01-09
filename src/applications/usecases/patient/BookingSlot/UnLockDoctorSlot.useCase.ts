@@ -1,7 +1,7 @@
 import { IDoctorSlotCache } from "../../../../domain/cache/DoctorSlot.cache";
 import { IDoctorSlotLock } from "../../../../domain/lock/DoctorSlotLock";
 
-export class LockDoctorSlotUseCase {
+export class UnLockDoctorSlotUseCase {
   constructor(
     private readonly _DoctorSlotLock: IDoctorSlotLock,
     private readonly _DoctorSlotCache: IDoctorSlotCache
@@ -11,16 +11,11 @@ export class LockDoctorSlotUseCase {
     doctorId: string;
     date: string;
     startTime: string;
-    userId: string;
-  }): Promise<{ locked: boolean }> {
-    const { doctorId, date, startTime, userId } = params;
+  }): Promise<{ unlocked: boolean }> {
+    const { doctorId, date, startTime } = params;
     await this._DoctorSlotCache.invalidate(doctorId, date);
-    const locked = await this._DoctorSlotLock.lockSlot(doctorId, date, startTime, userId, 700);
+    await this._DoctorSlotLock.unlockSlot(doctorId, date, startTime);
 
-    if (!locked) {
-      return { locked: false };
-    }
-
-    return { locked: true };
+    return { unlocked: true };
   }
 }

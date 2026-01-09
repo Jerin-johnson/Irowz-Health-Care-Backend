@@ -19,7 +19,7 @@ export class CheckoutUseCase {
       date,
       startTime,
       endTime,
-      visitType,
+      visitType = "ONLINE",
       patientSnapshot,
       addressSnapshot,
       notes,
@@ -31,60 +31,51 @@ export class CheckoutUseCase {
       throw new Error("Slot lock expired or does not belong to this user");
     }
 
-    const alreadyBooked = await this._DoctorAppoinmentRepo.exists(doctorId, date, startTime);
+    const slotBlocked = await this._DoctorAppoinmentRepo.exists(doctorId, date, startTime);
 
-    if (alreadyBooked) {
+    if (slotBlocked) {
       throw new Error("Slot already booked");
     }
 
-    //check price
-    const Doctor = await this._DoctorRepo.findById(doctorId);
-
-    if (!Doctor) throw new Error("The selected Doctor is currently un avaible");
-
-    const consultationFee = Doctor.consultationFee;
-    // const discountAmount = 0;
-    // const taxAmount = 0;
-
-    const totalAmount = consultationFee; // - discountAmount + taxAmount;
-    const appointment = await this._DoctorAppoinmentRepo.create({
+    let appointment = await this._DoctorAppoinmentRepo.findPendingByUser(
       doctorId,
       patientId,
-
       date,
-      startTime,
-      endTime,
-      timezone: "Asia/Kolkata",
+      startTime
+    );
 
-      visitType,
+    if (!appointment) {
+      const Doctor = await this._DoctorRepo.findById(doctorId);
+      if (!Doctor) throw new Error("Doctor unavailable");
 
-      patientSnapshot,
-      addressSnapshot,
-      notes,
-
-      consultationFee,
-
-      totalAmount,
-
-      paymentStatus: "PENDING",
-      paymentMethod: "RAZORPAY",
-
-      status: "PENDING",
-    });
+      appointment = await this._DoctorAppoinmentRepo.create({
+        doctorId,
+        patientId,
+        date,
+        startTime,
+        endTime,
+        timezone: "Asia/Kolkata",
+        visitType,
+        patientSnapshot,
+        addressSnapshot,
+        notes,
+        consultationFee: Doctor.consultationFee,
+        totalAmount: Doctor.consultationFee,
+        paymentStatus: "PENDING",
+        paymentMethod: "RAZORPAY",
+        status: "PENDING",
+      });
+    }
 
     const razorpayOrder = await this._RazorpayService.createOrder({
-      amount: totalAmount * 100,
+      amount: appointment.totalAmount * 100,
       receipt: appointment.id,
     });
-
-    // appointment.razorpayOrderId = razorpayOrder.id;
-
-    // await appointment.save()
 
     await this._DoctorAppoinmentRepo.attachPaymentOrder(appointment.id, razorpayOrder.id);
 
     return {
-      appointmentId: appointment.id,
+      appointmentId: appointment._id,
       razorpayOrderId: razorpayOrder.id,
       amount: razorpayOrder.amount,
       currency: razorpayOrder.currency,

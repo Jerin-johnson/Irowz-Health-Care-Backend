@@ -7,5 +7,9 @@ export interface PaymentOrder {
 export interface IPaymentGateway {
   createOrder(params: { amount: number; receipt: string }): Promise<PaymentOrder>;
 
-  verifyWebhookSignature(payload: string, signature: string): boolean;
+  verifyPaymentSignature(params: {
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+  }): boolean;
 }

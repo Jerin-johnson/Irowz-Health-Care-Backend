@@ -16,6 +16,8 @@ export interface HospitalVerification {
   mimeType?: any;
   fileBuffer?: any;
   licenseDocumentUrl: string;
+  latitude?: string;
+  longitude?: string;
   status: HospitalVerificationStatus;
   adminRemarks?: string;
   submittedAt: Date;
@@ -48,7 +50,7 @@ export interface IHospitalVerificationRepository {
   findAllPending(status?: string, search?: string): Promise<HospitalVerification[]>;
 
   resumbit(
-    userId: string,
+    verficationId: string,
     input: Partial<ResumbitHospitalVerficationRepository>
   ): Promise<HospitalVerification>;
 

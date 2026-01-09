@@ -3,20 +3,23 @@ import {
   IHospitalVerificationRepository,
 } from "../../../domain/repositories/IHospitalVerification.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
+import { PdfUploadQueueService } from "../../queue/PdfUPloadQueueService.";
 
 export class ResubmitHospitalVerificationUseCase {
   constructor(
-    private userRepo: IUserRepository,
-    private hospitalVerificationRepo: IHospitalVerificationRepository
+    private _userRepo: IUserRepository,
+    private _hospitalVerificationRepo: IHospitalVerificationRepository,
+    private _pdfUploadQueue: PdfUploadQueueService
   ) {}
 
-  async execute(userId: string, input: CreateHospitalVerificationRepository) {
-    const user = await this.userRepo.findById(userId);
-    if (!user) {
-      throw new Error("User not found");
-    }
+  async execute(verficationId: string, input: CreateHospitalVerificationRepository) {
+    const { city, hospitalAddress, pincode, state, fileBuffer, mimeType } = input;
 
-    const existing = await this.hospitalVerificationRepo.findPendingByUserId(userId);
+    console.log("re apply", verficationId, input);
+
+    const existing = await this._hospitalVerificationRepo.findById(verficationId);
+
+    console.log("the existing", existing);
 
     if (!existing) throw new Error("No record found on submission");
 
@@ -28,14 +31,39 @@ export class ResubmitHospitalVerificationUseCase {
       throw new Error("Hospital already verified");
     }
 
-    await this.hospitalVerificationRepo.resumbit(existing._id as string, {
-      ...input,
+    const user = await this._userRepo.findById(existing.userId as string);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    console.log("The user is ", user);
+
+    const result = await this._hospitalVerificationRepo.resumbit(verficationId as string, {
+      hospitalAddress,
+      pincode,
+      city,
+      state,
       status: "PENDING",
       adminRemarks: undefined,
       reviewedAt: undefined,
       updatedAt: new Date(),
     });
 
-    return { message: "Verification resubmitted" };
+    console.log("The result is", result);
+
+    await this._pdfUploadQueue.addUploadJob({
+      hospitalId: result._id as string,
+      buffer: fileBuffer,
+      mimeType: mimeType,
+    });
+
+    console.log(result);
+
+    return {
+      message: "Verification resubmitted",
+      data: {
+        city: input.city,
+      },
+    };
   }
 }

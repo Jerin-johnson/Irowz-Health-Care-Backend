@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IDoctorAvailabilityRepository } from "../../domain/repositories/IDoctorAvailabilityRepository";
 import { DoctorAvailability } from "../../domain/types/DoctorAvailability";
 import { DoctorAvailabilityModel } from "../database/mongo/models/DoctorAvailabilityModel";
@@ -36,5 +37,18 @@ export class MongoDoctorAvailabilityRepository implements IDoctorAvailabilityRep
     }
 
     return DoctorAvailabilityMapper.toDomain(doc);
+  }
+
+  async getByDoctorIds(doctorIds: Types.ObjectId[]) {
+    const records = await DoctorAvailabilityModel.find({
+      doctorId: { $in: doctorIds },
+    }).lean();
+
+    const map = new Map<string, any>();
+    records.forEach((r) => {
+      map.set(r.doctorId.toString(), r);
+    });
+
+    return map;
   }
 }

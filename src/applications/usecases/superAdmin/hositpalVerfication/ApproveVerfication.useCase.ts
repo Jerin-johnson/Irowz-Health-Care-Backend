@@ -1,4 +1,3 @@
-import { tr } from "zod/v4/locales";
 import { IHospitalRepository } from "../../../../domain/repositories/IHospital.repo";
 import { IHospitalVerificationRepository } from "../../../../domain/repositories/IHospitalVerification.repo";
 import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
@@ -11,36 +10,59 @@ export class ApproveVerficationRequest implements IApproveVerificationRequestUse
     private userRepo: IUserRepository
   ) {}
 
-  async execute(hositpalId: string, adminRemarks?: string) {
-    const status = await this.HosptialVerficationRepo.findHosptialVerficationStatus(hositpalId);
+  async execute(hospitalId: string, adminRemarks?: string) {
+    const hosptialVerficationInfo = await this.HosptialVerficationRepo.findById(hospitalId);
 
-    if (status === "APPROVED") throw new Error("The staus is already approved");
-    if (status != "PENDING")
-      throw new Error("The Invalid action since you alrady perfomed the action");
-    const result = await this.HosptialVerficationRepo.updateStatus(
-      hositpalId,
-      "APPROVED",
-      adminRemarks
-    );
+    if (!hosptialVerficationInfo) {
+      throw new Error("such thing is not founded ");
+    }
 
-    if (!result) throw new Error("something went wrong while updatingS");
+    if (hosptialVerficationInfo?.status === "APPROVED") {
+      throw new Error("Hospital is already approved");
+    }
 
-    await this.userRepo.markVerified(result.userId);
+    if (hosptialVerficationInfo?.status !== "PENDING") {
+      throw new Error("Invalid action for current verification status");
+    }
 
-    const hospital = this.HosptialRepo.create({
-      isVerified: true,
-      verifiedAt: new Date(),
-      isActive: true,
-      name: result.hospitalName,
-      city: result.city,
-      licenseDocumentUrl: result.licenseDocumentUrl,
-      officialEmail: result.officialEmail,
-      registrationNumber: result.registrationNumber,
-      phone: result.phone,
-      userId: result.userId,
-      state: result.state,
-    });
+    const existingHospital = await this.HosptialRepo.findByUserId(hosptialVerficationInfo.userId);
 
-    return { message: "Hosptial verfied successfully" };
+    if (existingHospital) {
+      await this.HosptialRepo.update(hosptialVerficationInfo.userId, {
+        isVerified: true,
+        verifiedAt: new Date(),
+        isActive: true,
+        city: hosptialVerficationInfo.city,
+        state: hosptialVerficationInfo.state,
+        latitude: Number(hosptialVerficationInfo.latitude),
+        longitude: Number(hosptialVerficationInfo.longitude),
+        pincode: hosptialVerficationInfo.pincode,
+        address: hosptialVerficationInfo.hospitalAddress,
+        licenseDocumentUrl: hosptialVerficationInfo.licenseDocumentUrl,
+      });
+    } else {
+      await this.HosptialRepo.create({
+        userId: hosptialVerficationInfo.userId,
+        name: hosptialVerficationInfo.hospitalName,
+        registrationNumber: hosptialVerficationInfo.registrationNumber,
+        officialEmail: hosptialVerficationInfo.officialEmail,
+        phone: hosptialVerficationInfo.phone,
+        city: hosptialVerficationInfo.city,
+        state: hosptialVerficationInfo.state,
+        latitude: Number(hosptialVerficationInfo.latitude),
+        longitude: Number(hosptialVerficationInfo.longitude),
+        address: hosptialVerficationInfo.hospitalAddress,
+        licenseDocumentUrl: hosptialVerficationInfo.licenseDocumentUrl,
+        isVerified: true,
+        verifiedAt: new Date(),
+        isActive: true,
+      });
+    }
+
+    await this.userRepo.markVerified(hosptialVerficationInfo.userId);
+
+    await this.HosptialVerficationRepo.updateStatus(hospitalId, "APPROVED", adminRemarks);
+
+    return { message: "Hospital verified successfully" };
   }
 }

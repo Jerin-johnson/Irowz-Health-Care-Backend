@@ -9,6 +9,7 @@ export interface IHospitalSpecialty {
   description: string;
 
   isActive: boolean;
+  symptoms?: string[];
 
   createdAt?: Date;
   updatedAt?: Date;
@@ -33,6 +34,14 @@ const HospitalSpecialtySchema = new Schema<IHospitalSpecialty>(
       type: String,
       required: true,
       trim: true,
+    },
+    symptoms: {
+      type: [String],
+      index: true,
+      validate: {
+        validator: (v: string[]) => v.length > 0,
+        message: "At least one symptom is required",
+      },
     },
 
     isActive: {

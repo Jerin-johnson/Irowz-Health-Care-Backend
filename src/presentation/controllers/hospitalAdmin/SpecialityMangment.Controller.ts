@@ -5,7 +5,7 @@ import { IBlockOrUnblockSpecialtyUseCase } from "../../../domain/usecase/hosptia
 import { IEditSpecialityUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IEditSpecialityUseCase.usecase";
 import { IGetAllSpecialtyNameUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IGetAllSpecialtyNameUseCase.usecase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
-import { createSpeciltyDtoInput } from "../../dtos/hosptial/createSpecailityDto";
+import { createSpeciltyDtoInput } from "../../../applications/dtos/hosptial/createSpecailityDto";
 
 export class SpecialtyMangmentController {
   constructor(
@@ -17,7 +17,7 @@ export class SpecialtyMangmentController {
   ) {}
 
   createSpecilty = async (req: Request, res: Response) => {
-    const { name, description } = req.body as createSpeciltyDtoInput;
+    const { name, description, symptoms } = req.body as createSpeciltyDtoInput;
     const hospitalId = req.user?.hospitalId;
 
     if (!hospitalId) {
@@ -31,6 +31,7 @@ export class SpecialtyMangmentController {
       hospitalId,
       name,
       description,
+      symptoms,
     });
 
     return res.status(HttpStatusCode.CREATED).json({
@@ -78,12 +79,13 @@ export class SpecialtyMangmentController {
 
   editSpecialty = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { name, description, symptoms } = req.body;
     const hospitalId = req.user!.hospitalId;
 
     const updated = await this.EditSpecialityUseCase.execute(id, hospitalId as string, {
       name,
       description,
+      symptoms,
     });
     res.status(HttpStatusCode.OK).json({ ...updated, success: true });
   };

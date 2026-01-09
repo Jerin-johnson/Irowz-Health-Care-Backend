@@ -5,6 +5,7 @@ export interface IEditSpecialityUseCase {
     data: {
       name: string;
       description: string;
+      symptoms: string[];
     }
   ): Promise<{
     message: string;

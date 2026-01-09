@@ -18,7 +18,7 @@ export class DoctorAvailabilityController {
   get = async (req: Request, res: Response) => {
     const doctorId = req.user?.doctorId;
 
-    const availability = await this._upsertAvailability["availabilityRepo"].findByDoctorId(
+    const availability = await this._upsertAvailability["_availabilityRepo"].findByDoctorId(
       doctorId as string
     );
 

@@ -19,6 +19,8 @@ export interface IHospitalSpecialtyRepository {
 
   getAllSpeciality(hospitalId: string): Promise<{ _id: string | Types.ObjectId; name: string }[]>;
 
+  getAllUSpecialityUnquie(): Promise<{ _id: string | Types.ObjectId; name: string }[]>;
+
   updateById(
     id: string,
     hospitalId: string,

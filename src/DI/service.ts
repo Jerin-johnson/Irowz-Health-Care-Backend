@@ -5,6 +5,7 @@ import { RandomOtpService } from "../infrastructure/services/otp.service";
 import { PdfUploadQueueService } from "../applications/queue/PdfUPloadQueueService.";
 import { S3FileStorage } from "../infrastructure/storage/S3FileStoragePdf";
 import { SharpImageProcessor } from "../infrastructure/services/sharpImage.service";
+import { RazorpayGateway } from "../infrastructure/payment/RazorpayGateway";
 // import { pdfUploadQueue } from "../infrastructure/queue/pdfUpload.queue";
 //services
 export const passwordService = new PasswordService();
@@ -14,3 +15,4 @@ export const otpService = new RandomOtpService();
 export const pdfUPloadQueueService = new PdfUploadQueueService();
 export const s3FileStorage = new S3FileStorage();
 export const sharpImageProcessor = new SharpImageProcessor();
+export const razorpayGateway = new RazorpayGateway();

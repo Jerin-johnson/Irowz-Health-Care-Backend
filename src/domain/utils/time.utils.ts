@@ -1,33 +1,37 @@
 export function addMinutes(time: string, minutes: number): string {
-  const [h, m] = time.split(":").map(Number);
-  const date = new Date(0, 0, 0, h, m + minutes);
-  return date.toTimeString().slice(0, 5);
+  return minutesToTime(timeToMinutes(time) + minutes);
 }
 
 export function isTimeInRange(time: string, start?: string, end?: string): boolean {
   if (!start || !end) return false;
-  return time >= start && time < end;
+
+  const t = timeToMinutes(time);
+  return t >= timeToMinutes(start) && t < timeToMinutes(end);
 }
 
-export function timeToMinutes(time: string): number {
-  const [h, m] = time.split(":").map(Number);
-  return h * 60 + m;
-}
+export const timeToMinutes = (time?: string): number => {
+  console.log("The time reciced", time);
+  if (!time) throw new Error("Invalid time value passed to timeToMinutes");
+
+  const [hours, minutes] = time.split(":").map(Number);
+  if (isNaN(hours) || isNaN(minutes)) {
+    throw new Error(`Invalid time format: ${time}`);
+  }
+
+  return hours * 60 + minutes;
+};
 
 export function minutesToTime(minutes: number): string {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
-
   return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
 }
 
 export type WeekDay = "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN";
 
 export function getWeekDay(date: string): WeekDay {
-  const day = new Date(date)
+  return new Date(date)
     .toLocaleDateString("en-US", { weekday: "short" })
     .toUpperCase()
-    .slice(0, 3);
-
-  return day as WeekDay;
+    .slice(0, 3) as WeekDay;
 }

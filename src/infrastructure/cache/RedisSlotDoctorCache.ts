@@ -17,6 +17,7 @@ export class RedisDoctorAvailabilityCache implements IDoctorSlotCache {
   }
 
   async invalidate(doctorId: string, date: string) {
-    await redisClient.del(this.key(doctorId, date));
+    const result = await redisClient.del(this.key(doctorId, date));
+    console.log("the result from the doctor cahce", result);
   }
 }

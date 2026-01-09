@@ -58,6 +58,14 @@ export class HospitalRepositoryImpl implements IHospitalRepository {
     return { data, total, totalHospitals, IsActiveHospitalCount };
   }
 
+  async update(id: string, data: any): Promise<any> {
+    return await HospitalModel.updateOne({ userId: id }, { data });
+  }
+
+  async findByHospitalId(hospitalId: string): Promise<any> {
+    return await HospitalModel.findOne({ _id: hospitalId });
+  }
+
   private map(doc: any) {
     return {
       id: doc._id.toString(),

@@ -1,4 +1,3 @@
-import { email } from "zod";
 import { OtpRepository } from "../../../domain/repositories/IOtp.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 // import { IEmailService } from "../../../domain/services/email.interface.service";
@@ -45,6 +44,7 @@ export class RegisterUserCase implements IRegisterUserUseCase {
       userId: newUser._id,
       email: newUser.email,
       name: newUser.name,
+      role: newUser.role,
     };
   }
 }

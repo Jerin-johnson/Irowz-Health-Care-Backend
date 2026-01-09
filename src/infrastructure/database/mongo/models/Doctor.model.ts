@@ -3,9 +3,9 @@ export interface DoctorDocument extends Document {
   userId: Types.ObjectId | string;
   hospitalId: Types.ObjectId | string;
 
-  fullName: string;
-  email: string;
-  phone: string;
+  fullName?: string;
+  email?: string;
+  phone?: string;
 
   specialtyId: Types.ObjectId | string;
 
@@ -23,6 +23,7 @@ export interface DoctorDocument extends Document {
   totalReviews: number;
 
   isActive: boolean;
+  location?: any;
 
   createdAt: Date;
   updatedAt: Date;
@@ -49,6 +50,17 @@ const DoctorSchema = new Schema<DoctorDocument>(
       ref: "HospitalSpecialty",
       required: [true, "Specialty is required"],
       index: true,
+    },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        // required: true,
+      },
     },
 
     experienceYears: {
@@ -129,5 +141,6 @@ const DoctorSchema = new Schema<DoctorDocument>(
 );
 
 DoctorSchema.index({ hospitalId: 1, medicalRegistrationNumber: 1 }, { unique: true });
+DoctorSchema.index({ location: "2dsphere" });
 
 export const DoctorModel = model<DoctorDocument>("Doctor", DoctorSchema);

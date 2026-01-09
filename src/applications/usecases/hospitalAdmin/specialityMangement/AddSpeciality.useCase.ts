@@ -6,6 +6,7 @@ interface CreateHospitalSpecialtyDTO {
   hospitalId: string;
   name: string;
   description: string;
+  symptoms: string[];
 }
 
 export class AddHospitalSpecialtyUseCase implements IAddHospitalSpecialtyUseCase {
@@ -20,10 +21,19 @@ export class AddHospitalSpecialtyUseCase implements IAddHospitalSpecialtyUseCase
       throw new Error("Specialty description is required");
     }
 
+    const normalizedSymptoms = Array.from(
+      new Set(data.symptoms.map((s) => s.trim().toLowerCase()).filter(Boolean))
+    );
+
+    if (normalizedSymptoms.length === 0) {
+      throw new Error("Symptoms cannot be empty");
+    }
+
     const specialty = await this.specialtyRepository.create({
       hospitalId: data.hospitalId as any,
       name: data.name,
       description: data.description,
+      symptoms: normalizedSymptoms,
       isActive: true,
     });
 

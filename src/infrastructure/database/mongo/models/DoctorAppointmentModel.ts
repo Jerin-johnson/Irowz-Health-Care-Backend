@@ -39,7 +39,7 @@ export interface DoctorAppointmentDocument {
   taxAmount?: number;
   totalAmount: number;
 
-  paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED" | "PARTIALLY_REFUNDED";
+  paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED" | "PARTIALLY_REFUNDED" | "CANCELLED";
 
   paymentMethod: "RAZORPAY";
   transactionId?: string;
@@ -88,7 +88,7 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
 
     date: { type: String, required: true, index: true },
     startTime: { type: String, required: true },
-    endTime: { type: String, required: true },
+    endTime: { type: String },
     timezone: { type: String, default: "Asia/Kolkata" },
 
     visitType: {

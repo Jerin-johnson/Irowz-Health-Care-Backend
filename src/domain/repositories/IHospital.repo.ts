@@ -8,6 +8,7 @@ export interface Hospital {
   type?: "GENERAL" | "SPECIALTY";
   licenseDocumentUrl: string;
   city: string;
+  address?: string;
   state: string;
   latitude?: number;
   longitude?: number;
@@ -26,6 +27,7 @@ export interface IHospitalRepository {
   BlockBYUserId(userId: string, status: boolean): Promise<void>;
   findByAdminUserId(userId: string): Promise<{ _id: string } | null>;
   activateHospital(hospitalId: string): Promise<void>;
+  findByHospitalId(hospitalId: string): Promise<any>;
   getPaginated(
     filters: {
       search?: string;
@@ -42,4 +44,6 @@ export interface IHospitalRepository {
     totalHospitals: number;
     IsActiveHospitalCount: number;
   }>;
+
+  update(id: string, data: any): Promise<any>;
 }

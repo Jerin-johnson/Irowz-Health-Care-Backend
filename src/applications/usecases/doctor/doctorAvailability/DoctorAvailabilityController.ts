@@ -2,22 +2,22 @@ import { IDoctorAvailabilityRepository } from "../../../../domain/repositories/I
 import { DoctorAvailability } from "../../../../domain/types/DoctorAvailability";
 
 export class UpsertDoctorAvailabilityUseCase {
-  constructor(private readonly availabilityRepo: IDoctorAvailabilityRepository) {}
+  constructor(private readonly _availabilityRepo: IDoctorAvailabilityRepository) {}
 
   async execute(
     doctorId: string,
     input: Omit<DoctorAvailability, "id" | "doctorId" | "createdAt" | "updatedAt">
   ): Promise<DoctorAvailability> {
-    const existing = await this.availabilityRepo.findByDoctorId(doctorId);
+    const existing = await this._availabilityRepo.findByDoctorId(doctorId);
 
     if (existing) {
-      return this.availabilityRepo.updateByDoctorId(doctorId, {
+      return this._availabilityRepo.updateByDoctorId(doctorId, {
         ...input,
         updatedAt: new Date(),
       });
     }
 
-    return this.availabilityRepo.create({
+    return this._availabilityRepo.create({
       doctorId,
       ...input,
     });

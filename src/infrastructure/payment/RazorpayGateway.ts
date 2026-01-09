@@ -1,7 +1,8 @@
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import { IPaymentGateway } from "../../domain/payment/PaymentGateway";
-
+import dotenv from "dotenv";
+dotenv.config();
 export class RazorpayGateway implements IPaymentGateway {
   private client: Razorpay;
 
@@ -27,12 +28,16 @@ export class RazorpayGateway implements IPaymentGateway {
     };
   }
 
-  verifyWebhookSignature(payload: string, signature: string): boolean {
-    const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET!)
-      .update(payload)
+  verifyPaymentSignature(params: {
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+  }): boolean {
+    const generatedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
+      .update(`${params.razorpayOrderId}|${params.razorpayPaymentId}`)
       .digest("hex");
 
-    return expectedSignature === signature;
+    return generatedSignature === params.razorpaySignature;
   }
 }

@@ -5,6 +5,7 @@ import {
   hosptialVerficatinRepo,
   hospitalSpecialityRepo,
   doctorRepo,
+  hosptialRepository,
 } from "./repositers";
 import { passwordService, pdfUPloadQueueService } from "./service";
 import { ResubmitHospitalVerificationUseCase } from "../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
@@ -30,7 +31,8 @@ const submitHositalVerficationRequest = new SubmitHositalVerficationRequest(
 );
 const resubmitHospitalVerificationUseCase = new ResubmitHospitalVerificationUseCase(
   mongoUserRepository,
-  hosptialVerficatinRepo
+  hosptialVerficatinRepo,
+  pdfUPloadQueueService
 );
 
 const checkHospitalVerfcationStatusById = new CheckHospitalVerfcationStatusById(
@@ -65,7 +67,8 @@ const adminCreateDoctorUseCase = new AdminCreateDoctorUseCase(
   doctorRepo,
   emailQuequeService,
   hospitalSpecialityRepo,
-  passwordService
+  passwordService,
+  hosptialRepository
 );
 
 const getAllDoctorUseCase = new GetAllDoctorUseCase(doctorRepo);

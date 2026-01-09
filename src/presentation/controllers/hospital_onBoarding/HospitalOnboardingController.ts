@@ -31,9 +31,18 @@ export class HospitalOnBoradingController {
   };
 
   ressubmitVerficationRequest = async (req: Request, res: Response) => {
-    const user = req.user as { userId: string; role: string };
-    const userId = user.userId;
-    const result = this.ResubmitHospitalVerificationUseCase.execute(userId, req.body);
+    const { body, file } = req;
+    const verficationId = req.params.id;
+
+    if (!file) {
+      return res.status(400).json({ message: "License PDF required" });
+    }
+
+    const result = this.ResubmitHospitalVerificationUseCase.execute(verficationId, {
+      ...body,
+      fileBuffer: file.buffer,
+      mimeType: file.mimetype,
+    });
     return res.json({ success: true, ...result });
   };
 

@@ -2,38 +2,36 @@ import { IDoctorSlotCache } from "../../../../domain/cache/DoctorSlot.cache";
 import { IPaymentGateway } from "../../../../domain/payment/PaymentGateway";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 
-export class HandlePaymentWebhookUseCase {
+export class HandleVerifyPayment {
   constructor(
-    private readonly paymentGateway: IPaymentGateway,
-    private readonly appointmentRepo: IDoctorAppointmentRepository,
-    private readonly slotCache: IDoctorSlotCache
+    private readonly _paymentGateway: IPaymentGateway,
+    private readonly _appointmentRepo: IDoctorAppointmentRepository,
+    private readonly _slotCache: IDoctorSlotCache
   ) {}
 
-  async execute(params: { rawBody: string; signature: string }) {
-    const { rawBody, signature } = params;
+  async execute(params: {
+    appointmentId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+    razorpayOrderId: string;
+  }) {
+    const { razorpayOrderId, razorpayPaymentId, razorpaySignature, appointmentId } = params;
 
-    const isValid = this.paymentGateway.verifyWebhookSignature(rawBody, signature);
-
-    if (!isValid) {
-      throw new Error("Invalid Razorpay webhook signature");
-    }
-
-    const event = JSON.parse(rawBody);
-
-    if (event.event !== "payment.captured") {
-      console.log("something went wrong");
-      return;
-    }
-
-    const razorpayOrderId = event.payload.payment.entity.order_id;
-
-    const transactionId = event.payload.payment.entity.id;
-
-    const appointment = await this.appointmentRepo.markPaid({
+    const isValid = this._paymentGateway.verifyPaymentSignature({
       razorpayOrderId,
-      transactionId,
+      razorpayPaymentId,
+      razorpaySignature,
     });
 
-    await this.slotCache.invalidate(appointment.doctorId, appointment.date);
+    if (!isValid) {
+      throw new Error("Invalid Razorpay payment signature");
+    }
+
+    const appointment = await this._appointmentRepo.markPaid({
+      appointmentId,
+      transactionId: razorpayPaymentId,
+    });
+
+    await this._slotCache.invalidate(appointment.doctorId, appointment.date);
   }
 }

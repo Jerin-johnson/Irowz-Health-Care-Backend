@@ -34,6 +34,7 @@ export class AuthController {
       name: result.name,
       email: result.email,
       userId: result.userId,
+      doctorId: result.doctorId,
       hospitalId: result.hospitalId,
       forcePasswordReset: result.forcePasswordReset,
       profileImage: result.profileImage,
@@ -68,7 +69,7 @@ export class AuthController {
     res.status(HttpStatusCode.OK).json({
       success: true,
       accessToken: result.accessToken,
-      userRole: result.userRole,
+      role: result.role,
     });
   };
 
