@@ -3,13 +3,13 @@ import {
   IHospitalVerificationRepository,
 } from "../../../domain/repositories/IHospitalVerification.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
-import { PdfUploadQueueService } from "../../queue/PdfUPloadQueueService.";
+import { IFileStorage } from "../../../domain/storage/IFile.storage";
 
 export class ResubmitHospitalVerificationUseCase {
   constructor(
     private _userRepo: IUserRepository,
     private _hospitalVerificationRepo: IHospitalVerificationRepository,
-    private _pdfUploadQueue: PdfUploadQueueService
+    private readonly _fileStorage: IFileStorage
   ) {}
 
   async execute(verficationId: string, input: CreateHospitalVerificationRepository) {
@@ -38,6 +38,14 @@ export class ResubmitHospitalVerificationUseCase {
 
     console.log("The user is ", user);
 
+    const licenseKey = `hospital-licenses/${existing._id}.pdf`;
+
+    const fileKey = await this._fileStorage.uploadPrivatePdf({
+      buffer: fileBuffer,
+      key: licenseKey,
+      mimeType,
+    });
+
     const result = await this._hospitalVerificationRepo.resumbit(verficationId as string, {
       hospitalAddress,
       pincode,
@@ -47,14 +55,7 @@ export class ResubmitHospitalVerificationUseCase {
       adminRemarks: undefined,
       reviewedAt: undefined,
       updatedAt: new Date(),
-    });
-
-    console.log("The result is", result);
-
-    await this._pdfUploadQueue.addUploadJob({
-      hospitalId: result._id as string,
-      buffer: fileBuffer,
-      mimeType: mimeType,
+      licenseDocumentKey: fileKey,
     });
 
     console.log(result);

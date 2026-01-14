@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import { S3FileStorage } from "../../storage/S3FileStoragePdf";
+import { S3FileStorage } from "../../storage/S3FileStorage";
 import { HospitalVerificationRepositoryImpl } from "../../repositories/HospitalVerification.repository";
 import { queueRedisConnection } from "../../redis/ioredis.connection";
 import mongoose from "mongoose";

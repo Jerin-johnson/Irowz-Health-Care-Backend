@@ -5,16 +5,16 @@ import {
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 import { IPasswordService } from "../../../domain/services/password.interface.service";
 import UserRoles from "../../../domain/constants/UserRole";
-import { PdfUploadQueueService } from "../../queue/PdfUPloadQueueService.";
 import { ISubmitHospitalVerificationRequestUseCase } from "../../../domain/usecase/hospitalOnBoarding/ISubmitHospitalVerificationRequest.usecase";
 import { geocodeCityState } from "../../../infrastructure/services/geo.coding.service";
+import { IFileStorage } from "../../../domain/storage/IFile.storage";
 
 export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificationRequestUseCase {
   constructor(
     private userRepo: IUserRepository,
     private HosptialVerficatinRepo: IHospitalVerificationRepository,
     private PasswordService: IPasswordService,
-    private pdfUploadQueue: PdfUploadQueueService
+    private fileStorage: IFileStorage
   ) {}
 
   async execute(input: CreateHospitalVerificationRepository) {
@@ -68,6 +68,14 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
       console.error("Geocoding failed:", err);
     }
 
+    const licenseKey = `hospital-licenses/${HospitalAdminUser._id}.pdf`;
+
+    const fileKey = await this.fileStorage.uploadPrivatePdf({
+      buffer: fileBuffer,
+      key: licenseKey,
+      mimeType,
+    });
+
     const HospitalVerficationRequest = await this.HosptialVerficatinRepo.create({
       userId: HospitalAdminUser._id,
       hospitalName: hospitalName,
@@ -78,16 +86,10 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
       pincode: pincode,
       officialEmail: officialEmail,
       phone: phone,
-      licenseDocumentUrl: "pending",
+      licenseDocumentKey: fileKey,
       submittedAt: new Date(),
       latitude,
       longitude,
-    });
-
-    await this.pdfUploadQueue.addUploadJob({
-      hospitalId: HospitalVerficationRequest._id as string,
-      buffer: fileBuffer,
-      mimeType: mimeType,
     });
 
     return {

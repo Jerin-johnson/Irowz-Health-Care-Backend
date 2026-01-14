@@ -3,7 +3,7 @@ import { EmailNotificationService } from "../infrastructure/services/email.servi
 import { JwtTokenService } from "../infrastructure/services/jwt.service";
 import { RandomOtpService } from "../infrastructure/services/otp.service";
 import { PdfUploadQueueService } from "../applications/queue/PdfUPloadQueueService.";
-import { S3FileStorage } from "../infrastructure/storage/S3FileStoragePdf";
+import { S3FileStorage } from "../infrastructure/storage/S3FileStorage";
 import { SharpImageProcessor } from "../infrastructure/services/sharpImage.service";
 import { RazorpayGateway } from "../infrastructure/payment/RazorpayGateway";
 // import { pdfUploadQueue } from "../infrastructure/queue/pdfUpload.queue";

@@ -30,6 +30,11 @@ export class SuperAdminRoutes {
     );
 
     this.router.get(
+      "/hospital-verifications/:id/license/view",
+      asyncHandler(this.HosptialVerifcationController.viewLinencsenDocs)
+    );
+
+    this.router.get(
       "/hospital-verifications/:id",
       asyncHandler(this.HosptialVerifcationController.getVerficationRequestById)
     );
@@ -43,7 +48,6 @@ export class SuperAdminRoutes {
       asyncHandler(this.HosptialVerifcationController.reject)
     );
 
-    // hospital mangament routes;
     this.router.get("/hospital", asyncHandler(this.HospitalMangementController.getAllHospital));
 
     this.router.patch(

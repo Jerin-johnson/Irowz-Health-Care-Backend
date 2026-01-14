@@ -36,8 +36,21 @@ export class DoctorAvailabilityEngine {
       start: timeToMinutes(a.startTime),
       end: timeToMinutes(a.startTime) + slotDuration,
     }));
+
+    let minStartMinutes = workStart;
+    const now = new Date();
+    const isToday = date === now.toISOString().split("T")[0];
+
+    if (isToday) {
+      const nowPlusBuffer = now.getHours() * 60 + now.getMinutes() + 10;
+
+      const alignedStart = Math.ceil(nowPlusBuffer / slotDuration) * slotDuration;
+
+      minStartMinutes = Math.max(workStart, alignedStart);
+    }
+
     const slots: Slot[] = [];
-    for (let cursor = workStart; cursor + slotDuration <= workEnd; cursor += slotDuration) {
+    for (let cursor = minStartMinutes; cursor + slotDuration <= workEnd; cursor += slotDuration) {
       const slotStart = cursor;
       const slotEnd = cursor + slotDuration;
       const slotStartTime = minutesToTime(slotStart);

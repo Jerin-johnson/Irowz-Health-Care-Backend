@@ -9,6 +9,8 @@ import { GetVerficationRequestById } from "../applications/usecases/superAdmin/h
 import { GetALLHosptialLists } from "../applications/usecases/superAdmin/hosptialMangement/GetAllHospital.useCase";
 import { HospitalMangementController } from "../presentation/controllers/superAdmin/HosptialMangementController";
 import { BlockOrUnblockHospitalUseCase } from "../applications/usecases/superAdmin/hosptialMangement/BlockOrUnBlockHospital.useCase";
+import { ViewHospitalLicenseUseCase } from "../applications/usecases/superAdmin/hositpalVerfication/ViewHospitalLicenseUseCase";
+import { s3FileStorage } from "./service";
 const approveVerficationRequest = new ApproveVerficationRequest(
   hosptialVerficatinRepo,
   hosptialRepository,
@@ -21,12 +23,18 @@ const getAllVerficationRequest = new GetALLVerficationRequest(hosptialVerficatin
 
 const getHospitalStatsUseCase = new GetHospitalStatsUseCase(hosptialVerficatinRepo);
 const getVerficationRequestById = new GetVerficationRequestById(hosptialVerficatinRepo);
+
+const viewHospitalLicenseUseCase = new ViewHospitalLicenseUseCase(
+  hosptialVerficatinRepo,
+  s3FileStorage
+);
 const hospitalVerficationController = new HospitalVerficationController(
   approveVerficationRequest,
   rejectVerficationRequest,
   getAllVerficationRequest,
   getHospitalStatsUseCase,
-  getVerficationRequestById
+  getVerficationRequestById,
+  viewHospitalLicenseUseCase
 );
 
 //hospital mangement controller

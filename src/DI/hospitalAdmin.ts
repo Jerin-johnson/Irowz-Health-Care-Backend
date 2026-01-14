@@ -7,7 +7,7 @@ import {
   doctorRepo,
   hosptialRepository,
 } from "./repositers";
-import { passwordService, pdfUPloadQueueService } from "./service";
+import { passwordService, s3FileStorage } from "./service";
 import { ResubmitHospitalVerificationUseCase } from "../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
 import { HospitalAdminRoutes } from "../presentation/routes/hospital_admin.routes";
 import { CheckHospitalVerfcationStatusById } from "../applications/usecases/hosptialOnBorading/checkStatusById";
@@ -27,12 +27,12 @@ const submitHositalVerficationRequest = new SubmitHositalVerficationRequest(
   mongoUserRepository,
   hosptialVerficatinRepo,
   passwordService,
-  pdfUPloadQueueService
+  s3FileStorage
 );
 const resubmitHospitalVerificationUseCase = new ResubmitHospitalVerificationUseCase(
   mongoUserRepository,
   hosptialVerficatinRepo,
-  pdfUPloadQueueService
+  s3FileStorage
 );
 
 const checkHospitalVerfcationStatusById = new CheckHospitalVerfcationStatusById(

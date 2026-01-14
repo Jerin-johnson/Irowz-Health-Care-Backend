@@ -12,7 +12,7 @@ export interface HospitalVerificationDocument extends Document {
   phone: string;
   latitude?: number;
   longitude?: number;
-  licenseDocumentUrl: string;
+  licenseDocumentKey: string;
   status: "PENDING" | "APPROVED" | "REJECTED";
   adminRemarks?: string;
 
@@ -35,7 +35,7 @@ const HospitalVerificationSchema = new Schema(
 
     officialEmail: { type: String, required: true },
     phone: { type: String, required: true },
-    licenseDocumentUrl: { type: String, required: true },
+    licenseDocumentKey: { type: String, required: true },
 
     status: {
       type: String,

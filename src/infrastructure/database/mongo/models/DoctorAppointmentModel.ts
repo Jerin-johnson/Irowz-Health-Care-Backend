@@ -39,7 +39,14 @@ export interface DoctorAppointmentDocument {
   taxAmount?: number;
   totalAmount: number;
 
-  paymentStatus: "PENDING" | "PAID" | "FAILED" | "REFUNDED" | "PARTIALLY_REFUNDED" | "CANCELLED";
+  paymentStatus:
+    | "PENDING"
+    | "PAID"
+    | "FAILED"
+    | "REFUNDED"
+    | "PARTIALLY_REFUNDED"
+    | "CANCELLED"
+    | "EXPIRED";
 
   paymentMethod: "RAZORPAY";
   transactionId?: string;
@@ -52,7 +59,7 @@ export interface DoctorAppointmentDocument {
 
   razorpayOrderId?: string;
 
-  status: "PENDING" | "BOOKED" | "CANCELLED" | "COMPLETED" | "NO_SHOW";
+  status: "PENDING" | "BOOKED" | "CANCELLED" | "COMPLETED" | "NO_SHOW" | "STARTED";
 
   cancelledAt?: Date;
   cancelReason?: string;
@@ -125,7 +132,7 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
 
     paymentStatus: {
       type: String,
-      enum: ["PENDING", "PAID", "FAILED", "REFUNDED", "PARTIALLY_REFUNDED"],
+      enum: ["PENDING", "PAID", "FAILED", "REFUNDED", "PARTIALLY_REFUNDED", "EXPIRED"],
       default: "PENDING",
       index: true,
     },
@@ -146,7 +153,7 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
 
     status: {
       type: String,
-      enum: ["PENDING", "BOOKED", "CANCELLED", "COMPLETED", "NO_SHOW"],
+      enum: ["PENDING", "BOOKED", "CANCELLED", "COMPLETED", "NO_SHOW", "STARTED"],
       default: "PENDING",
       index: true,
     },

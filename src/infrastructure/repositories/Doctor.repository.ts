@@ -28,7 +28,7 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
   async findById(doctorId: string): Promise<DoctorDocument | null> {
     return await DoctorModel.findById(doctorId)
       .select(
-        "userId hospitalId specialtyId experienceYears consultationFee bio medicalRegistrationNumber medicalCouncil teleConsultationEnabled averageRating totalReviews isActive createdAt"
+        "userId hospitalId specialtyId location experienceYears consultationFee bio medicalRegistrationNumber medicalCouncil teleConsultationEnabled averageRating totalReviews isActive createdAt"
       )
       .populate({
         path: "hospitalId",

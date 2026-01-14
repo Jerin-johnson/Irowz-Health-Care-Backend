@@ -6,7 +6,8 @@ export interface Hospital {
   officialEmail: string;
   phone: string;
   type?: "GENERAL" | "SPECIALTY";
-  licenseDocumentUrl: string;
+  licenseDocumentUrl?: string;
+  licenseDocumentKey: string;
   city: string;
   address?: string;
   state: string;

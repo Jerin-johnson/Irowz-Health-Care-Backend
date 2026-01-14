@@ -8,8 +8,11 @@ import { UnLockDoctorSlotUseCase } from "../applications/usecases/patient/Bookin
 import { DoctorSearchUseCase } from "../applications/usecases/patient/DoctorListing/DoctorSearch.UseCase";
 import { GetAvailableSpecialityUseCase } from "../applications/usecases/patient/DoctorListing/GetAvailbaleSpecialty.useCase";
 import { GetDoctorProfileUseCase } from "../applications/usecases/patient/DoctorListing/GetDoctorProfile";
+import { GetReviewUseCase } from "../applications/usecases/patient/DoctorReview/GetReviewUseCase";
+import { PostReviewUseCase } from "../applications/usecases/patient/DoctorReview/PostReviewUseCase";
 import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.Controller";
 import { DoctorListingController } from "../presentation/controllers/patient/DoctorListing.Controller";
+import { DoctorReviewController } from "../presentation/controllers/patient/DoctorReview.Controller";
 // import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.controller";
 import { PatientRoutes } from "../presentation/routes/patient.routes";
 import { redisDoctorAvailabilityCache, redisDoctorSpecialityCache } from "./cache";
@@ -18,6 +21,7 @@ import {
   doctorAppointmentRepository,
   doctorAvailabilityRepository,
   doctorRepo,
+  doctorReviewRepository,
   doctorSearchMongoRepository,
   hospitalSpecialityRepo,
   mongoUserRepository,
@@ -92,4 +96,14 @@ const doctorListingController = new DoctorListingController(
   getDoctorProfileUseCase
 );
 
-export const patientRoutes = new PatientRoutes(doctorBookingController, doctorListingController);
+const postReviewUseCase = new PostReviewUseCase(doctorReviewRepository, doctorRepo);
+
+const getReviewUseCase = new GetReviewUseCase(doctorReviewRepository);
+
+const doctorReviewController = new DoctorReviewController(postReviewUseCase, getReviewUseCase);
+
+export const patientRoutes = new PatientRoutes(
+  doctorBookingController,
+  doctorListingController,
+  doctorReviewController
+);

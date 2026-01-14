@@ -5,6 +5,7 @@ import app from "./app";
 import { connectRedis } from "./infrastructure/redis/redisClient";
 import { connectDB } from "./infrastructure/database/mongo/mongoose.connect";
 import { setupSocket } from "./socket";
+import { startPaymentExpiryCron } from "./cron/paymentExpiry.cron";
 
 const PORT = process.env.PORT || 5000;
 
@@ -12,6 +13,7 @@ async function startServer() {
   try {
     await connectRedis();
     await connectDB();
+    startPaymentExpiryCron();
 
     const server = http.createServer(app);
 

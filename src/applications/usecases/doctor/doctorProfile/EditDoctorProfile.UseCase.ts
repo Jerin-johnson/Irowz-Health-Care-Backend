@@ -51,7 +51,7 @@ export class EditDoctorProfileUseCase {
 
       const key = `public/doctor/images/${doctorId}/${Date.now()}.jpg`;
 
-      const imageUrl = await this.fileStorage.uploadImage({
+      const imageUrl = await this.fileStorage.uploadPublicImage({
         buffer: processedImage,
         mimeType: "image/jpeg",
         key,

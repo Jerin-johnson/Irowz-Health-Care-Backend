@@ -38,7 +38,7 @@ export class ApproveVerficationRequest implements IApproveVerificationRequestUse
         longitude: Number(hosptialVerficationInfo.longitude),
         pincode: hosptialVerficationInfo.pincode,
         address: hosptialVerficationInfo.hospitalAddress,
-        licenseDocumentUrl: hosptialVerficationInfo.licenseDocumentUrl,
+        licenseDocumentKey: hosptialVerficationInfo.licenseDocumentKey,
       });
     } else {
       await this.HosptialRepo.create({
@@ -52,7 +52,7 @@ export class ApproveVerficationRequest implements IApproveVerificationRequestUse
         latitude: Number(hosptialVerficationInfo.latitude),
         longitude: Number(hosptialVerficationInfo.longitude),
         address: hosptialVerficationInfo.hospitalAddress,
-        licenseDocumentUrl: hosptialVerficationInfo.licenseDocumentUrl,
+        licenseDocumentKey: hosptialVerficationInfo.licenseDocumentKey,
         isVerified: true,
         verifiedAt: new Date(),
         isActive: true,

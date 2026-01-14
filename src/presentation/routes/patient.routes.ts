@@ -3,13 +3,15 @@ import { asyncHandler } from "../middlewares/asyncHandler";
 import { DoctorBookingController } from "../controllers/patient/DoctorBooking.Controller";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { DoctorListingController } from "../controllers/patient/DoctorListing.Controller";
+import { DoctorReviewController } from "../controllers/patient/DoctorReview.Controller";
 
 export class PatientRoutes {
   private _router: Router;
 
   constructor(
     private readonly _DoctorBookingController: DoctorBookingController,
-    private readonly _DoctorListingController: DoctorListingController
+    private readonly _DoctorListingController: DoctorListingController,
+    private readonly _DoctorReviewController: DoctorReviewController
   ) {
     this._router = Router();
   }
@@ -62,6 +64,19 @@ export class PatientRoutes {
       "/appointment/success/:id",
       authMiddleware,
       asyncHandler(this._DoctorBookingController.apponitmentSuccess)
+    );
+
+    // doctor reviews
+    this._router.get(
+      "/doctor/review/:id",
+      authMiddleware,
+      asyncHandler(this._DoctorReviewController.getDoctorReview)
+    );
+
+    this._router.post(
+      "/doctor/review",
+      authMiddleware,
+      asyncHandler(this._DoctorReviewController.postReview)
     );
 
     return this._router;

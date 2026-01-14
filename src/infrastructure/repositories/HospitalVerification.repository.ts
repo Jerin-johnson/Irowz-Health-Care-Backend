@@ -79,7 +79,7 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     console.log("what is that", data);
     const updated = await HospitalVerificationModel.findOneAndUpdate(
       { _id: objectId },
-      { licenseDocumentUrl: data.licenseDocumentUrl }
+      { licenseDocumentKey: data.licenseDocumentKey }
     );
     console.log("This was success");
     if (!updated) {
@@ -155,7 +155,7 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
       pincode: doc.pincode,
       officialEmail: doc.officialEmail,
       phone: doc.phone,
-      licenseDocumentUrl: doc.licenseDocumentUrl,
+      licenseDocumentKey: doc.licenseDocumentKey,
       status: doc.status,
       adminRemarks: doc.adminRemarks,
       submittedAt: doc.submittedAt,

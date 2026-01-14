@@ -7,7 +7,7 @@ export interface HospitalDocument extends Document {
   officialEmail: string;
   phone: string;
   type: "GENERAL" | "SPECIALTY";
-  licenseDocumentUrl: string;
+  licenseDocumentKey: string;
   city: string;
   state: string;
   address?: string;
@@ -34,7 +34,7 @@ const HospitalSchema = new Schema(
       enum: ["GENERAL", "SPECIALTY"],
     },
 
-    licenseDocumentUrl: { type: String, required: true },
+    licenseDocumentKey: { type: String, required: true },
 
     city: { type: String, required: true },
     state: { type: String, required: true },
