@@ -5,6 +5,7 @@ import { validate } from "../middlewares/validate.middleware";
 import { loginSchema } from "../validators/auth/login.schema";
 import { registerSchema } from "../validators/auth/register.schema";
 import UserRoles from "../../domain/constants/UserRole";
+import { AUTH_ROUTES } from "../constants/routes/auth.contants.routes";
 
 export class AuthRoute {
   private router: Router;
@@ -14,49 +15,47 @@ export class AuthRoute {
   }
 
   register(): Router {
-    //Patient login
+    // Patient
     this.router.post(
-      "/login",
+      AUTH_ROUTES.LOGIN,
       validate(loginSchema),
       asyncHandler(this.authController.login([UserRoles.PATIENT]))
     );
 
     this.router.post(
-      "/register",
+      AUTH_ROUTES.REGISTER,
       validate(registerSchema),
       asyncHandler(this.authController.register)
     );
 
-    this.router.post("/verify-otp", this.authController.verifyOtp);
+    this.router.post(AUTH_ROUTES.VERIFY_OTP, asyncHandler(this.authController.verifyOtp));
 
-    //doctor login
+    this.router.post(AUTH_ROUTES.RESEND_OTP, asyncHandler(this.authController.resendOtp));
+
+    // Doctor
     this.router.post(
-      "/doctor/login",
+      AUTH_ROUTES.DOCTOR_LOGIN,
       validate(loginSchema),
       asyncHandler(this.authController.login([UserRoles.DOCTOR]))
     );
 
-    //hostpal_admin
-
+    // Hospital Admin
     this.router.post(
-      "/hospital-admin/login",
+      AUTH_ROUTES.HOSPITAL_ADMIN_LOGIN,
       validate(loginSchema),
       asyncHandler(this.authController.login([UserRoles.HOSPITAL_ADMIN]))
     );
 
-    //login super admin
-
+    // Super Admin
     this.router.post(
-      "/super-admin/login",
+      AUTH_ROUTES.SUPER_ADMIN_LOGIN,
       validate(loginSchema),
       asyncHandler(this.authController.login([UserRoles.SUPER_ADMIN]))
     );
 
-    this.router.get("/refresh-token", asyncHandler(this.authController.refreshToken));
+    this.router.get(AUTH_ROUTES.REFRESH_TOKEN, asyncHandler(this.authController.refreshToken));
 
-    this.router.post("/resend-otp", asyncHandler(this.authController.resendOtp));
-
-    this.router.get("/logout", asyncHandler(this.authController.logout));
+    this.router.get(AUTH_ROUTES.LOGOUT, asyncHandler(this.authController.logout));
 
     return this.router;
   }

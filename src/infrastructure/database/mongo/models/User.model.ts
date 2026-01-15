@@ -13,6 +13,8 @@ const userSchema = new Schema<IUser>({
     default: UserRoles.PATIENT,
     required: true,
   },
+  gender: String,
+  dob: { type: Date },
   profileImage: { type: String },
   isBlocked: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },

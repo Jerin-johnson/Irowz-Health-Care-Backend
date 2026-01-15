@@ -5,53 +5,61 @@ import { asyncHandler } from "../middlewares/asyncHandler";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { HospitalMangementController } from "../controllers/superAdmin/HosptialMangementController";
 import { authorizeRoles } from "../middlewares/role.middleware";
+import { SUPER_ADMIN_ROUTES } from "../constants/routes/super-admin.constants.routes";
 
 export class SuperAdminRoutes {
   private router: Router;
+
   constructor(
-    private HosptialVerifcationController: HospitalVerficationController,
-    private HospitalMangementController: HospitalMangementController
+    private readonly HosptialVerifcationController: HospitalVerficationController,
+    private readonly HospitalMangementController: HospitalMangementController
   ) {
     this.router = Router();
   }
 
   register(): Router {
+    // -------- AUTH + ROLE GUARD --------
     this.router.use(authMiddleware, authorizeRoles(UserRoles.SUPER_ADMIN));
 
+    // -------- Hospital verification --------
     this.router.get(
-      "/hospital-verifications/stats",
+      SUPER_ADMIN_ROUTES.HOSPITAL_VERIFICATION_STATS,
       asyncHandler(this.HosptialVerifcationController.getStats)
     );
 
     this.router.get(
-      "/hospital-verifications",
-      authMiddleware,
+      SUPER_ADMIN_ROUTES.HOSPITAL_VERIFICATIONS,
       asyncHandler(this.HosptialVerifcationController.getAllVerficationRequest)
     );
 
     this.router.get(
-      "/hospital-verifications/:id/license/view",
+      SUPER_ADMIN_ROUTES.HOSPITAL_LICENSE_VIEW,
       asyncHandler(this.HosptialVerifcationController.viewLinencsenDocs)
     );
 
     this.router.get(
-      "/hospital-verifications/:id",
+      SUPER_ADMIN_ROUTES.HOSPITAL_VERIFICATION_BY_ID,
       asyncHandler(this.HosptialVerifcationController.getVerficationRequestById)
     );
 
     this.router.patch(
-      "/hospital-verifications/:hospitalId/approve",
+      SUPER_ADMIN_ROUTES.HOSPITAL_APPROVE,
       asyncHandler(this.HosptialVerifcationController.approve)
     );
+
     this.router.patch(
-      "/hospital-verifications/:hospitalId/reject",
+      SUPER_ADMIN_ROUTES.HOSPITAL_REJECT,
       asyncHandler(this.HosptialVerifcationController.reject)
     );
 
-    this.router.get("/hospital", asyncHandler(this.HospitalMangementController.getAllHospital));
+    // -------- Hospital management --------
+    this.router.get(
+      SUPER_ADMIN_ROUTES.HOSPITAL,
+      asyncHandler(this.HospitalMangementController.getAllHospital)
+    );
 
     this.router.patch(
-      "/hospital/toggle/status",
+      SUPER_ADMIN_ROUTES.HOSPITAL_TOGGLE_STATUS,
       asyncHandler(this.HospitalMangementController.BlockOrUnBlockHospital)
     );
 

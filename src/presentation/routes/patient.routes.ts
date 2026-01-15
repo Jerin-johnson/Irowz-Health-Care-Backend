@@ -4,6 +4,7 @@ import { DoctorBookingController } from "../controllers/patient/DoctorBooking.Co
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { DoctorListingController } from "../controllers/patient/DoctorListing.Controller";
 import { DoctorReviewController } from "../controllers/patient/DoctorReview.Controller";
+import { PATIENT_ROUTES } from "../constants/routes/patient.constants.routes";
 
 export class PatientRoutes {
   private _router: Router;
@@ -17,64 +18,75 @@ export class PatientRoutes {
   }
 
   register(): Router {
-    this._router.get("/doctor/slot", asyncHandler(this._DoctorBookingController.GetAvailableSlots));
+    // -------- Doctor slots --------
+    this._router.get(
+      PATIENT_ROUTES.DOCTOR_SLOT,
+      asyncHandler(this._DoctorBookingController.GetAvailableSlots)
+    );
+
     this._router.post(
-      "/doctor/slot/lock",
+      PATIENT_ROUTES.DOCTOR_SLOT_LOCK,
       authMiddleware,
       asyncHandler(this._DoctorBookingController.lockDoctorSlot)
     );
+
     this._router.post(
-      "/doctor/slot/unlock",
+      PATIENT_ROUTES.DOCTOR_SLOT_UNLOCK,
       authMiddleware,
       asyncHandler(this._DoctorBookingController.unLockDoctorSlot)
     );
 
-    //Doctor listing
+    // -------- Doctor listing --------
     this._router.get(
-      "/doctor/speciality",
+      PATIENT_ROUTES.DOCTOR_SPECIALITY,
       asyncHandler(this._DoctorListingController.getAllSpeciality)
     );
 
-    this._router.get("/doctors", asyncHandler(this._DoctorListingController.searchDoctors));
-    this._router.get("/doctor/:id", asyncHandler(this._DoctorListingController.getDoctorProfile));
-
-    //get userBasic details for the checkout
+    this._router.get(
+      PATIENT_ROUTES.DOCTORS,
+      asyncHandler(this._DoctorListingController.searchDoctors)
+    );
 
     this._router.get(
-      "/checkout/profile",
+      PATIENT_ROUTES.DOCTOR_PROFILE,
+      asyncHandler(this._DoctorListingController.getDoctorProfile)
+    );
+
+    // -------- Checkout --------
+    this._router.get(
+      PATIENT_ROUTES.CHECKOUT_PROFILE,
       authMiddleware,
       asyncHandler(this._DoctorBookingController.getPatientBasicDetailsForCheckout)
     );
 
     this._router.post(
-      "/checkout",
+      PATIENT_ROUTES.CHECKOUT,
       authMiddleware,
       asyncHandler(this._DoctorBookingController.checkout)
     );
 
     this._router.post(
-      "/payment/verify",
+      PATIENT_ROUTES.PAYMENT_VERIFY,
       authMiddleware,
       asyncHandler(this._DoctorBookingController.verifyPayment)
     );
 
-    //appointment success
-
+    // -------- Appointment --------
     this._router.get(
-      "/appointment/success/:id",
+      PATIENT_ROUTES.APPOINTMENT_SUCCESS,
       authMiddleware,
       asyncHandler(this._DoctorBookingController.apponitmentSuccess)
     );
 
-    // doctor reviews
+    // -------- Doctor reviews --------
     this._router.get(
-      "/doctor/review/:id",
+      PATIENT_ROUTES.DOCTOR_REVIEW_BY_ID,
       authMiddleware,
       asyncHandler(this._DoctorReviewController.getDoctorReview)
     );
 
     this._router.post(
-      "/doctor/review",
+      PATIENT_ROUTES.DOCTOR_REVIEW,
       authMiddleware,
       asyncHandler(this._DoctorReviewController.postReview)
     );

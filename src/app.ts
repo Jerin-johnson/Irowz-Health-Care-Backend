@@ -8,6 +8,7 @@ import { errorHandler } from "./presentation/middlewares/errorHandle";
 import { superAdminRoutes } from "./DI/superAdmin";
 import { doctorRoutes } from "./DI/doctor";
 import { patientRoutes } from "./DI/patient";
+import { API_ROUTES } from "./presentation/constants/routes/api.constants.routes";
 
 const app = express();
 
@@ -31,11 +32,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/auth", authRoute.register());
-app.use("/api/patient", patientRoutes.register());
-app.use("/api/hospital-admin", hospitalAdminRoutes.register());
-app.use("/api/doctor", doctorRoutes.register());
-app.use("/api/super-admin", superAdminRoutes.register());
+app.use(API_ROUTES.AUTH, authRoute.register());
+app.use(API_ROUTES.PATIENT, patientRoutes.register());
+app.use(API_ROUTES.HOSPITAL_ADMIN, hospitalAdminRoutes.register());
+app.use(API_ROUTES.DOCTOR, doctorRoutes.register());
+app.use(API_ROUTES.SUPER_ADMIN, superAdminRoutes.register());
 app.use(errorHandler);
 
 export default app;

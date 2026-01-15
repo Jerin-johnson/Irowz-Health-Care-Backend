@@ -3,11 +3,13 @@ export interface IUser {
   name: string;
   email: string;
   phone: string;
+  gender?: string;
   password: string;
   role: string;
   profileImage: string;
   forcePasswordReset?: boolean;
   isBlocked: boolean;
+  dob: Date;
   isVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
