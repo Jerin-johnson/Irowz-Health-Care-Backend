@@ -6,6 +6,7 @@ import { PdfUploadQueueService } from "../applications/queue/PdfUPloadQueueServi
 import { S3FileStorage } from "../infrastructure/storage/S3FileStorage";
 import { SharpImageProcessor } from "../infrastructure/services/sharpImage.service";
 import { RazorpayGateway } from "../infrastructure/payment/RazorpayGateway";
+import { EmailQueueService } from "../applications/queue/EmailQueueService";
 // import { pdfUploadQueue } from "../infrastructure/queue/pdfUpload.queue";
 //services
 export const passwordService = new PasswordService();
@@ -16,3 +17,4 @@ export const pdfUPloadQueueService = new PdfUploadQueueService();
 export const s3FileStorage = new S3FileStorage();
 export const sharpImageProcessor = new SharpImageProcessor();
 export const razorpayGateway = new RazorpayGateway();
+export const emailQueueService = new EmailQueueService();

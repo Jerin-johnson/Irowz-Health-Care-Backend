@@ -1,4 +1,4 @@
-import { OtpRepository } from "../../../domain/repositories/IOtp.repo";
+import { IOtpRepository } from "../../../domain/repositories/IOtp.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 // import { IEmailService } from "../../../domain/services/email.interface.service";
 import { IOtpService } from "../../../domain/services/otp.interface.service";
@@ -6,14 +6,21 @@ import { IPasswordService } from "../../../domain/services/password.interface.se
 import { createUser } from "../../../domain/types/IUser.types";
 import { EmailQueueService } from "../../queue/EmailQueueService";
 import { IRegisterUserUseCase } from "../../../domain/usecase/auth/IRegisterUser.useCase";
+import { injectable, inject } from "tsyringe";
+import { TOKENS } from "../../../DI/tsyringe/tokens";
 
+@injectable()
 export class RegisterUserCase implements IRegisterUserUseCase {
   constructor(
+    @inject(TOKENS.IUserRepository)
     private userRepo: IUserRepository,
+    @inject(TOKENS.IPasswordService)
     private passwordService: IPasswordService,
+    @inject(TOKENS.IOtpService)
     private otpService: IOtpService,
     private emailService: EmailQueueService,
-    private otpRepo: OtpRepository
+    @inject(TOKENS.IOtpRepository)
+    private otpRepo: IOtpRepository
   ) {}
 
   async execute(input: createUser) {

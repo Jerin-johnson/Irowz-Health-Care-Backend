@@ -1,6 +1,8 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import "reflect-metadata";
+
 // import { mongoSanitizeMiddleware } from "./presentation/middlewares/mongoSanitize.middleware";
 import { authRoute } from "./DI/auth";
 import { hospitalAdminRoutes } from "./DI/hospitalAdmin";

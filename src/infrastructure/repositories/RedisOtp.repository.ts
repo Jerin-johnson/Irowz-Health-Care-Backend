@@ -1,7 +1,7 @@
-import { OtpRepository } from "../../domain/repositories/IOtp.repo";
+import { IOtpRepository } from "../../domain/repositories/IOtp.repo";
 import { redisClient } from "../redis/redisClient";
 
-export class RedisOtpRepository implements OtpRepository {
+export class RedisOtpRepository implements IOtpRepository {
   private key(email: string) {
     return `otp:${email}`;
   }

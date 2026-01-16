@@ -5,18 +5,26 @@ import { IVerifyOtpUseCase } from "../../../domain/usecase/auth/IVerifyOtpUseCas
 import { IRefreshTokenUseCase } from "../../../domain/usecase/auth/IRefreshToken.useCase";
 import { IReSendOtpUseCase } from "../../../domain/usecase/auth/IResendOtp.useCase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
+import { inject, injectable } from "tsyringe";
+import { TOKENS } from "../../../DI/tsyringe/tokens";
 
+@injectable()
 export class AuthController {
   constructor(
-    private loginUseCase: ILoginUseCase,
-    private RegisterUseCase: IRegisterUserUseCase,
-    private VerfiyOtpUseCase: IVerifyOtpUseCase,
-    private RefreshTokenUseCase: IRefreshTokenUseCase,
-    private ResendOtpUseCase: IReSendOtpUseCase
+    @inject(TOKENS.ILoginUseCase)
+    private _loginUseCase: ILoginUseCase,
+    @inject(TOKENS.IRegisterUserUseCase)
+    private _RegisterUseCase: IRegisterUserUseCase,
+    @inject(TOKENS.IVerifyOtpUseCase)
+    private _VerfiyOtpUseCase: IVerifyOtpUseCase,
+    @inject(TOKENS.IRefreshTokenUseCase)
+    private _RefreshTokenUseCase: IRefreshTokenUseCase,
+    @inject(TOKENS.IReSendOtpUseCase)
+    private _ResendOtpUseCase: IReSendOtpUseCase
   ) {}
 
   login = (allowedRoles: string[]) => async (req: Request, res: Response) => {
-    const result = await this.loginUseCase.execute(
+    const result = await this._loginUseCase.execute(
       req.body as { email: string; password: string },
       allowedRoles
     );
@@ -42,7 +50,7 @@ export class AuthController {
   };
 
   register = async (req: Request, res: Response) => {
-    const result = await this.RegisterUseCase.execute(req.body);
+    const result = await this._RegisterUseCase.execute(req.body);
     return res.status(200).json({ success: true, ...result });
   };
 
@@ -59,7 +67,7 @@ export class AuthController {
         .json({ success: false, message: "fields are missing" });
     }
 
-    const result = await this.VerfiyOtpUseCase.execute(userId, email, otp);
+    const result = await this._VerfiyOtpUseCase.execute(userId, email, otp);
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
       secure: true,
@@ -80,7 +88,7 @@ export class AuthController {
       return res.status(HttpStatusCode.UNAUTHORIZED).json({ message: "Unauthorized" });
     }
 
-    const { refreshToken, accessToken, user } = await this.RefreshTokenUseCase.execute(token);
+    const { refreshToken, accessToken, user } = await this._RefreshTokenUseCase.execute(token);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -95,7 +103,7 @@ export class AuthController {
   resendOtp = async (req: Request, res: Response) => {
     const { email } = req?.body as { email: string };
     if (!email) throw new Error("The request is not valid");
-    const result = await this.ResendOtpUseCase.execute(email);
+    const result = await this._ResendOtpUseCase.execute(email);
     return res.json({ success: true, ...result });
   };
 

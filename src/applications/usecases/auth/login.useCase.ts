@@ -1,3 +1,4 @@
+import { TOKENS } from "../../../DI/tsyringe/tokens";
 import { IDoctorRepository } from "../../../domain/repositories/IDoctor.repo";
 import { IHospitalRepository } from "../../../domain/repositories/IHospital.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
@@ -5,13 +6,20 @@ import { ITokenService, TokenPayload } from "../../../domain/services/jwt.interf
 import { IPasswordService } from "../../../domain/services/password.interface.service";
 import { LoginUser } from "../../../domain/types/IUser.types";
 import { ILoginUseCase } from "../../../domain/usecase/auth/ILogin.useCase";
+import { injectable, inject } from "tsyringe";
 
+@injectable()
 export class LoginUseCase implements ILoginUseCase {
   constructor(
+    @inject(TOKENS.IUserRepository)
     private UserRepo: IUserRepository,
+    @inject(TOKENS.IPasswordService)
     private PasswordService: IPasswordService,
+    @inject(TOKENS.ITokenService)
     private TokenService: ITokenService,
+    @inject(TOKENS.IHospitalRepository)
     private HosptialRepo: IHospitalRepository,
+    @inject(TOKENS.IDoctorRepository)
     private DoctorRepo: IDoctorRepository
   ) {}
 

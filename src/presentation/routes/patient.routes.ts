@@ -91,6 +91,10 @@ export class PatientRoutes {
       asyncHandler(this._DoctorReviewController.postReview)
     );
 
+    // -------- Patient Profile --------
+
+    // this._router.get("/profile",authMiddleware,asyncHandler())
+
     return this._router;
   }
 }

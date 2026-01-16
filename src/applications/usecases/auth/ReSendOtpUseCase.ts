@@ -1,17 +1,20 @@
-import { email } from "zod";
-import { OtpRepository } from "../../../domain/repositories/IOtp.repo";
+import { IOtpRepository } from "../../../domain/repositories/IOtp.repo";
 
-// import { IEmailService } from "../../../domain/services/email.interface.service";
 import { IOtpService } from "../../../domain/services/otp.interface.service";
 
 import { EmailQueueService } from "../../queue/EmailQueueService";
 import { IReSendOtpUseCase } from "../../../domain/usecase/auth/IResendOtp.useCase";
+import { injectable, inject } from "tsyringe";
+import { TOKENS } from "../../../DI/tsyringe/tokens";
 
+@injectable()
 export class ReSendOtpUseCase implements IReSendOtpUseCase {
   constructor(
+    @inject(TOKENS.IOtpService)
     private otpService: IOtpService,
     private emailService: EmailQueueService,
-    private otpRepo: OtpRepository
+    @inject(TOKENS.IOtpRepository)
+    private otpRepo: IOtpRepository
   ) {}
 
   async execute(email: string) {

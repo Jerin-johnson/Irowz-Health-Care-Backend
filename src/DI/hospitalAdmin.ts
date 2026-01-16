@@ -7,7 +7,7 @@ import {
   doctorRepo,
   hosptialRepository,
 } from "./repositers";
-import { passwordService, s3FileStorage } from "./service";
+import { emailQueueService, passwordService, s3FileStorage } from "./service";
 import { ResubmitHospitalVerificationUseCase } from "../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
 import { HospitalAdminRoutes } from "../presentation/routes/hospital_admin.routes";
 import { CheckHospitalVerfcationStatusById } from "../applications/usecases/hosptialOnBorading/checkStatusById";
@@ -18,7 +18,7 @@ import { BlockOrUnblockSpecialtyUseCase } from "../applications/usecases/hospita
 import { EditSpecialityUseCase } from "../applications/usecases/hospitalAdmin/specialityMangement/EditSpecialty.useCase";
 import { AdminCreateDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/AdminCreateDoctorUseCase";
 import { DoctorMangmentController } from "../presentation/controllers/hospitalAdmin/DoctorMangment.Controller";
-import { emailQuequeService } from "./auth";
+// import { emailQuequeService } from "./auth";
 import { GetAllDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/GetDoctor.useCase";
 import { GetAllSpecialtyNameUseCase } from "../applications/usecases/hospitalAdmin/specialityMangement/GetAllSpecialityName.userCae";
 import { BlockOrUnblockDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/BlockOrUnBlockDoctor.UseCase";
@@ -65,7 +65,7 @@ const specialityMangementController = new SpecialtyMangmentController(
 const adminCreateDoctorUseCase = new AdminCreateDoctorUseCase(
   mongoUserRepository,
   doctorRepo,
-  emailQuequeService,
+  emailQueueService,
   hospitalSpecialityRepo,
   passwordService,
   hosptialRepository

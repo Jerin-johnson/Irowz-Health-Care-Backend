@@ -75,7 +75,7 @@ export class HospitalRepositoryImpl implements IHospitalRepository {
       officialEmail: doc.officialEmail,
       phone: doc.phone,
       type: doc.type,
-      licenseDocumentUrl: doc.licenseDocumentUrl,
+      licenseDocumentKey: doc.licenseDocumentKey,
       city: doc.city,
       state: doc.state,
       latitude: doc.latitude,

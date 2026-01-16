@@ -1,8 +1,11 @@
+import { TOKENS } from "../../../DI/tsyringe/tokens";
 import { ITokenService, TokenPayload } from "../../../domain/services/jwt.interface.service";
 import { IRefreshTokenUseCase } from "../../../domain/usecase/auth/IRefreshToken.useCase";
+import { injectable, inject } from "tsyringe";
 
+@injectable()
 export class RefreshTokenUseCase implements IRefreshTokenUseCase {
-  constructor(private TokenService: ITokenService) {}
+  constructor(@inject(TOKENS.ITokenService) private TokenService: ITokenService) {}
 
   async execute(token: string) {
     const decoded: TokenPayload = this.TokenService.verifyRefreshToken(token);

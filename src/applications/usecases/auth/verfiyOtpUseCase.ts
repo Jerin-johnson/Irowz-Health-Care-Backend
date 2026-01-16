@@ -1,14 +1,21 @@
-import { OtpRepository } from "../../../domain/repositories/IOtp.repo";
+import { TOKENS } from "../../../DI/tsyringe/tokens";
+import { IOtpRepository } from "../../../domain/repositories/IOtp.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 import { ITokenService } from "../../../domain/services/jwt.interface.service";
 import { IOtpService } from "../../../domain/services/otp.interface.service";
 import { IVerifyOtpUseCase } from "../../../domain/usecase/auth/IVerifyOtpUseCase.usecase";
+import { injectable, inject } from "tsyringe";
 
+@injectable()
 export class VerfiyOtpUseCase implements IVerifyOtpUseCase {
   constructor(
+    @inject(TOKENS.IUserRepository)
     private UserRepo: IUserRepository,
-    private OtpRepo: OtpRepository,
+    @inject(TOKENS.IOtpRepository)
+    private OtpRepo: IOtpRepository,
+    @inject(TOKENS.IOtpService)
     private OtpService: IOtpService,
+    @inject(TOKENS.ITokenService)
     private TokenService: ITokenService
   ) {}
 
