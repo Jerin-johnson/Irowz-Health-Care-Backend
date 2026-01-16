@@ -20,6 +20,6 @@ export class PatientProfileRepository
     userId: Types.ObjectId | string,
     data: Partial<IPatientProfile>
   ): Promise<IPatientProfile | null> {
-    return PatientProfile.findOneAndUpdate({ userId }, data, { new: true });
+    return PatientProfile.findOneAndUpdate({ userId }, { $set: data }, { new: true, upsert: true });
   }
 }

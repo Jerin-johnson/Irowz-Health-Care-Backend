@@ -46,6 +46,7 @@ export class AuthController {
       hospitalId: result.hospitalId,
       forcePasswordReset: result.forcePasswordReset,
       profileImage: result.profileImage,
+      patientId: result.patientId,
     });
   };
 

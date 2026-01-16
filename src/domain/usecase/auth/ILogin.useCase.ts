@@ -15,5 +15,6 @@ export interface ILoginUseCase {
     doctorId?: string;
     forcePasswordReset: boolean;
     profileImage?: string;
+    patientId?: string;
   }>;
 }

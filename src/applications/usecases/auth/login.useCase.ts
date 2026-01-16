@@ -1,6 +1,7 @@
 import { TOKENS } from "../../../DI/tsyringe/tokens";
 import { IDoctorRepository } from "../../../domain/repositories/IDoctor.repo";
 import { IHospitalRepository } from "../../../domain/repositories/IHospital.repo";
+import { IPatientProfileRepository } from "../../../domain/repositories/IPatientProfileRepository";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 import { ITokenService, TokenPayload } from "../../../domain/services/jwt.interface.service";
 import { IPasswordService } from "../../../domain/services/password.interface.service";
@@ -20,7 +21,9 @@ export class LoginUseCase implements ILoginUseCase {
     @inject(TOKENS.IHospitalRepository)
     private HosptialRepo: IHospitalRepository,
     @inject(TOKENS.IDoctorRepository)
-    private DoctorRepo: IDoctorRepository
+    private DoctorRepo: IDoctorRepository,
+    @inject(TOKENS.IPatientProfileRepository)
+    private IPatientProfileRepository: IPatientProfileRepository
   ) {}
 
   async execute(input: LoginUser, allowedRoles: string[]) {
@@ -65,11 +68,10 @@ export class LoginUseCase implements ILoginUseCase {
     tokenPayload.forcePasswordReset = user.forcePasswordReset ? true : false;
     console.log("The token payload", tokenPayload);
 
-    // if (user.role === "PATIENT") {
-    //   const patient = await this.PatientRepo.findByUserId(user._id);
-    //   if (!patient) throw new Error("Patient profile not found");
-    //   tokenPayload.patientId = patient._id;
-    // }
+    if (user.role === "PATIENT") {
+      const patient = await this.IPatientProfileRepository.findByUserId(user._id);
+      if (patient) tokenPayload.patientId = String(patient._id);
+    }
 
     return {
       userId: user._id,
@@ -82,6 +84,7 @@ export class LoginUseCase implements ILoginUseCase {
       forcePasswordReset: user.forcePasswordReset ? true : false,
       doctorId: tokenPayload.doctorId,
       profileImage: user.profileImage,
+      patientId: tokenPayload.patientId,
     };
   }
 }

@@ -1,6 +1,11 @@
 import { container } from "tsyringe";
 import { TOKENS } from "./tokens";
-import { doctorRepo, hosptialRepository, mongoUserRepository } from "../repositers";
+import {
+  doctorRepo,
+  hosptialRepository,
+  mongoUserRepository,
+  patientProfileRepository,
+} from "../repositers";
 // import { redisOtpRepository } from "../auth";
 import { jwtTokenService, otpService, passwordService } from "../service";
 import { EmailQueueService } from "../../applications/queue/EmailQueueService";
@@ -18,6 +23,7 @@ container.register(TOKENS.IOtpRepository, { useClass: RedisOtpRepository });
 container.register(TOKENS.IDoctorRepository, {
   useValue: doctorRepo,
 });
+container.register(TOKENS.IPatientProfileRepository, { useValue: patientProfileRepository });
 
 container.register(TOKENS.IPasswordService, { useValue: passwordService });
 container.register(TOKENS.IOtpService, { useValue: otpService });

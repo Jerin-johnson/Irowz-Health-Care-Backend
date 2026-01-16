@@ -5,6 +5,10 @@ import { authMiddleware } from "../middlewares/authMiddleware";
 import { DoctorListingController } from "../controllers/patient/DoctorListing.Controller";
 import { DoctorReviewController } from "../controllers/patient/DoctorReview.Controller";
 import { PATIENT_ROUTES } from "../constants/routes/patient.constants.routes";
+import { PatientProfileController } from "../controllers/patient/PatientProfile.Controller";
+import { profileImageUpload } from "../middlewares/profileImage.upload";
+import { validate } from "../middlewares/validate.middleware";
+import { patientProfileSchema } from "../validators/patient/PatientProfileSchme";
 
 export class PatientRoutes {
   private _router: Router;
@@ -12,7 +16,8 @@ export class PatientRoutes {
   constructor(
     private readonly _DoctorBookingController: DoctorBookingController,
     private readonly _DoctorListingController: DoctorListingController,
-    private readonly _DoctorReviewController: DoctorReviewController
+    private readonly _DoctorReviewController: DoctorReviewController,
+    private readonly _PatientProfileController: PatientProfileController
   ) {
     this._router = Router();
   }
@@ -93,7 +98,23 @@ export class PatientRoutes {
 
     // -------- Patient Profile --------
 
-    // this._router.get("/profile",authMiddleware,asyncHandler())
+    this._router.get(
+      "/profile",
+      authMiddleware,
+      asyncHandler(this._PatientProfileController.getProfile)
+    );
+
+    this._router.patch(
+      "/profile",
+      authMiddleware,
+      profileImageUpload.single("profileImage"),
+      (req, res, next) => {
+        console.log("the req.body is ", req.body);
+        next();
+      },
+      validate(patientProfileSchema),
+      asyncHandler(this._PatientProfileController.editProfile)
+    );
 
     return this._router;
   }

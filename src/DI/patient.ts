@@ -10,9 +10,12 @@ import { GetAvailableSpecialityUseCase } from "../applications/usecases/patient/
 import { GetDoctorProfileUseCase } from "../applications/usecases/patient/DoctorListing/GetDoctorProfile";
 import { GetReviewUseCase } from "../applications/usecases/patient/DoctorReview/GetReviewUseCase";
 import { PostReviewUseCase } from "../applications/usecases/patient/DoctorReview/PostReviewUseCase";
+import { EditPatientProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/EditPatientProfileUseCase";
+import { GetProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/GetProfile.UseCase";
 import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.Controller";
 import { DoctorListingController } from "../presentation/controllers/patient/DoctorListing.Controller";
 import { DoctorReviewController } from "../presentation/controllers/patient/DoctorReview.Controller";
+import { PatientProfileController } from "../presentation/controllers/patient/PatientProfile.Controller";
 // import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.controller";
 import { PatientRoutes } from "../presentation/routes/patient.routes";
 import { redisDoctorAvailabilityCache, redisDoctorSpecialityCache } from "./cache";
@@ -25,8 +28,9 @@ import {
   doctorSearchMongoRepository,
   hospitalSpecialityRepo,
   mongoUserRepository,
+  patientProfileRepository,
 } from "./repositers";
-import { razorpayGateway } from "./service";
+import { razorpayGateway, s3FileStorage, sharpImageProcessor } from "./service";
 
 export const getDoctorAvailabileSlotUseCase = new GetDoctorAvailabileSlotUseCase(
   doctorAvailabilityRepository,
@@ -102,8 +106,23 @@ const getReviewUseCase = new GetReviewUseCase(doctorReviewRepository);
 
 const doctorReviewController = new DoctorReviewController(postReviewUseCase, getReviewUseCase);
 
+const getProfileUseCase = new GetProfileUseCase(patientProfileRepository, mongoUserRepository);
+
+const editPatientProfileUseCase = new EditPatientProfileUseCase(
+  mongoUserRepository,
+  patientProfileRepository,
+  s3FileStorage,
+  sharpImageProcessor
+);
+
+const patientProfileController = new PatientProfileController(
+  getProfileUseCase,
+  editPatientProfileUseCase
+);
+
 export const patientRoutes = new PatientRoutes(
   doctorBookingController,
   doctorListingController,
-  doctorReviewController
+  doctorReviewController,
+  patientProfileController
 );

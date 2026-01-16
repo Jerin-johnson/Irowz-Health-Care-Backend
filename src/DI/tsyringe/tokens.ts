@@ -6,6 +6,7 @@ export const TOKENS = {
   ITokenService: "ITokenService",
   IOtpService: "IOtpService",
   IOtpRepository: "IOtpRepository",
+  IPatientProfileRepository: "IPatientProfileRepository",
 
   // use cases
   ILoginUseCase: "ILoginUseCase",
