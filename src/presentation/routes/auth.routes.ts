@@ -57,6 +57,10 @@ export class AuthRoute {
 
     this.router.get(AUTH_ROUTES.LOGOUT, asyncHandler(this.authController.logout));
 
+    this.router.post("/forgot-password", asyncHandler(this.authController.forgetPassword));
+
+    this.router.post("/reset-password", asyncHandler(this.authController.resetPassword));
+
     return this.router;
   }
 }

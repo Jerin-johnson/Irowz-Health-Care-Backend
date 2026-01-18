@@ -6,7 +6,7 @@ const PAYMENT_TIMEOUT_MINUTES = 10;
 export const startPaymentExpiryCron = () => {
   cron.schedule("* * * * *", async () => {
     try {
-      console.log("🔄 Running payment expiry cron...");
+      console.log(" Running payment expiry cron...");
 
       const expiryTime = new Date(Date.now() - PAYMENT_TIMEOUT_MINUTES * 60 * 1000);
 

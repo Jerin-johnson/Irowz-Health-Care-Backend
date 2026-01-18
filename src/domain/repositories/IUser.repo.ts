@@ -8,4 +8,13 @@ export interface IUserRepository {
   updateUser(user: updateUser): Promise<null | UserResponse>;
   markVerified(userId: string): Promise<void>;
   BlockByUserId(userId: string, status: boolean): Promise<void>;
+  saveForgetPasswordToken(
+    email: string,
+    data: {
+      resetPasswordToken: string;
+      resetPasswordExpires: Date;
+    }
+  ): Promise<any>;
+
+  findOneByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse | null>;
 }

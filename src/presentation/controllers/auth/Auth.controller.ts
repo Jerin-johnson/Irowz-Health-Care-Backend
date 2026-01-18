@@ -7,6 +7,9 @@ import { IReSendOtpUseCase } from "../../../domain/usecase/auth/IResendOtp.useCa
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../DI/tsyringe/tokens";
+import { ApiResponse } from "../../utils/common.response.model";
+import { IResetPasswordUseCase } from "../../../domain/usecase/auth/IResetPasswordUseCase";
+import { IForgetPasswordUseCase } from "../../../domain/usecase/auth/IForgetPasswordUseCase";
 
 @injectable()
 export class AuthController {
@@ -20,7 +23,11 @@ export class AuthController {
     @inject(TOKENS.IRefreshTokenUseCase)
     private _RefreshTokenUseCase: IRefreshTokenUseCase,
     @inject(TOKENS.IReSendOtpUseCase)
-    private _ResendOtpUseCase: IReSendOtpUseCase
+    private _ResendOtpUseCase: IReSendOtpUseCase,
+    @inject(TOKENS.IForgetPasswordUseCase)
+    private _ForgetPasswordUseCase: IForgetPasswordUseCase,
+    @inject(TOKENS.IResetPasswordUseCase)
+    private _ResetPasswordUseCase: IResetPasswordUseCase
   ) {}
 
   login = (allowedRoles: string[]) => async (req: Request, res: Response) => {
@@ -113,5 +120,23 @@ export class AuthController {
     return res
       .status(HttpStatusCode.OK)
       .json({ success: true, message: "User logout successfully" });
+  };
+
+  forgetPassword = async (req: Request, res: Response) => {
+    const email = req.body?.email;
+    if (!email) throw new Error("Invalid request");
+
+    const result = await this._ForgetPasswordUseCase.execute(email);
+
+    return ApiResponse.success(res, null, result.message);
+  };
+
+  resetPassword = async (req: Request, res: Response) => {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) throw new Error("Invlaid request");
+
+    const result = await this._ResetPasswordUseCase.execute(token, newPassword);
+    return ApiResponse.success(res, result.role, result.message);
   };
 }

@@ -1,8 +1,9 @@
 import { IDoctorRepository } from "../../../../domain/repositories/IDoctor.repo";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { IAppointmentSuccessOrFailureUseCase } from "../../../../domain/usecase/patient/BookingSlots/IAppointmentSuccessOrFailure";
 import { DoctorProfileMapper } from "../../../dtos/doctor/doctorProfile.mapper";
 
-export class ApponintmentSuccessOrFailureUseCase {
+export class ApponintmentSuccessOrFailureUseCase implements IAppointmentSuccessOrFailureUseCase {
   constructor(
     private readonly _DoctorAppointmentRepo: IDoctorAppointmentRepository,
     private readonly _DoctorRepo: IDoctorRepository

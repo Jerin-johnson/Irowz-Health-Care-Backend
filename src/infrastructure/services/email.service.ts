@@ -52,6 +52,7 @@ export class EmailNotificationService implements IEmailService {
 
   // ---------------- RESET PASSWORD ----------------
   async sendResetPassword(email: string, resetLink: string): Promise<void> {
+    console.log("The resest password email is send to", email, resetLink);
     await this.transporter.sendMail({
       from: `"My Healthcare SaaS" <${process.env.SMTP_USER}>`,
       to: email,

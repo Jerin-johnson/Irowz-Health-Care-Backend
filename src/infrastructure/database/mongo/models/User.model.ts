@@ -2,30 +2,42 @@ import { Schema, model } from "mongoose";
 import { IUser } from "../../../../domain/types/IUser.types";
 import UserRoles from "../../../../domain/constants/UserRole";
 
-const userSchema = new Schema<IUser>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  phone: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: {
-    type: String,
-    enum: Object.values(UserRoles),
-    default: UserRoles.PATIENT,
-    required: true,
-  },
-  gender: String,
-  dob: { type: Date },
-  profileImage: { type: String },
-  isBlocked: { type: Boolean, default: false },
-  isVerified: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now },
-  forcePasswordReset: {
-    type: Boolean,
-    default: false,
-  },
+const userSchema = new Schema<IUser>(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    phone: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: Object.values(UserRoles),
+      default: UserRoles.PATIENT,
+      required: true,
+    },
 
-  updatedAt: { type: Date, default: Date.now },
-});
+    resetPasswordToken: { type: String, index: true, default: null },
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
+    },
+
+    gender: String,
+    dob: { type: Date },
+    profileImage: { type: String },
+    isBlocked: { type: Boolean, default: false },
+    isVerified: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now },
+    forcePasswordReset: {
+      type: Boolean,
+      default: false,
+    },
+
+    updatedAt: { type: Date, default: Date.now },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const User = model<IUser>("User", userSchema);
 

@@ -15,6 +15,8 @@ import { VerfiyOtpUseCase } from "../../applications/usecases/auth/verfiyOtpUseC
 import { RefreshTokenUseCase } from "../../applications/usecases/auth/ReFreshJwtTokenUseCase";
 import { ReSendOtpUseCase } from "../../applications/usecases/auth/ReSendOtpUseCase";
 import { RedisOtpRepository } from "../../infrastructure/repositories/RedisOtp.repository";
+import { ResetPasswordUseCase } from "../../applications/usecases/auth/resetPassword.useCase";
+import { ForgetPasswordUseCase } from "../../applications/usecases/auth/forgetPassword.useCase";
 
 // ===== interface bindings =====
 container.register(TOKENS.IUserRepository, { useValue: mongoUserRepository });
@@ -38,3 +40,5 @@ container.register(TOKENS.IRegisterUserUseCase, { useClass: RegisterUserCase });
 container.register(TOKENS.IVerifyOtpUseCase, { useClass: VerfiyOtpUseCase });
 container.register(TOKENS.IRefreshTokenUseCase, { useClass: RefreshTokenUseCase });
 container.register(TOKENS.IReSendOtpUseCase, { useClass: ReSendOtpUseCase });
+container.register(TOKENS.IResetPasswordUseCase, { useClass: ResetPasswordUseCase });
+container.register(TOKENS.IForgetPasswordUseCase, { useClass: ForgetPasswordUseCase });

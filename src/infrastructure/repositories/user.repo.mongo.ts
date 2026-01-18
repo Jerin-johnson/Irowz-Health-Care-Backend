@@ -56,4 +56,23 @@ export class MongoUserRepository implements IUserRepository {
   async BlockByUserId(userId: string, status: boolean): Promise<void> {
     await User.updateOne({ _id: userId }, { isBlocked: status });
   }
+
+  async saveForgetPasswordToken(
+    email: string,
+    data: { resetPasswordToken: string; resetPasswordExpires: Date }
+  ): Promise<any> {
+    const result = await User.updateOne({ email }, { $set: data });
+
+    return {
+      success: result.modifiedCount > 0,
+      matched: result.matchedCount > 0,
+    };
+  }
+
+  async findOneByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse | null> {
+    return await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+  }
 }

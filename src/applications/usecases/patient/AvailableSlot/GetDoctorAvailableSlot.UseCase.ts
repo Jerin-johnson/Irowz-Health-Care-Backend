@@ -4,8 +4,9 @@ import { IDoctorAppointmentRepository } from "../../../../domain/repositories/ID
 import { IDoctorAvailabilityRepository } from "../../../../domain/repositories/IDoctorAvailabilityRepository";
 import { DoctorAvailabilityEngine } from "../../../../domain/services/DoctorAvailabilityEngine.service";
 import { Slot } from "../../../../domain/types/Slot";
+import { IGetDoctorAvailableSlotUseCase } from "../../../../domain/usecase/patient/Availibility/IGetDoctorAvailabileSlotUseCase";
 
-export class GetDoctorAvailabileSlotUseCase {
+export class GetDoctorAvailabileSlotUseCase implements IGetDoctorAvailableSlotUseCase {
   constructor(
     private readonly _DoctorAvailbilityRepo: IDoctorAvailabilityRepository,
     private readonly _DoctorAppointmentRepo: IDoctorAppointmentRepository,

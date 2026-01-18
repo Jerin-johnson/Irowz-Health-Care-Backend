@@ -14,4 +14,6 @@ export const TOKENS = {
   IVerifyOtpUseCase: "IVerifyOtpUseCase",
   IRefreshTokenUseCase: "IRefreshTokenUseCase",
   IReSendOtpUseCase: "IReSendOtpUseCase",
+  IForgetPasswordUseCase: "IForgetPasswordUseCase",
+  IResetPasswordUseCase: "IResetPasswordUseCase",
 };

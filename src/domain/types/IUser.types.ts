@@ -10,6 +10,9 @@ export interface IUser {
   forcePasswordReset?: boolean;
   isBlocked: boolean;
   dob: Date;
+  resetPasswordToken?: string | null;
+  resetPasswordExpires?: Date | null;
+
   isVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
