@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import {
   DoctorSearchQueryDTO,
   DoctorSearchRawDTO,
@@ -69,7 +70,11 @@ export class DoctorSearchMongoRepository implements IDoctorSearchRepository {
     pipeline.push({ $match: { isActive: true } });
 
     if (specialtyId) {
-      pipeline.push({ $match: { specialtyId } });
+      pipeline.push({
+        $match: {
+          specialtyId: new Types.ObjectId(specialtyId),
+        },
+      });
     }
 
     if (search) {
@@ -85,10 +90,29 @@ export class DoctorSearchMongoRepository implements IDoctorSearchRepository {
       });
     }
 
+    let sortStage: any = { averageRating: -1 };
+
+    if (query.sortBy === "price") {
+      sortStage = {
+        consultationFee: query.sortOrder === "desc" ? -1 : 1,
+      };
+    }
+
+    if (query.sortBy === "rating") {
+      sortStage = {
+        averageRating: query.sortOrder === "asc" ? 1 : -1,
+      };
+    }
+
+    if (query.sortBy === "experience") {
+      sortStage = {
+        experienceYears: query.sortOrder === "asc" ? 1 : -1,
+      };
+    }
     pipeline.push({
       $facet: {
         items: [
-          { $sort: { averageRating: -1 } },
+          { $sort: sortStage },
           { $skip: skip },
           { $limit: limit },
           {

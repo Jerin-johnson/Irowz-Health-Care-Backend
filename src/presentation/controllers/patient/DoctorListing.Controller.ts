@@ -30,6 +30,8 @@ export class DoctorListingController {
       radiusKm: req.query.radiusKm ? Number(req.query.radiusKm) : 10,
       page: req.query.page ? Number(req.query.page) : 1,
       limit: req.query.limit ? Number(req.query.limit) : 10,
+      sortBy: req.query.sortBy ? (req.query.sortBy as string) : null,
+      sortOrder: req.query.sortOrder ? (req.query.sortOrder as string) : null,
     };
 
     const result = await this._DoctorSearchUseCase.execute(query);

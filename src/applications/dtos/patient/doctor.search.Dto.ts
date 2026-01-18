@@ -8,6 +8,8 @@ export interface DoctorSearchQueryDTO {
   radiusKm?: number;
   page: number;
   limit: number;
+  sortBy?: "rating" | "price" | "experience" | string | null;
+  sortOrder?: "asc" | "desc" | string | null;
 }
 
 export interface DoctorSearchRawDTO {
