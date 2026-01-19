@@ -6,17 +6,46 @@ import {
 } from "../database/mongo/models/DoctorAppointmentModel";
 
 export class DoctorAppointmentRepository implements IDoctorAppointmentRepository {
+  // async findByDoctorAndDate(
+  //   doctorId: string,
+  //   date: string
+  // ): Promise<{ startTime: string; endTime: string; status: "BOOKED" | "PENDING" }[]> {
+  //   const result = await DoctorAppointmentModel.find({
+  //     doctorId,
+  //     date,
+  //     status: { $in: ["BOOKED", "PENDING"] },
+  //   }).select("startTime endTime status");
+
+  //   return result as { startTime: string; endTime: string; status: "BOOKED" | "PENDING" }[];
+  // }
+
   async findByDoctorAndDate(
     doctorId: string,
     date: string
-  ): Promise<{ startTime: string; endTime: string; status: "BOOKED" | "PENDING" }[]> {
+  ): Promise<
+    {
+      _id?: any;
+      startTime: string;
+      endTime: string;
+      status: "BOOKED" | "PENDING";
+      visitType?: string;
+      patientSnapshot?: any;
+    }[]
+  > {
     const result = await DoctorAppointmentModel.find({
       doctorId,
       date,
       status: { $in: ["BOOKED", "PENDING"] },
-    }).select("startTime endTime status");
+    }).select("startTime endTime status _id visitType patientSnapshot");
 
-    return result as { startTime: string; endTime: string; status: "BOOKED" | "PENDING" }[];
+    return result as {
+      _id?: any;
+      startTime: string;
+      endTime: string;
+      status: "BOOKED" | "PENDING";
+      visitType?: string;
+      patientSnapshot?: any;
+    }[];
   }
 
   async findPendingByUser(doctorId: string, patientId: string, date: string, startTime: string) {

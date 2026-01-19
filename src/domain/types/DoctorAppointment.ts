@@ -1,6 +1,6 @@
 export type AppointmentStatus = "PENDING" | "BOOKED" | "CANCELLED" | "COMPLETED" | "NO_SHOW";
 
-export type VisitType = "IN_PERSON" | "ONLINE";
+export type VisitType = "OPD" | "ONLINE";
 
 export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED" | "PARTIALLY_REFUNDED";
 

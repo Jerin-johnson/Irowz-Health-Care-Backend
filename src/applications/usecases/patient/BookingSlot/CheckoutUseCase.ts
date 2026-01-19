@@ -19,7 +19,7 @@ export class CheckoutUseCase {
       date,
       startTime,
       endTime,
-      visitType = "ONLINE",
+      visitType = "OPD",
       patientSnapshot,
       addressSnapshot,
       notes,

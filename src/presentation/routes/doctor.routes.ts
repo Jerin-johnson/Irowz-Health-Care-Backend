@@ -7,13 +7,15 @@ import { DoctorProfileMangementController } from "../controllers/doctor/DoctorPr
 import { DoctorAvailabilityController } from "../controllers/doctor/DoctorAvailabilityController";
 import { profileImageUpload } from "../middlewares/profileImage.upload";
 import { DOCTOR_ROUTES } from "../constants/routes/doctor.constants.routes";
+import { DoctorScheduleMangmentController } from "../controllers/doctor/DoctorScheduleMangment.Controller";
 
 export class DoctorRoutes {
   private _router: Router;
 
   constructor(
     private readonly _DoctorProfileMangementController: DoctorProfileMangementController,
-    private readonly _DoctorAvailabilityController: DoctorAvailabilityController
+    private readonly _DoctorAvailabilityController: DoctorAvailabilityController,
+    private readonly _DoctorScheduleMangmentController: DoctorScheduleMangmentController
   ) {
     this._router = Router();
   }
@@ -50,6 +52,8 @@ export class DoctorRoutes {
       DOCTOR_ROUTES.AVAILABILITY,
       asyncHandler(this._DoctorAvailabilityController.upsert)
     );
+
+    this._router.get("/schedule", asyncHandler(this._DoctorScheduleMangmentController.getSlots));
 
     return this._router;
   }

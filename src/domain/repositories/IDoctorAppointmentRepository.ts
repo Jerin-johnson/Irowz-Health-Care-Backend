@@ -7,9 +7,12 @@ export interface IDoctorAppointmentRepository {
     date: string
   ): Promise<
     {
+      _id?: any;
       startTime: string;
       endTime: string;
       status: "BOOKED" | "PENDING";
+      visitType?: string;
+      patientSnapshot?: any;
     }[]
   >;
 

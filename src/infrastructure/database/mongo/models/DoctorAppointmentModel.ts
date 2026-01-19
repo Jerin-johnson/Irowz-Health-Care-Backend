@@ -12,7 +12,7 @@ export interface DoctorAppointmentDocument {
   endTime: string;
   timezone: string;
 
-  visitType: "IN_PERSON" | "ONLINE";
+  visitType: "OPD" | "ONLINE";
 
   // Checkout snapshot
   patientSnapshot: {
@@ -100,7 +100,7 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
 
     visitType: {
       type: String,
-      enum: ["IN_PERSON", "ONLINE"],
+      enum: ["OPD", "ONLINE"],
       required: true,
     },
 

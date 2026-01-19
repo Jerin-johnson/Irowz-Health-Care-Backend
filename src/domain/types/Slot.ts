@@ -9,4 +9,6 @@ export interface AppointmentLike {
   startTime: string; // HH:mm
   endTime: string; // HH:mm
   status: "BOOKED" | "PENDING";
+  vistType?: string;
+  patientSnapshot?: any;
 }
