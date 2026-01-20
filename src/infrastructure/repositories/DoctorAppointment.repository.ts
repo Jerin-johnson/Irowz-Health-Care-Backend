@@ -7,19 +7,6 @@ import {
 } from "../database/mongo/models/DoctorAppointmentModel";
 
 export class DoctorAppointmentRepository implements IDoctorAppointmentRepository {
-  // async findByDoctorAndDate(
-  //   doctorId: string,
-  //   date: string
-  // ): Promise<{ startTime: string; endTime: string; status: "BOOKED" | "PENDING" }[]> {
-  //   const result = await DoctorAppointmentModel.find({
-  //     doctorId,
-  //     date,
-  //     status: { $in: ["BOOKED", "PENDING"] },
-  //   }).select("startTime endTime status");
-
-  //   return result as { startTime: string; endTime: string; status: "BOOKED" | "PENDING" }[];
-  // }
-
   async findByDoctorAndDate(
     doctorId: string,
     date: string
@@ -133,5 +120,29 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
     })
       .sort({ queuePriority: 1 })
       .lean();
+  }
+
+  async findActiveConsultation(
+    doctorId: string,
+    date: string
+  ): Promise<DoctorAppointmentDocument | null> {
+    return DoctorAppointmentModel.findOne({
+      doctorId: new Types.ObjectId(doctorId),
+      date,
+      status: "STARTED",
+    });
+  }
+
+  async startConsultation(appointmentId: string) {
+    return DoctorAppointmentModel.findByIdAndUpdate(
+      appointmentId,
+      {
+        $set: {
+          status: "STARTED",
+          startedAt: new Date(),
+        },
+      },
+      { new: true }
+    );
   }
 }
