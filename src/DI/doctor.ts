@@ -1,9 +1,11 @@
+import { GetDoctorAppoinmentQueueUsecase } from "../applications/usecases/doctor/appoinment/GetDoctorAppoinmentQueue.usecase";
 import { UpsertDoctorAvailabilityUseCase } from "../applications/usecases/doctor/doctorAvailability/DoctorAvailabilityController";
 import { EditDoctorProfileUseCase } from "../applications/usecases/doctor/doctorProfile/EditDoctorProfile.UseCase";
 import { GetDoctorProfileUseCase } from "../applications/usecases/doctor/doctorProfile/GetDoctorProfile.UseCase";
 import { ResetDoctorPasswordUseCase } from "../applications/usecases/doctor/doctorProfile/ResetPassword.UseCase";
 import { BlockDoctorSlotUseCase } from "../applications/usecases/doctor/schedule/BlockSlots.Schedule.useCase";
 import { GetSlotsScheduleUseCase } from "../applications/usecases/doctor/schedule/GetSlots.schedule.UseCase";
+import { DoctorAppointmentController } from "../presentation/controllers/doctor/DoctorAppoinmentController";
 import { DoctorAvailabilityController } from "../presentation/controllers/doctor/DoctorAvailabilityController";
 import { DoctorProfileMangementController } from "../presentation/controllers/doctor/DoctorProfileMangement.Controller";
 import { DoctorScheduleMangmentController } from "../presentation/controllers/doctor/DoctorScheduleMangment.Controller";
@@ -57,8 +59,17 @@ const doctorScheduleMangmentController = new DoctorScheduleMangmentController(
   blockDoctorSlotUseCase
 );
 
+const getDoctorAppoinmentQueueUsecase = new GetDoctorAppoinmentQueueUsecase(
+  doctorAppointmentRepository
+);
+
+const doctorAppointmentController = new DoctorAppointmentController(
+  getDoctorAppoinmentQueueUsecase
+);
+
 export const doctorRoutes = new DoctorRoutes(
   doctorProfileMangementController,
   doctorAvailabilityController,
-  doctorScheduleMangmentController
+  doctorScheduleMangmentController,
+  doctorAppointmentController
 );

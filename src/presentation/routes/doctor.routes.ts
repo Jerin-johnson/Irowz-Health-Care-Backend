@@ -8,6 +8,7 @@ import { DoctorAvailabilityController } from "../controllers/doctor/DoctorAvaila
 import { profileImageUpload } from "../middlewares/profileImage.upload";
 import { DOCTOR_ROUTES } from "../constants/routes/doctor.constants.routes";
 import { DoctorScheduleMangmentController } from "../controllers/doctor/DoctorScheduleMangment.Controller";
+import { DoctorAppointmentController } from "../controllers/doctor/DoctorAppoinmentController";
 
 export class DoctorRoutes {
   private _router: Router;
@@ -15,7 +16,8 @@ export class DoctorRoutes {
   constructor(
     private readonly _DoctorProfileMangementController: DoctorProfileMangementController,
     private readonly _DoctorAvailabilityController: DoctorAvailabilityController,
-    private readonly _DoctorScheduleMangmentController: DoctorScheduleMangmentController
+    private readonly _DoctorScheduleMangmentController: DoctorScheduleMangmentController,
+    private readonly _DoctorAppointmentController: DoctorAppointmentController
   ) {
     this._router = Router();
   }
@@ -58,6 +60,10 @@ export class DoctorRoutes {
       "/schedule/lock",
       asyncHandler(this._DoctorScheduleMangmentController.blockSlots)
     );
+
+    // Queue and consulation module
+
+    this._router.get("/queue", asyncHandler(this._DoctorAppointmentController.getLiveQueue));
 
     return this._router;
   }

@@ -38,6 +38,8 @@ export interface DoctorAppointment {
   endTime: string; // HH:mm
   timezone: string;
 
+  queuePriority: number;
+
   // 🔹 Visit
   visitType: VisitType;
 

@@ -2,6 +2,7 @@ import { IDoctorSlotLock } from "../../../../domain/lock/DoctorSlotLock";
 import { IPaymentGateway } from "../../../../domain/payment/PaymentGateway";
 import { IDoctorRepository } from "../../../../domain/repositories/IDoctor.repo";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { timeToMinutes } from "../../../../domain/utils/time.utils";
 import { CheckoutInput } from "../../../dtos/patient/CheckoutInput";
 
 export class CheckoutUseCase {
@@ -44,6 +45,8 @@ export class CheckoutUseCase {
       startTime
     );
 
+    const queuePriority = timeToMinutes(startTime);
+
     if (!appointment) {
       const Doctor = await this._DoctorRepo.findById(doctorId);
       if (!Doctor) throw new Error("Doctor unavailable");
@@ -59,6 +62,7 @@ export class CheckoutUseCase {
         patientSnapshot,
         addressSnapshot,
         notes,
+        queuePriority,
         consultationFee: Doctor.consultationFee,
         totalAmount: Doctor.consultationFee,
         paymentStatus: "PENDING",

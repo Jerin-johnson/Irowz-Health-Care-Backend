@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IDoctorAppointmentRepository } from "../../domain/repositories/IDoctorAppointmentRepository";
 import { DoctorAppointment } from "../../domain/types/DoctorAppointment";
 import {
@@ -123,5 +124,14 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
     const appoinement = await DoctorAppointmentModel.findById(id).lean();
     console.log(appoinement);
     return appoinement ? appoinement : null;
+  }
+
+  async getDoctorAppointmentsForDay(doctorId: string, date: string) {
+    return DoctorAppointmentModel.find({
+      doctorId: new Types.ObjectId(doctorId),
+      date,
+    })
+      .sort({ queuePriority: 1 })
+      .lean();
   }
 }

@@ -50,6 +50,11 @@ export interface DoctorAppointmentDocument {
 
   paymentMethod: "RAZORPAY";
   transactionId?: string;
+  queuePriority: number;
+  isLate?: boolean; // patient arrived late
+  lateArrivedAt?: Date; // when patient arrived late
+  delayReason?: string; // doctor delay / admin note
+  noShowMarkedAt?: Date; // when doctor marked no-show
 
   refund?: {
     amount: number;
@@ -59,7 +64,7 @@ export interface DoctorAppointmentDocument {
 
   razorpayOrderId?: string;
 
-  status: "PENDING" | "BOOKED" | "CANCELLED" | "COMPLETED" | "NO_SHOW" | "STARTED";
+  status: "PENDING" | "BOOKED" | "CANCELLED" | "COMPLETED" | "NO_SHOW" | "STARTED"; //Booked means schedueled
 
   cancelledAt?: Date;
   cancelReason?: string;
@@ -145,6 +150,12 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
 
     transactionId: String,
 
+    queuePriority: { type: Number, required: true, index: true },
+    isLate: { type: Boolean, default: false },
+    delayReason: String,
+    noShowMarkedAt: Date,
+    lateArrivedAt: Date,
+
     refund: {
       amount: Number,
       refundedAt: Date,
@@ -168,6 +179,13 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
 );
 
 DoctorAppointmentSchema.index({ doctorId: 1, date: 1, startTime: 1 }, { unique: true });
+
+DoctorAppointmentSchema.index({
+  doctorId: 1,
+  date: 1,
+  queuePriority: 1,
+  status: 1,
+});
 
 export const DoctorAppointmentModel = model<DoctorAppointmentDocument>(
   "DoctorAppointment",
