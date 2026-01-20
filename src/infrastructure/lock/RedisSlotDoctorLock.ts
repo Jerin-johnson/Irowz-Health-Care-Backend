@@ -6,6 +6,16 @@ export class RedisDoctorSlotLockService implements IDoctorSlotLock {
     return `lock:${doctorId}:${date}:${startTime}`;
   }
 
+  private calculateTTL(date: string): number {
+    const now = new Date();
+    const [y, m, d] = date.split("-").map(Number);
+
+    const endOfDay = new Date(y, m - 1, d, 23, 59, 59, 999);
+    const ttlMs = endOfDay.getTime() - now.getTime();
+
+    return ttlMs > 0 ? Math.ceil(ttlMs / 1000) : 1;
+  }
+
   async lockSlot(
     doctorId: string,
     date: string,
@@ -19,6 +29,24 @@ export class RedisDoctorSlotLockService implements IDoctorSlotLock {
     });
 
     return result === "OK";
+  }
+
+  async lockSlotByDoctor(
+    doctorId: string,
+    date: string,
+    startTime: string,
+    reason = "Doctor blocked"
+  ) {
+    const ttlSeconds = this.calculateTTL(date);
+
+    await redisClient.set(
+      this.key(doctorId, date, startTime),
+      JSON.stringify({ lockedBy: "DOCTOR", reason }),
+      {
+        NX: true,
+        EX: ttlSeconds,
+      }
+    );
   }
 
   async unlockSlot(doctorId: string, date: string, startTime: string) {

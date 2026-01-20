@@ -1,7 +1,7 @@
-import { IDoctorSlotLock } from "../../../domain/lock/DoctorSlotLock";
-import { IDoctorAvailabilityRepository } from "../../../domain/repositories/IDoctorAvailabilityRepository";
-import { IDoctorAppointmentRepository } from "../../../domain/repositories/IDoctorAppointmentRepository";
-import { DoctorAvailabilityEngine } from "../../../domain/services/DoctorAvailabilityEngine.service";
+import { IDoctorSlotLock } from "../../../../domain/lock/DoctorSlotLock";
+import { IDoctorAvailabilityRepository } from "../../../../domain/repositories/IDoctorAvailabilityRepository";
+import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { DoctorAvailabilityEngine } from "../../../../domain/services/DoctorAvailabilityEngine.service";
 
 export interface DoctorSchudleSlot {
   startTime: string;
@@ -12,6 +12,16 @@ export interface DoctorSchudleSlot {
   appointmentId?: string;
 }
 
+const isPastDate = (date: string): boolean => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const [y, m, d] = date.split("-").map(Number);
+  const target = new Date(y, m - 1, d, 0, 0, 0, 0);
+
+  return target.getTime() < today.getTime();
+};
+
 export class GetSlotsScheduleUseCase {
   constructor(
     private readonly _DoctorAvailbilityRepo: IDoctorAvailabilityRepository,
@@ -20,6 +30,16 @@ export class GetSlotsScheduleUseCase {
   ) {}
 
   async execute(doctorId: string, date: string): Promise<DoctorSchudleSlot[]> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const maxBookingDate = new Date(today);
+    maxBookingDate.setDate(today.getDate() + 14);
+
+    if (new Date(date) > maxBookingDate) {
+      return [];
+    }
+
     const availability = await this._DoctorAvailbilityRepo.findByDoctorId(doctorId);
     if (!availability) {
       throw new Error("Doctor availability not configured");
@@ -65,6 +85,20 @@ export class GetSlotsScheduleUseCase {
     [...availableSlots, ...blockedSlots, ...bookedSlots].forEach((slot) => {
       slotMap.set(slot.startTime, slot);
     });
-    return Array.from(slotMap.values()).sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+    const finalSlots: DoctorSchudleSlot[] = Array.from(slotMap.values()).map(
+      (slot): DoctorSchudleSlot => {
+        if (slot.status === "available" && isPastDate(date)) {
+          return {
+            ...slot,
+            status: "blocked",
+          };
+        }
+
+        return slot;
+      }
+    );
+
+    return finalSlots.sort((a, b) => a.startTime.localeCompare(b.startTime));
   }
 }

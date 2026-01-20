@@ -54,6 +54,10 @@ export class DoctorRoutes {
     );
 
     this._router.get("/schedule", asyncHandler(this._DoctorScheduleMangmentController.getSlots));
+    this._router.post(
+      "/schedule/lock",
+      asyncHandler(this._DoctorScheduleMangmentController.blockSlots)
+    );
 
     return this._router;
   }

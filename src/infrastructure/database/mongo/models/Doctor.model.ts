@@ -142,9 +142,7 @@ const DoctorSchema = new Schema<DoctorDocument>(
 
 DoctorSchema.index({ hospitalId: 1, medicalRegistrationNumber: 1 }, { unique: true });
 DoctorSchema.index({ location: "2dsphere" });
-DoctorSchema.index({ specialtyId: 1 });
 DoctorSchema.index({ averageRating: -1 });
 DoctorSchema.index({ consultationFee: 1 });
-DoctorSchema.index({ isActive: 1 });
 
 export const DoctorModel = model<DoctorDocument>("Doctor", DoctorSchema);

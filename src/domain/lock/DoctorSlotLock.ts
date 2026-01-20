@@ -7,6 +7,13 @@ export interface IDoctorSlotLock {
     ttlSeconds?: number
   ): Promise<boolean>;
 
+  lockSlotByDoctor(
+    doctorId: string,
+    date: string,
+    startTime: string,
+    reason?: string
+  ): Promise<any>;
+
   unlockSlot(doctorId: string, date: string, startTime: string): Promise<void>;
 
   getLockedSlots(doctorId: string, date: string): Promise<string[]>;

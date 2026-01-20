@@ -2,7 +2,8 @@ import { UpsertDoctorAvailabilityUseCase } from "../applications/usecases/doctor
 import { EditDoctorProfileUseCase } from "../applications/usecases/doctor/doctorProfile/EditDoctorProfile.UseCase";
 import { GetDoctorProfileUseCase } from "../applications/usecases/doctor/doctorProfile/GetDoctorProfile.UseCase";
 import { ResetDoctorPasswordUseCase } from "../applications/usecases/doctor/doctorProfile/ResetPassword.UseCase";
-import { GetSlotsScheduleUseCase } from "../applications/usecases/doctor/GetSlots.schedule.UseCase";
+import { BlockDoctorSlotUseCase } from "../applications/usecases/doctor/schedule/BlockSlots.Schedule.useCase";
+import { GetSlotsScheduleUseCase } from "../applications/usecases/doctor/schedule/GetSlots.schedule.UseCase";
 import { DoctorAvailabilityController } from "../presentation/controllers/doctor/DoctorAvailabilityController";
 import { DoctorProfileMangementController } from "../presentation/controllers/doctor/DoctorProfileMangement.Controller";
 import { DoctorScheduleMangmentController } from "../presentation/controllers/doctor/DoctorScheduleMangment.Controller";
@@ -46,8 +47,14 @@ const getSlotsScheduleUseCase = new GetSlotsScheduleUseCase(
   redisDoctorSlotLockService
 );
 
+const blockDoctorSlotUseCase = new BlockDoctorSlotUseCase(
+  redisDoctorSlotLockService,
+  doctorAppointmentRepository
+);
+
 const doctorScheduleMangmentController = new DoctorScheduleMangmentController(
-  getSlotsScheduleUseCase
+  getSlotsScheduleUseCase,
+  blockDoctorSlotUseCase
 );
 
 export const doctorRoutes = new DoctorRoutes(
