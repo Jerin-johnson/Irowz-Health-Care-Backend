@@ -9,6 +9,7 @@ import { PatientProfileController } from "../controllers/patient/PatientProfile.
 import { profileImageUpload } from "../middlewares/profileImage.upload";
 import { validate } from "../middlewares/validate.middleware";
 import { patientProfileSchema } from "../validators/patient/PatientProfileSchme";
+import { PatientAppointmentController } from "../controllers/patient/PatientAppointment.Controller";
 
 export class PatientRoutes {
   private _router: Router;
@@ -17,7 +18,8 @@ export class PatientRoutes {
     private readonly _DoctorBookingController: DoctorBookingController,
     private readonly _DoctorListingController: DoctorListingController,
     private readonly _DoctorReviewController: DoctorReviewController,
-    private readonly _PatientProfileController: PatientProfileController
+    private readonly _PatientProfileController: PatientProfileController,
+    private readonly _PatientAppointmentController: PatientAppointmentController
   ) {
     this._router = Router();
   }
@@ -76,13 +78,6 @@ export class PatientRoutes {
       asyncHandler(this._DoctorBookingController.verifyPayment)
     );
 
-    // -------- Appointment --------
-    this._router.get(
-      PATIENT_ROUTES.APPOINTMENT_SUCCESS,
-      authMiddleware,
-      asyncHandler(this._DoctorBookingController.apponitmentSuccess)
-    );
-
     // -------- Doctor reviews --------
     this._router.get(
       PATIENT_ROUTES.DOCTOR_REVIEW_BY_ID,
@@ -114,6 +109,27 @@ export class PatientRoutes {
       },
       validate(patientProfileSchema),
       asyncHandler(this._PatientProfileController.editProfile)
+    );
+
+    // // -------- Appointment --------\\
+
+    this._router.get(
+      "/appointments",
+      authMiddleware,
+      asyncHandler(this._PatientAppointmentController.getAppointments)
+    );
+
+    this._router.get(
+      PATIENT_ROUTES.APPOINTMENT_SUCCESS,
+      authMiddleware,
+      asyncHandler(this._DoctorBookingController.apponitmentSuccess)
+    );
+
+    //live queue
+    this._router.get(
+      "/live/queue/:id",
+      authMiddleware,
+      asyncHandler(this._PatientAppointmentController.getLiveQueue)
     );
 
     return this._router;

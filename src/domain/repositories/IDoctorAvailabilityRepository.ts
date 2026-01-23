@@ -25,4 +25,10 @@ export interface IDoctorAvailabilityRepository {
       }
     >
   >;
+
+  setDoctorDelay(doctorId: string, delayMinutes: number, reason: string): Promise<void>;
+
+  markDelayEvaluated(doctorId: string): Promise<void>;
+
+  resetDailyDelay(): Promise<void>;
 }

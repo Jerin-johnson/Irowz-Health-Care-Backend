@@ -17,6 +17,10 @@ export interface DoctorAvailability {
     };
   }[];
 
+  doctorDelayMinutes: number;
+  doctorDelayedAt?: Date;
+  doctorDelayReason?: string;
+
   slotDurationMinutes: number;
 
   maxPatientsPerDay: number;

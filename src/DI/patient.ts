@@ -1,3 +1,5 @@
+import { GetPatientAppointmentsUseCase } from "../applications/usecases/patient/Appointments/GetAppointment.UseCase";
+import { GetPatientQueueStatusUseCase } from "../applications/usecases/patient/Appointments/GetPatientQueueStatusUseCase";
 import { GetDoctorAvailabileSlotUseCase } from "../applications/usecases/patient/AvailableSlot/GetDoctorAvailableSlot.UseCase";
 import { ApponintmentSuccessOrFailureUseCase } from "../applications/usecases/patient/BookingSlot/ApponintmentSuccessOrFailure.useCase";
 import { CheckoutUseCase } from "../applications/usecases/patient/BookingSlot/CheckoutUseCase";
@@ -15,11 +17,13 @@ import { GetProfileUseCase } from "../applications/usecases/patient/ProfileAndSe
 import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.Controller";
 import { DoctorListingController } from "../presentation/controllers/patient/DoctorListing.Controller";
 import { DoctorReviewController } from "../presentation/controllers/patient/DoctorReview.Controller";
+import { PatientAppointmentController } from "../presentation/controllers/patient/PatientAppointment.Controller";
 import { PatientProfileController } from "../presentation/controllers/patient/PatientProfile.Controller";
 // import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.controller";
 import { PatientRoutes } from "../presentation/routes/patient.routes";
 import { redisDoctorAvailabilityCache, redisDoctorSpecialityCache } from "./cache";
 import { redisDoctorSlotLockService } from "./lock";
+import { realtimePublisher } from "./realtime";
 import {
   doctorAppointmentRepository,
   doctorAvailabilityRepository,
@@ -64,7 +68,8 @@ const checkoutUseCase = new CheckoutUseCase(
 const handleVerifyPayment = new HandleVerifyPayment(
   razorpayGateway,
   doctorAppointmentRepository,
-  redisDoctorAvailabilityCache
+  redisDoctorAvailabilityCache,
+  realtimePublisher
 );
 
 const apponintmentSuccessOrFailureUseCase = new ApponintmentSuccessOrFailureUseCase(
@@ -120,9 +125,24 @@ const patientProfileController = new PatientProfileController(
   editPatientProfileUseCase
 );
 
+const getPatientQueueStatusUseCase = new GetPatientQueueStatusUseCase(
+  doctorAvailabilityRepository,
+  doctorAppointmentRepository
+);
+
+const getPatientAppointmentsUseCase = new GetPatientAppointmentsUseCase(
+  doctorAppointmentRepository
+);
+
+const patientAppointmentController = new PatientAppointmentController(
+  getPatientQueueStatusUseCase,
+  getPatientAppointmentsUseCase
+);
+
 export const patientRoutes = new PatientRoutes(
   doctorBookingController,
   doctorListingController,
   doctorReviewController,
-  patientProfileController
+  patientProfileController,
+  patientAppointmentController
 );

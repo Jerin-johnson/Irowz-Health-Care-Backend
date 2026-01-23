@@ -51,4 +51,55 @@ export class MongoDoctorAvailabilityRepository implements IDoctorAvailabilityRep
 
     return map;
   }
+
+  async setDoctorDelay(doctorId: string, delayMinutes: number, reason: string): Promise<void> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    await DoctorAvailabilityModel.updateOne(
+      {
+        doctorId,
+        $or: [{ doctorDelayedAt: { $exists: false } }, { doctorDelayedAt: { $lt: today } }],
+      },
+      {
+        $set: {
+          doctorDelayMinutes: delayMinutes,
+          doctorDelayReason: reason,
+          doctorDelayedAt: new Date(),
+        },
+      }
+    );
+  }
+
+  async markDelayEvaluated(doctorId: string): Promise<void> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    await DoctorAvailabilityModel.updateOne(
+      {
+        doctorId,
+        $or: [{ doctorDelayedAt: { $exists: false } }, { doctorDelayedAt: { $lt: today } }],
+      },
+      {
+        $set: {
+          doctorDelayMinutes: 0,
+          doctorDelayedAt: new Date(),
+          doctorDelayReason: null,
+        },
+      }
+    );
+  }
+
+  async resetDailyDelay(): Promise<void> {
+    await DoctorAvailabilityModel.updateMany(
+      {},
+      {
+        $set: {
+          doctorDelayMinutes: 0,
+          doctorDelayedAt: null,
+          doctorDelayReason: null,
+        },
+      }
+    );
+  }
 }

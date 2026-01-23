@@ -4,8 +4,10 @@ import http from "http";
 import app from "./app";
 import { connectRedis } from "./infrastructure/redis/redisClient";
 import { connectDB } from "./infrastructure/database/mongo/mongoose.connect";
-import { setupSocket } from "./socket";
+import { initSocket } from "./socket";
 import { startPaymentExpiryCron } from "./cron/paymentExpiry.cron";
+import { setupRealtimeConsumer } from "./infrastructure/realTIme/realtimeConsumer";
+import { startDoctorDelayResetCron } from "./cron/DoctorDelay.cron";
 
 const PORT = process.env.PORT || 5000;
 
@@ -14,10 +16,12 @@ async function startServer() {
     await connectRedis();
     await connectDB();
     startPaymentExpiryCron();
+    startDoctorDelayResetCron();
 
     const server = http.createServer(app);
 
-    setupSocket(server);
+    initSocket(server);
+    setupRealtimeConsumer();
 
     server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

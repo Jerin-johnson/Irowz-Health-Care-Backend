@@ -1,3 +1,5 @@
+import { DoctorAppointmentDocument } from "../../infrastructure/database/mongo/models/DoctorAppointmentModel";
+
 export type AppointmentStatus = "PENDING" | "BOOKED" | "CANCELLED" | "COMPLETED" | "NO_SHOW";
 
 export type VisitType = "OPD" | "ONLINE";
@@ -75,4 +77,17 @@ export interface DoctorAppointment {
   // 🔹 Audit
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface AppointmentFilterDTO {
+  patientId: string;
+  status?: string; // BOOKED | COMPLETED | etc
+  date?: string; // YYYY-MM-DD
+  page?: number;
+  limit?: number;
+}
+
+export interface AppointmentListResult {
+  data: DoctorAppointmentDocument[];
+  total: number;
 }

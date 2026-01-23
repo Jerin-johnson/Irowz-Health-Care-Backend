@@ -1,3 +1,4 @@
+import { GetAppoinmentBYIdUseCase } from "../applications/usecases/doctor/appoinment/GetAppoinmentBYIdUseCase";
 import { GetDoctorAppoinmentQueueUsecase } from "../applications/usecases/doctor/appoinment/GetDoctorAppoinmentQueue.usecase";
 import { UpsertDoctorAvailabilityUseCase } from "../applications/usecases/doctor/doctorAvailability/DoctorAvailabilityController";
 import { EditDoctorProfileUseCase } from "../applications/usecases/doctor/doctorProfile/EditDoctorProfile.UseCase";
@@ -63,8 +64,11 @@ const getDoctorAppoinmentQueueUsecase = new GetDoctorAppoinmentQueueUsecase(
   doctorAppointmentRepository
 );
 
+const getAppoinmentBYIdUseCase = new GetAppoinmentBYIdUseCase(doctorAppointmentRepository);
+
 const doctorAppointmentController = new DoctorAppointmentController(
-  getDoctorAppoinmentQueueUsecase
+  getDoctorAppoinmentQueueUsecase,
+  getAppoinmentBYIdUseCase
 );
 
 export const doctorRoutes = new DoctorRoutes(

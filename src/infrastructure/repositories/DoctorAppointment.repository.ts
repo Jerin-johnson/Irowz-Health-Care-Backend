@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { IDoctorAppointmentRepository } from "../../domain/repositories/IDoctorAppointmentRepository";
-import { DoctorAppointment } from "../../domain/types/DoctorAppointment";
+import { AppointmentFilterDTO, DoctorAppointment } from "../../domain/types/DoctorAppointment";
 import {
   DoctorAppointmentDocument,
   DoctorAppointmentModel,
@@ -144,5 +144,57 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
       },
       { new: true }
     );
+  }
+
+  async getNextPatients(doctorId: string, date: string, limit = 2) {
+    return DoctorAppointmentModel.find({
+      doctorId: new Types.ObjectId(doctorId),
+      date,
+      status: "BOOKED",
+    })
+      .sort({ queuePriority: 1 })
+      .limit(limit)
+      .lean();
+  }
+
+  async findAppointmentsByPatient(filters: AppointmentFilterDTO) {
+    const { patientId, status, date, page = 1, limit = 10 } = filters;
+
+    const query: any = {
+      patientId: new Types.ObjectId(patientId),
+    };
+
+    if (status && status !== "ALL") {
+      query.status = status;
+    }
+
+    if (date) {
+      query.date = date; // frontend sends YYYY-MM-DD
+    }
+
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      DoctorAppointmentModel.find(query)
+        .populate({
+          path: "doctorId",
+          populate: {
+            path: "userId",
+            select: "name email phone profileImage",
+          },
+          select: "userId specialtyId",
+        })
+        .sort({ date: -1, startTime: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      DoctorAppointmentModel.countDocuments(query),
+    ]);
+
+    return {
+      data,
+      total,
+    };
   }
 }

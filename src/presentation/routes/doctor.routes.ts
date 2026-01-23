@@ -23,6 +23,11 @@ export class DoctorRoutes {
   }
 
   register(): Router {
+    // global and reused by the patient
+    this._router.get(
+      "/appointment/:id",
+      asyncHandler(this._DoctorAppointmentController.getAppointmentById)
+    );
     // Auth + Role guard
     this._router.use(authMiddleware, authorizeRoles(UserRoles.DOCTOR));
 
@@ -64,6 +69,8 @@ export class DoctorRoutes {
     // Queue and consulation module
 
     this._router.get("/queue", asyncHandler(this._DoctorAppointmentController.getLiveQueue));
+
+    //view appointment
 
     return this._router;
   }

@@ -34,7 +34,7 @@ export class GetDoctorAvailabileSlotUseCase implements IGetDoctorAvailableSlotUs
 
     const availabilityConfig = await this._DoctorAvailbilityRepo.findByDoctorId(doctorId);
     if (!availabilityConfig) {
-      throw new Error("please configure doctor Availibility");
+      throw new Error("Doctor does not set avalibility");
     }
 
     const appointments = await this._DoctorAppointmentRepo.findByDoctorAndDate(doctorId, date);

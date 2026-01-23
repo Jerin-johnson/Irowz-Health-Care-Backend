@@ -9,7 +9,20 @@ export class GetDoctorAppoinmentQueueUsecase {
       date
     );
 
-    if (!appointments) throw new Error("No appoinment for today");
+    if (!appointments || appointments.length === 0) {
+      return {
+        currentAppointmentId: null,
+        nextAppointmentId: null,
+        stats: {
+          totalToday: 0,
+          completed: 0,
+          pending: 0,
+          inConsultation: 0,
+          cancelled: 0,
+        },
+        appointments: [],
+      };
+    }
 
     const stats = {
       totalToday: appointments.length,
@@ -20,6 +33,9 @@ export class GetDoctorAppoinmentQueueUsecase {
     };
 
     const current = appointments.find((a) => a.status === "STARTED");
+    const waitingQueue = appointments.filter((a) => a.status === "BOOKED");
+
+    const next = current ? null : (waitingQueue[0] ?? null);
 
     const list = appointments.map((a) => ({
       appointmentId: a._id,
@@ -32,6 +48,7 @@ export class GetDoctorAppoinmentQueueUsecase {
 
     return {
       currentAppointmentId: current?._id ?? null,
+      nextAppointmentId: next?._id ?? null,
       stats,
       appointments: list,
     };

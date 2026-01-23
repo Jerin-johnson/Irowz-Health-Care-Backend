@@ -25,6 +25,8 @@ export interface DoctorAvailabilityDocument extends Document {
 
   teleConsultationEnabled: boolean;
   timezone: string;
+  doctorDelayMinutes?: number; // default 0
+  doctorDelayedAt?: Date; // null initially
 
   createdAt: Date;
   updatedAt: Date;
@@ -89,6 +91,8 @@ const DoctorAvailabilitySchema = new Schema(
       type: Boolean,
       default: false,
     },
+    doctorDelayMinutes: Number, // default 0
+    doctorDelayedAt: Date,
 
     timezone: {
       type: String,

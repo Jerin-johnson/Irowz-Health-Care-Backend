@@ -1,5 +1,9 @@
 import { DoctorAppointmentDocument } from "../../infrastructure/database/mongo/models/DoctorAppointmentModel";
-import { DoctorAppointment } from "../types/DoctorAppointment";
+import {
+  AppointmentFilterDTO,
+  AppointmentListResult,
+  DoctorAppointment,
+} from "../types/DoctorAppointment";
 
 export interface IDoctorAppointmentRepository {
   findByDoctorAndDate(
@@ -41,4 +45,12 @@ export interface IDoctorAppointmentRepository {
   findActiveConsultation(doctorId: string, date: string): Promise<DoctorAppointmentDocument | null>;
 
   startConsultation(appointmentId: string): Promise<any>;
+
+  getNextPatients(
+    doctorId: string,
+    date: string,
+    limit: number
+  ): Promise<Partial<DoctorAppointment>[] | any>;
+
+  findAppointmentsByPatient(filters: AppointmentFilterDTO): Promise<AppointmentListResult>;
 }
