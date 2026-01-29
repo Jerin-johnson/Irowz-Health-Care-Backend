@@ -9,6 +9,7 @@ import { profileImageUpload } from "../middlewares/profileImage.upload";
 import { DOCTOR_ROUTES } from "../constants/routes/doctor.constants.routes";
 import { DoctorScheduleMangmentController } from "../controllers/doctor/DoctorScheduleMangment.Controller";
 import { DoctorAppointmentController } from "../controllers/doctor/DoctorAppoinmentController";
+import { DoctorConsultationController } from "../controllers/doctor/DoctorConsultation.Controller";
 
 export class DoctorRoutes {
   private _router: Router;
@@ -17,7 +18,8 @@ export class DoctorRoutes {
     private readonly _DoctorProfileMangementController: DoctorProfileMangementController,
     private readonly _DoctorAvailabilityController: DoctorAvailabilityController,
     private readonly _DoctorScheduleMangmentController: DoctorScheduleMangmentController,
-    private readonly _DoctorAppointmentController: DoctorAppointmentController
+    private readonly _DoctorAppointmentController: DoctorAppointmentController,
+    private readonly _DoctorConsultationController: DoctorConsultationController
   ) {
     this._router = Router();
   }
@@ -28,6 +30,7 @@ export class DoctorRoutes {
       "/appointment/:id",
       asyncHandler(this._DoctorAppointmentController.getAppointmentById)
     );
+
     // Auth + Role guard
     this._router.use(authMiddleware, authorizeRoles(UserRoles.DOCTOR));
 
@@ -70,7 +73,46 @@ export class DoctorRoutes {
 
     this._router.get("/queue", asyncHandler(this._DoctorAppointmentController.getLiveQueue));
 
-    //view appointment
+    //consutlation controller
+    this._router.post(
+      `/consultation/start/patient/quicknote/:id`,
+      asyncHandler(this._DoctorConsultationController.saveQuickObservationNote)
+    );
+
+    this._router.post(
+      "/consultation/start/:appointmentId",
+      asyncHandler(this._DoctorConsultationController.startConsultation)
+    );
+
+    this._router.get(
+      "/consultation/start/patient/overview/:id",
+      asyncHandler(this._DoctorConsultationController.getPatientOverviewForConsulation)
+    );
+
+    this._router.post(
+      "/consultation/complete/:appointmentId",
+      asyncHandler(this._DoctorConsultationController.completeConsultation)
+    );
+
+    this._router.post(
+      "/consultation/no-show/:appointmentId",
+      asyncHandler(this._DoctorConsultationController.MarkAsNoShow)
+    );
+
+    this._router.post(
+      "/video/token",
+      asyncHandler(this._DoctorConsultationController.getVideoToken)
+    );
+
+    this._router.get(
+      "/consultation/active/online",
+      asyncHandler(this._DoctorConsultationController.getActiveDoctorConsultation)
+    );
+
+    this._router.post(
+      "/consultation/online/end",
+      asyncHandler(this._DoctorConsultationController.EndConsultationOnline)
+    );
 
     return this._router;
   }

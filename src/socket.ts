@@ -16,6 +16,7 @@ export const initSocket = (httpServer: any) => {
     });
 
     socket.on("join-user", (userId: string) => {
+      console.log("The user has been joined");
       socket.join(`user:${userId}`);
     });
 

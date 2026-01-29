@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
-import { DoctorAvailability } from "../../domain/types/DoctorAvailability";
-import { DoctorAvailabilityDocument } from "../database/mongo/models/DoctorAvailabilityModel";
+import { DoctorAvailabilityDocument } from "../../../infrastructure/database/mongo/models/DoctorAvailabilityModel";
+import { DoctorAvailability } from "../../../domain/types/DoctorAvailability";
 
 export class DoctorAvailabilityMapper {
   static toDomain(doc: DoctorAvailabilityDocument): DoctorAvailability {
@@ -33,6 +33,7 @@ export class DoctorAvailabilityMapper {
 
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
+      doctorDelayMinutes: doc?.doctorDelayMinutes || 0,
     };
   }
 }

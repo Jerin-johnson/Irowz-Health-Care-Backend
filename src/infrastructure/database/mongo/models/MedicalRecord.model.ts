@@ -69,7 +69,7 @@ const MedicalRecordSchema = new Schema<MedicalRecordDocument>(
       type: Schema.Types.ObjectId,
       ref: "DoctorAppointment",
       required: true,
-      unique: true, // 🔥 one record per visit
+      unique: true, //  one record per visit
       index: true,
     },
 

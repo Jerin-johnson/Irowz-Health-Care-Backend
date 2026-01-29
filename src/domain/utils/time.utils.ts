@@ -35,3 +35,15 @@ export function getWeekDay(date: string): WeekDay {
     .toUpperCase()
     .slice(0, 3) as WeekDay;
 }
+
+export function getCurrentISTMinutes(): number {
+  const now = new Date().toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const [hours, minutes] = now.split(":").map(Number);
+  return hours * 60 + minutes;
+}

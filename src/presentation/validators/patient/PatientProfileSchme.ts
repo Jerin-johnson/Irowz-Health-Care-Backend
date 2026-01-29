@@ -28,6 +28,8 @@ export const patientProfileSchema = z.object({
     pincode: z.string().min(4, "Pincode must be at least 4 characters"),
 
     address: z.string().min(5, "Address must be at least 5 characters"),
+    allergies: z.array(z.string()).optional(),
+    chronicConditions: z.array(z.string()).optional(),
   }),
 
   // optional file support (profile image)

@@ -197,4 +197,51 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
       total,
     };
   }
+
+  async markCompleted(id: string, completedAt: Date): Promise<void> {
+    await DoctorAppointmentModel.findByIdAndUpdate(id, {
+      status: "COMPLETED",
+      completedAt,
+    });
+  }
+
+  async lastAppointment(id: string): Promise<DoctorAppointmentDocument | null> {
+    const today = new Date();
+    const yestard = new Date();
+    yestard.setDate(today.getDate() - 1);
+    const previous = yestard.setDate(yestard.getDate() - 1);
+
+    return await DoctorAppointmentModel.findOne({
+      patientId: id,
+      updatedAt: { $in: [today, yestard, previous] },
+    });
+  }
+
+  async getMaxQueuePriority({ doctorId, date }: { doctorId: string; date: string }) {
+    const last = await DoctorAppointmentModel.findOne({
+      doctorId,
+      date,
+      status: { $in: ["BOOKED", "NO_SHOW"] },
+    })
+      .sort({ queuePriority: -1 })
+      .select("queuePriority");
+
+    return last?.queuePriority || 0;
+  }
+
+  async markNoShow({
+    appointmentId,
+    newPriority,
+    markedAt,
+  }: {
+    appointmentId: string;
+    newPriority: number;
+    markedAt: Date;
+  }) {
+    await DoctorAppointmentModel.findByIdAndUpdate(appointmentId, {
+      status: "NO_SHOW",
+      queuePriority: newPriority,
+      noShowMarkedAt: markedAt,
+    });
+  }
 }

@@ -1,6 +1,8 @@
+import { ObjectId } from "mongoose";
+
 export interface INotificationRepository {
   create(data: {
-    userId: string;
+    userId: string | ObjectId;
     title: string;
     message: string;
     type: string;

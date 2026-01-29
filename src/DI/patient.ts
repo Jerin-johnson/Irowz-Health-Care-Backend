@@ -1,3 +1,4 @@
+import { MarkAsNoShowUseCase } from "../applications/usecases/doctor/consultation/MarkAsNoShow.UseCase";
 import { GetPatientAppointmentsUseCase } from "../applications/usecases/patient/Appointments/GetAppointment.UseCase";
 import { GetPatientQueueStatusUseCase } from "../applications/usecases/patient/Appointments/GetPatientQueueStatusUseCase";
 import { GetDoctorAvailabileSlotUseCase } from "../applications/usecases/patient/AvailableSlot/GetDoctorAvailableSlot.UseCase";
@@ -7,17 +8,23 @@ import { GetPatientBasicDetailsForCheckoutUseCase } from "../applications/usecas
 import { HandleVerifyPayment } from "../applications/usecases/patient/BookingSlot/HandlePaymentWebhookUseCase";
 import { LockDoctorSlotUseCase } from "../applications/usecases/patient/BookingSlot/LockDoctorSlotUseCase";
 import { UnLockDoctorSlotUseCase } from "../applications/usecases/patient/BookingSlot/UnLockDoctorSlot.useCase";
+import { GetConsultationVideoTokenPatientUseCase } from "../applications/usecases/patient/consultation/GetConsultationVideoTokenPatient";
+import { RespondConsultationUseCase } from "../applications/usecases/patient/consultation/RespondConsultationUseCase";
 import { DoctorSearchUseCase } from "../applications/usecases/patient/DoctorListing/DoctorSearch.UseCase";
 import { GetAvailableSpecialityUseCase } from "../applications/usecases/patient/DoctorListing/GetAvailbaleSpecialty.useCase";
 import { GetDoctorProfileUseCase } from "../applications/usecases/patient/DoctorListing/GetDoctorProfile";
 import { GetReviewUseCase } from "../applications/usecases/patient/DoctorReview/GetReviewUseCase";
 import { PostReviewUseCase } from "../applications/usecases/patient/DoctorReview/PostReviewUseCase";
+import { GetPatientNotifcationUseCase } from "../applications/usecases/patient/notification/PatientNotifcation";
 import { EditPatientProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/EditPatientProfileUseCase";
 import { GetProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/GetProfile.UseCase";
+import { notificationRepo } from "../infrastructure/realTIme/realtimeConsumer";
 import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.Controller";
 import { DoctorListingController } from "../presentation/controllers/patient/DoctorListing.Controller";
 import { DoctorReviewController } from "../presentation/controllers/patient/DoctorReview.Controller";
 import { PatientAppointmentController } from "../presentation/controllers/patient/PatientAppointment.Controller";
+import { PatientNotificationController } from "../presentation/controllers/patient/PatientNotifcation.Controller";
+import { PatientOnlineConsultationController } from "../presentation/controllers/patient/PatientOnlineConsultation.Controller";
 import { PatientProfileController } from "../presentation/controllers/patient/PatientProfile.Controller";
 // import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.controller";
 import { PatientRoutes } from "../presentation/routes/patient.routes";
@@ -25,6 +32,7 @@ import { redisDoctorAvailabilityCache, redisDoctorSpecialityCache } from "./cach
 import { redisDoctorSlotLockService } from "./lock";
 import { realtimePublisher } from "./realtime";
 import {
+  consultationRepo,
   doctorAppointmentRepository,
   doctorAvailabilityRepository,
   doctorRepo,
@@ -139,10 +147,34 @@ const patientAppointmentController = new PatientAppointmentController(
   getPatientAppointmentsUseCase
 );
 
+const getPatientNotifcationUseCase = new GetPatientNotifcationUseCase(notificationRepo);
+const patientNotificationController = new PatientNotificationController(
+  getPatientNotifcationUseCase
+);
+
+const getConsultationVideoTokenPatientUseCase = new GetConsultationVideoTokenPatientUseCase(
+  consultationRepo
+);
+
+const markAsNoShowUseCase = new MarkAsNoShowUseCase(doctorAppointmentRepository, realtimePublisher);
+
+const respondConsultationUseCase = new RespondConsultationUseCase(
+  consultationRepo,
+  markAsNoShowUseCase,
+  realtimePublisher
+);
+
+const patientOnlineConsultationController = new PatientOnlineConsultationController(
+  respondConsultationUseCase,
+  getConsultationVideoTokenPatientUseCase
+);
+
 export const patientRoutes = new PatientRoutes(
   doctorBookingController,
   doctorListingController,
   doctorReviewController,
   patientProfileController,
-  patientAppointmentController
+  patientAppointmentController,
+  patientNotificationController,
+  patientOnlineConsultationController
 );

@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 import { IDoctorAvailabilityRepository } from "../../domain/repositories/IDoctorAvailabilityRepository";
 import { DoctorAvailability } from "../../domain/types/DoctorAvailability";
 import { DoctorAvailabilityModel } from "../database/mongo/models/DoctorAvailabilityModel";
-import { DoctorAvailabilityMapper } from "../mapper/DoctorAvailabilityMapper";
+import { DoctorAvailabilityMapper } from "../../applications/dtos/doctor/doctorAvalablityMapper";
 
 export class MongoDoctorAvailabilityRepository implements IDoctorAvailabilityRepository {
   async findByDoctorId(doctorId: string): Promise<DoctorAvailability | null> {
@@ -52,23 +52,27 @@ export class MongoDoctorAvailabilityRepository implements IDoctorAvailabilityRep
     return map;
   }
 
-  async setDoctorDelay(doctorId: string, delayMinutes: number, reason: string): Promise<void> {
+  async setDoctorDelay(doctorId: string, delayMinutes: number, reason?: string): Promise<void> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    console.log(reason);
 
-    await DoctorAvailabilityModel.updateOne(
-      {
-        doctorId,
-        $or: [{ doctorDelayedAt: { $exists: false } }, { doctorDelayedAt: { $lt: today } }],
-      },
-      {
-        $set: {
-          doctorDelayMinutes: delayMinutes,
-          doctorDelayReason: reason,
-          doctorDelayedAt: new Date(),
+    try {
+      await DoctorAvailabilityModel.updateOne(
+        {
+          doctorId,
+          $or: [{ doctorDelayedAt: { $exists: false } }, { doctorDelayedAt: { $lt: today } }],
         },
-      }
-    );
+        {
+          $set: {
+            doctorDelayMinutes: delayMinutes,
+            doctorDelayedAt: new Date(),
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async markDelayEvaluated(doctorId: string): Promise<void> {
@@ -84,7 +88,6 @@ export class MongoDoctorAvailabilityRepository implements IDoctorAvailabilityRep
         $set: {
           doctorDelayMinutes: 0,
           doctorDelayedAt: new Date(),
-          doctorDelayReason: null,
         },
       }
     );

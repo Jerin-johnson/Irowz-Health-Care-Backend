@@ -16,7 +16,7 @@ export class BaseRepository<TCreate, TUpdate, TResponse> implements IBaseReposit
   }
 
   async findAll(): Promise<TResponse[]> {
-    return this.model.find();
+    return await this.model.find();
   }
 
   async update(id: string, data: TUpdate): Promise<TResponse | null> {

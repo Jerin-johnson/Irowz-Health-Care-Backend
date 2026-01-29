@@ -16,6 +16,8 @@ export interface PatientProfileInputDTO {
   city: string;
   pincode: string;
   address: string;
+  allergies?: [string];
+  chronicConditions?: [string];
 }
 
 export class EditPatientProfileUseCase {
@@ -33,6 +35,8 @@ export class EditPatientProfileUseCase {
       dob: input.dateOfBirth,
       gender: input.gender,
     };
+
+    console.log("The input is ", input);
 
     if (file) {
       console.log("does this works");
@@ -69,6 +73,8 @@ export class EditPatientProfileUseCase {
       height: input.height,
       weight: input.weight,
       bloodGroup: input.bloodGroup,
+      allergies: input.allergies ?? [""],
+      chronicConditions: input.chronicConditions ?? [""],
     });
 
     console.log("The updated patient profile", updatedProfile);

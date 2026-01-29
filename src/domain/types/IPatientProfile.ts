@@ -20,6 +20,8 @@ export interface IPatientProfile {
     phone: string;
     relation: string;
   };
+  allergies?: [string];
+  chronicConditions?: [string];
 
   createdAt: Date;
   updatedAt: Date;

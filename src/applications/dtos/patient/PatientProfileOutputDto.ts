@@ -15,6 +15,8 @@ interface PatientProfileDTO {
   address: string;
   email: string;
   profileImage: string;
+  allergies?: [string] | [];
+  chronicConditions?: [string] | [];
 }
 
 export function mapPatientProfileToDTO(
@@ -40,5 +42,7 @@ export function mapPatientProfileToDTO(
     city: profile?.address?.city ?? "",
     pincode: profile?.address?.pincode ?? "",
     address: profile?.address?.addressLine ?? "",
+    allergies: profile?.allergies ?? [],
+    chronicConditions: profile?.chronicConditions ?? [],
   };
 }

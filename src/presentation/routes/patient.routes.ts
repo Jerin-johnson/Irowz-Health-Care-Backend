@@ -10,6 +10,8 @@ import { profileImageUpload } from "../middlewares/profileImage.upload";
 import { validate } from "../middlewares/validate.middleware";
 import { patientProfileSchema } from "../validators/patient/PatientProfileSchme";
 import { PatientAppointmentController } from "../controllers/patient/PatientAppointment.Controller";
+import { PatientNotificationController } from "../controllers/patient/PatientNotifcation.Controller";
+import { PatientOnlineConsultationController } from "../controllers/patient/PatientOnlineConsultation.Controller";
 
 export class PatientRoutes {
   private _router: Router;
@@ -19,7 +21,9 @@ export class PatientRoutes {
     private readonly _DoctorListingController: DoctorListingController,
     private readonly _DoctorReviewController: DoctorReviewController,
     private readonly _PatientProfileController: PatientProfileController,
-    private readonly _PatientAppointmentController: PatientAppointmentController
+    private readonly _PatientAppointmentController: PatientAppointmentController,
+    private readonly _PatientNotificationController: PatientNotificationController,
+    private readonly _PatientOnlineConsultationController: PatientOnlineConsultationController
   ) {
     this._router = Router();
   }
@@ -130,6 +134,28 @@ export class PatientRoutes {
       "/live/queue/:id",
       authMiddleware,
       asyncHandler(this._PatientAppointmentController.getLiveQueue)
+    );
+
+    //Notification
+
+    this._router.get(
+      "/notification",
+      authMiddleware,
+      asyncHandler(this._PatientNotificationController.get)
+    );
+
+    // online consultation
+
+    this._router.post(
+      "/consultation/respond",
+      authMiddleware,
+      asyncHandler(this._PatientOnlineConsultationController.RespondToCall)
+    );
+
+    this._router.post(
+      "/video/token",
+      authMiddleware,
+      asyncHandler(this._PatientOnlineConsultationController.videoToken)
     );
 
     return this._router;

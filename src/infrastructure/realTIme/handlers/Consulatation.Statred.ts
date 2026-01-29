@@ -1,6 +1,11 @@
 import { handlers } from ".";
+import { OnlineConsultationListener } from "../../../applications/usecases/doctor/consultation/online/OnlineConsultationListener";
+import { realtimePublisher } from "../../../DI/realtime";
+import { consultationRepo } from "../../../DI/repositers";
 import { getIO } from "../../../socket";
 import { notificationRepo } from "../realtimeConsumer";
+
+const onlineListener = new OnlineConsultationListener(consultationRepo, realtimePublisher);
 
 handlers["CONSULTATION_STARTED"] = async (event) => {
   const { currentPatientId, nextPatientIds } = event.payload;
@@ -9,11 +14,11 @@ handlers["CONSULTATION_STARTED"] = async (event) => {
 
   // Current patient
   const currentNotification = await notificationRepo.create({
-    userId: currentPatientId,
+    userId: currentPatientId as string,
     type: event.type,
     title: "Consultation Started",
     message: "Doctor has started your consultation",
-    metadata: event.payload,
+    metadata: "Here we store the information of the next patient actually",
   });
 
   io.to(`user:${currentPatientId}`).emit("notification", currentNotification);
@@ -21,13 +26,17 @@ handlers["CONSULTATION_STARTED"] = async (event) => {
   // Next patients
   for (const userId of nextPatientIds) {
     const notification = await notificationRepo.create({
-      userId,
+      userId: userId.patientId,
       type: event.type,
-      title: "You are next",
+      title: "You will be called next",
       message: "Please be ready for your consultation",
-      metadata: event.payload,
+      metadata: "here we store patient id of the next patient",
     });
 
-    io.to(`user:${userId}`).emit("notification", notification);
+    io.to(`user:${userId.patientId}`).emit("notification", notification);
   }
+
+  //online
+
+  await onlineListener.handle(event);
 };

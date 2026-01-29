@@ -51,8 +51,11 @@ export class CheckoutUseCase {
       const Doctor = await this._DoctorRepo.findById(doctorId);
       if (!Doctor) throw new Error("Doctor unavailable");
 
+      console.log("The Doctor is", Doctor);
+
       appointment = await this._DoctorAppoinmentRepo.create({
         doctorId,
+        hospitalId: String(Doctor.hospitalId._id) as string,
         patientId,
         date,
         startTime,

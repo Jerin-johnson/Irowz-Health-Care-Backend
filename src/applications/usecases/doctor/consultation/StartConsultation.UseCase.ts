@@ -2,6 +2,13 @@ import { DomainEventPublisher } from "../../../../domain/events/event";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { IMedicalRecordRepository } from "../../../../domain/repositories/IMedicalRecordRepository";
 import { IDoctorAvailabilityRepository } from "../../../../domain/repositories/IDoctorAvailabilityRepository";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import { getCurrentISTMinutes, timeToMinutes } from "../../../../domain/utils/time.utils";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const DELAY_THRESHOLD_MINUTES = 5;
 
@@ -19,9 +26,9 @@ export class StartConsultationUseCase {
       throw new Error("Appointment not found");
     }
 
-    if (appointment.status !== "BOOKED") {
-      throw new Error("Only BOOKED appointments can be started");
-    }
+    // if (appointment.status !== "BOOKED" || appointment.status !== "NO_SHOW") {
+    //   throw new Error("Only BOOKED appointments can be started");
+    // }
 
     const active = await this._appointmentRepo.findActiveConsultation(
       String(appointment.doctorId),
@@ -34,18 +41,26 @@ export class StartConsultationUseCase {
 
     const availability = await this._availabilityRepo.findByDoctorId(String(appointment.doctorId));
 
-    const delayAlreadyEvaluated =
-      availability?.doctorDelayedAt && this.isSameDay(availability.doctorDelayedAt, new Date());
+    const delayAlreadyEvaluated = Boolean(
+      availability?.doctorDelayedAt && this.isSameDay(availability.doctorDelayedAt, new Date())
+    );
+
+    console.log("The Doctor delay evalution ", delayAlreadyEvaluated);
 
     let delayApplied = false;
     let delayMinutes = 0;
 
     if (!delayAlreadyEvaluated) {
-      const now = new Date();
+      console.log("does this called actually");
 
-      const scheduledStart = new Date(`${appointment.date}T${appointment.startTime}:00`);
+      const scheduledMinutes = timeToMinutes(appointment.startTime);
+      const nowMinutes = getCurrentISTMinutes();
 
-      delayMinutes = Math.floor((now.getTime() - scheduledStart.getTime()) / 60000);
+      delayMinutes = nowMinutes - scheduledMinutes;
+
+      console.log("Scheduled minutes:", scheduledMinutes);
+      console.log("Current IST minutes:", nowMinutes);
+      console.log("Delay minutes:", delayMinutes);
 
       if (delayMinutes < 0) delayMinutes = 0;
 
@@ -58,34 +73,48 @@ export class StartConsultationUseCase {
 
         delayApplied = true;
       } else {
-        // Mark delay as evaluated so we don't calculate again today
+        // Mark delay nevverer  caluculated today today
+        console.log("to know which is called");
         await this._availabilityRepo.markDelayEvaluated(String(appointment.doctorId));
       }
     }
 
     const updated = await this._appointmentRepo.startConsultation(appointmentId);
 
-    await this._medicalRecordRepo.createDraft({
-      appointmentId: String(updated._id),
-      patientId: String(updated.patientId),
-      doctorId: String(updated.doctorId),
-      visitType: updated.visitType,
-      visitDate: new Date(),
-    });
+    console.log("the doctor updated", updated);
 
+    let medicalRecord = await this._medicalRecordRepo.findByAppointmentId(String(updated._id));
+
+    if (!medicalRecord) {
+      medicalRecord = await this._medicalRecordRepo.createDraft({
+        appointmentId: String(updated._id),
+        patientId: String(updated.patientId),
+        doctorId: String(updated.doctorId),
+        hospitalId: String(updated.hospitalId),
+        visitType: updated.visitType,
+        visitDate: new Date(),
+      });
+    }
     const nextPatientIds = await this._appointmentRepo.getNextPatients(
       String(updated.doctorId),
       String(updated.date),
       1
     );
 
+    console.log("The next patient are", nextPatientIds);
+
     await this._eventPublisher.publish({
       type: "CONSULTATION_STARTED",
       payload: {
+        appointmentId: String(updated._id),
         currentPatientId: String(updated.patientId),
         nextPatientIds,
+        visitType: updated.visitType,
+        doctorId: updated.doctorId,
       },
     });
+
+    let affectedPatientIds: string[] = [];
 
     if (delayApplied) {
       const bookedAppointments = await this._appointmentRepo.getDoctorAppointmentsForDay(
@@ -93,7 +122,7 @@ export class StartConsultationUseCase {
         String(updated.date)
       );
 
-      const affectedPatientIds = bookedAppointments
+      affectedPatientIds = bookedAppointments
         .filter((a) => a.status === "BOOKED")
         .map((a) => String(a.patientId));
 
@@ -114,6 +143,7 @@ export class StartConsultationUseCase {
       payload: {
         doctorId: String(updated.doctorId),
         date: String(updated.date),
+        patientIds: affectedPatientIds,
       },
     });
 
@@ -121,6 +151,9 @@ export class StartConsultationUseCase {
       appointmentId: updated._id.toString(),
       status: updated.status,
       startedAt: updated.startedAt,
+      patientId: updated.patientId,
+      patientName: updated.patientSnapshot.firstName,
+      medicalRecordId: medicalRecord._id,
     };
   }
 

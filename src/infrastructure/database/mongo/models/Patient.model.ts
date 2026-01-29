@@ -6,7 +6,8 @@ export interface IPatientProfile {
   bloodGroup?: string;
   height?: number;
   weight?: number;
-
+  allergies?: [string];
+  chronicConditions?: [string];
   address?: {
     state: string;
     city: string;
@@ -43,6 +44,16 @@ const patientProfileSchema = new Schema<IPatientProfile>(
       pincode: String,
       addressLine: String,
     },
+    allergies: [
+      {
+        type: String,
+      },
+    ],
+    chronicConditions: [
+      {
+        type: String,
+      },
+    ],
 
     emergencyContact: {
       name: String,

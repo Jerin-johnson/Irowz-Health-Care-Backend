@@ -53,4 +53,12 @@ export interface IDoctorAppointmentRepository {
   ): Promise<Partial<DoctorAppointment>[] | any>;
 
   findAppointmentsByPatient(filters: AppointmentFilterDTO): Promise<AppointmentListResult>;
+
+  markCompleted(id: string, completedAt: Date): Promise<void>;
+
+  lastAppointment(id: string): Promise<DoctorAppointmentDocument | null>;
+
+  getMaxQueuePriority(params: { doctorId: string; date: string }): Promise<number>;
+
+  markNoShow(params: { appointmentId: string; newPriority: number; markedAt: Date }): Promise<void>;
 }

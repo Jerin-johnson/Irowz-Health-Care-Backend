@@ -26,7 +26,7 @@ export interface IDoctorAvailabilityRepository {
     >
   >;
 
-  setDoctorDelay(doctorId: string, delayMinutes: number, reason: string): Promise<void>;
+  setDoctorDelay(doctorId: string, delayMinutes: number, reason?: string): Promise<void>;
 
   markDelayEvaluated(doctorId: string): Promise<void>;
 
