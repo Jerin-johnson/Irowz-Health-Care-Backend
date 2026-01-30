@@ -6,6 +6,7 @@ import { MarkAsNoShowUseCase } from "../applications/usecases/doctor/consultatio
 import { EndConsultationOnlineUseCase } from "../applications/usecases/doctor/consultation/online/EndOnlineConsultationUseCase";
 import { GetActiveDoctorOnlineConsultationUseCase } from "../applications/usecases/doctor/consultation/online/GetActiveDoctorConsultationUseCase";
 import { GetConsultationVideoTokenDoctorUseCase } from "../applications/usecases/doctor/consultation/online/GetConsultationVideoTokenUseCase";
+import { UpdateMedicalRecordPercriptionUseCase } from "../applications/usecases/doctor/consultation/SavePercription.UseCase";
 import { SaveQuickNoteUseCase } from "../applications/usecases/doctor/consultation/SaveQuickNoteUseCase";
 import { StartConsultationUseCase } from "../applications/usecases/doctor/consultation/StartConsultation.UseCase";
 import { UpsertDoctorAvailabilityUseCase } from "../applications/usecases/doctor/doctorAvailability/DoctorAvailabilityController";
@@ -117,6 +118,10 @@ const getActiveDoctorOnlineConsultationUseCase = new GetActiveDoctorOnlineConsul
 
 const endConsultationOnlineUseCase = new EndConsultationOnlineUseCase(consultationRepo);
 
+const updateMedicalRecordPercriptionUseCase = new UpdateMedicalRecordPercriptionUseCase(
+  medicalRecordRepository
+);
+
 const doctorConsultationController = new DoctorConsultationController(
   startConsultationUseCase,
   getPatientOverViewUseCase,
@@ -125,7 +130,8 @@ const doctorConsultationController = new DoctorConsultationController(
   markAsNoShowUseCase,
   getConsultationVideoTokenUseCase,
   getActiveDoctorOnlineConsultationUseCase,
-  endConsultationOnlineUseCase
+  endConsultationOnlineUseCase,
+  updateMedicalRecordPercriptionUseCase
 );
 
 export const doctorRoutes = new DoctorRoutes(

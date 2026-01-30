@@ -90,6 +90,11 @@ export class DoctorRoutes {
     );
 
     this._router.post(
+      `/consultation/start/patient/prescription/:id`,
+      asyncHandler(this._DoctorConsultationController.savePercritption)
+    );
+
+    this._router.post(
       "/consultation/complete/:appointmentId",
       asyncHandler(this._DoctorConsultationController.completeConsultation)
     );

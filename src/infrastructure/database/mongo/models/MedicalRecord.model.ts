@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, Types, Document } from "mongoose";
 
 const PrescriptionSchema = new Schema(
   {
@@ -25,8 +25,8 @@ const LabTestSchema = new Schema(
   { _id: false }
 );
 
-export interface MedicalRecordDocument {
-  _id?: Types.ObjectId;
+export interface MedicalRecordDocument extends Document {
+  // _id?: Types.ObjectId;
 
   appointmentId: Types.ObjectId; // 🔑 one-to-one with appointment
   patientId: Types.ObjectId;
@@ -38,6 +38,7 @@ export interface MedicalRecordDocument {
 
   diagnosisSummary?: string;
   observationNotes?: string;
+  clinicalObservations?: string;
 
   prescriptions: {
     medicineName: string;
@@ -105,6 +106,10 @@ const MedicalRecordSchema = new Schema<MedicalRecordDocument>(
     },
 
     diagnosisSummary: {
+      type: String,
+    },
+
+    clinicalObservations: {
       type: String,
     },
 

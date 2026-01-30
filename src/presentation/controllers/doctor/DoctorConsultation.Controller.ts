@@ -9,6 +9,7 @@ import { MarkAsNoShowUseCase } from "../../../applications/usecases/doctor/consu
 import { GetConsultationVideoTokenDoctorUseCase } from "../../../applications/usecases/doctor/consultation/online/GetConsultationVideoTokenUseCase";
 import { GetActiveDoctorOnlineConsultationUseCase } from "../../../applications/usecases/doctor/consultation/online/GetActiveDoctorConsultationUseCase";
 import { EndConsultationOnlineUseCase } from "../../../applications/usecases/doctor/consultation/online/EndOnlineConsultationUseCase";
+import { UpdateMedicalRecordPercriptionUseCase } from "../../../applications/usecases/doctor/consultation/SavePercription.UseCase";
 
 export class DoctorConsultationController {
   constructor(
@@ -19,7 +20,8 @@ export class DoctorConsultationController {
     private readonly _MarkAsNoShowUseCase: MarkAsNoShowUseCase,
     private readonly _GetConsultationVideoTokenUseCase: GetConsultationVideoTokenDoctorUseCase,
     private readonly _GetActiveDoctorOnlineConsultationUseCase: GetActiveDoctorOnlineConsultationUseCase,
-    private readonly _EndConsultationOnlineUseCase: EndConsultationOnlineUseCase
+    private readonly _EndConsultationOnlineUseCase: EndConsultationOnlineUseCase,
+    private readonly _UpdateMedicalRecordPercriptionUseCase: UpdateMedicalRecordPercriptionUseCase
   ) {}
 
   startConsultation = async (req: Request, res: Response) => {
@@ -92,5 +94,14 @@ export class DoctorConsultationController {
     const consultationId = req.body.consultationId;
     await this._EndConsultationOnlineUseCase.execute(consultationId);
     return ApiResponse.success(res);
+  };
+
+  savePercritption = async (req: Request, res: Response) => {
+    const { id: appointmentId } = req.params;
+    const result = await this._UpdateMedicalRecordPercriptionUseCase.execute({
+      ...req.body,
+      appointmentId,
+    });
+    return ApiResponse.success(res, null, result.message);
   };
 }
