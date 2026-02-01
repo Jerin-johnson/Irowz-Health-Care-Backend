@@ -1,6 +1,8 @@
 import { GetAppoinmentBYIdUseCase } from "../applications/usecases/doctor/appoinment/GetAppoinmentBYIdUseCase";
 import { GetDoctorAppoinmentQueueUsecase } from "../applications/usecases/doctor/appoinment/GetDoctorAppoinmentQueue.usecase";
 import { CompleteConsultationUseCase } from "../applications/usecases/doctor/consultation/CompleteConsultation.UseCase";
+import { GetMedicalRecordWithDoctorInfoUseCase } from "../applications/usecases/doctor/consultation/GetMedicalRecordWithDoctorInfo.usecase";
+import { GetMedicalHistoryUseCase } from "../applications/usecases/doctor/consultation/GetPatientMedicalHistory.UseCase";
 import { GetPatientOverViewUseCase } from "../applications/usecases/doctor/consultation/GetPatientOverview.useCase";
 import { MarkAsNoShowUseCase } from "../applications/usecases/doctor/consultation/MarkAsNoShow.UseCase";
 import { EndConsultationOnlineUseCase } from "../applications/usecases/doctor/consultation/online/EndOnlineConsultationUseCase";
@@ -122,6 +124,15 @@ const updateMedicalRecordPercriptionUseCase = new UpdateMedicalRecordPercription
   medicalRecordRepository
 );
 
+const getMedicalHistoryUseCase = new GetMedicalHistoryUseCase(
+  medicalRecordRepository,
+  doctorAppointmentRepository
+);
+
+const getMedicalRecordWithDoctorInfoUseCase = new GetMedicalRecordWithDoctorInfoUseCase(
+  medicalRecordRepository
+);
+
 const doctorConsultationController = new DoctorConsultationController(
   startConsultationUseCase,
   getPatientOverViewUseCase,
@@ -131,7 +142,9 @@ const doctorConsultationController = new DoctorConsultationController(
   getConsultationVideoTokenUseCase,
   getActiveDoctorOnlineConsultationUseCase,
   endConsultationOnlineUseCase,
-  updateMedicalRecordPercriptionUseCase
+  updateMedicalRecordPercriptionUseCase,
+  getMedicalHistoryUseCase,
+  getMedicalRecordWithDoctorInfoUseCase
 );
 
 export const doctorRoutes = new DoctorRoutes(

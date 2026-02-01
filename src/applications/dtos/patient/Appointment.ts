@@ -34,6 +34,7 @@ export interface AppointmentResponseDTO {
 
   cancelledAt?: Date;
   cancelReason?: string;
+  isRescheduleAppointment: boolean;
 
   createdAt: Date;
   updatedAt: Date;
@@ -66,6 +67,7 @@ export const mapAppointmentToResponse = (appointment: any) => {
     visitType: appointment.visitType,
 
     patientSnapshot: appointment.patientSnapshot,
+    isRescheduleAppointment: appointment.isRescheduleAppointment || false,
 
     consultationFee: appointment.consultationFee,
     discountAmount: appointment.discountAmount,

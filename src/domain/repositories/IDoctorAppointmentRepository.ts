@@ -31,7 +31,9 @@ export interface IDoctorAppointmentRepository {
     date: string;
   }>;
 
-  findById(id: string): Promise<Partial<DoctorAppointmentDocument> | null>;
+  findById(id: string): Promise<DoctorAppointmentDocument | null>;
+
+  findByIdNoLean(id: string): Promise<DoctorAppointmentDocument | null>;
 
   findPendingByUser(
     doctorId: string,
@@ -61,4 +63,6 @@ export interface IDoctorAppointmentRepository {
   getMaxQueuePriority(params: { doctorId: string; date: string }): Promise<number>;
 
   markNoShow(params: { appointmentId: string; newPriority: number; markedAt: Date }): Promise<void>;
+
+  save(appointment: DoctorAppointmentDocument): Promise<DoctorAppointmentDocument>;
 }

@@ -34,6 +34,8 @@ export interface AppointmentDto {
   isLate: boolean;
   status: "BOOKED" | "COMPLETED" | "CANCELLED"; // etc.
 
+  isRescheduleAppointment: boolean;
+
   createdAt: string;
   updatedAt: string;
 }
@@ -56,11 +58,11 @@ export const toAppointmentDto = (doc: any): AppointmentDto => ({
   },
 
   address: {
-    country: doc.addressSnapshot.country,
-    state: doc.addressSnapshot.state,
-    city: doc.addressSnapshot.city,
-    zip: doc.addressSnapshot.zip,
-    street: doc.addressSnapshot.street,
+    country: doc.addressSnapshot?.country,
+    state: doc.addressSnapshot?.state,
+    city: doc.addressSnapshot?.city,
+    zip: doc.addressSnapshot?.zip,
+    street: doc.addressSnapshot?.street,
   },
 
   consultationFee: doc.consultationFee,
@@ -73,6 +75,7 @@ export const toAppointmentDto = (doc: any): AppointmentDto => ({
   queuePriority: doc.queuePriority,
   isLate: doc.isLate,
   status: doc.status as AppointmentDto["status"],
+  isRescheduleAppointment: doc?.isRescheduleAppointment || false,
 
   createdAt: doc.createdAt.toISOString(),
   updatedAt: doc.updatedAt.toISOString(),

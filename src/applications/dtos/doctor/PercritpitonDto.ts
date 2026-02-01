@@ -1,7 +1,7 @@
 export interface UpdateMedicalRecordInput {
   appointmentId: string;
 
-  diagnosisSummary?: string;
+  primaryDiagnosis?: string;
   clinicalObservations?: string;
 
   medications?: {

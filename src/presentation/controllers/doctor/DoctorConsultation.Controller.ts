@@ -10,6 +10,9 @@ import { GetConsultationVideoTokenDoctorUseCase } from "../../../applications/us
 import { GetActiveDoctorOnlineConsultationUseCase } from "../../../applications/usecases/doctor/consultation/online/GetActiveDoctorConsultationUseCase";
 import { EndConsultationOnlineUseCase } from "../../../applications/usecases/doctor/consultation/online/EndOnlineConsultationUseCase";
 import { UpdateMedicalRecordPercriptionUseCase } from "../../../applications/usecases/doctor/consultation/SavePercription.UseCase";
+import { GetMedicalHistoryUseCase } from "../../../applications/usecases/doctor/consultation/GetPatientMedicalHistory.UseCase";
+import { GetMedicalRecordWithDoctorInfoUseCase } from "../../../applications/usecases/doctor/consultation/GetMedicalRecordWithDoctorInfo.usecase";
+import { MedicalRecordPrescriptionMapper } from "../../../applications/dtos/doctor/MedicalRecordPrescription.mapper";
 
 export class DoctorConsultationController {
   constructor(
@@ -21,7 +24,9 @@ export class DoctorConsultationController {
     private readonly _GetConsultationVideoTokenUseCase: GetConsultationVideoTokenDoctorUseCase,
     private readonly _GetActiveDoctorOnlineConsultationUseCase: GetActiveDoctorOnlineConsultationUseCase,
     private readonly _EndConsultationOnlineUseCase: EndConsultationOnlineUseCase,
-    private readonly _UpdateMedicalRecordPercriptionUseCase: UpdateMedicalRecordPercriptionUseCase
+    private readonly _UpdateMedicalRecordPercriptionUseCase: UpdateMedicalRecordPercriptionUseCase,
+    private readonly _GetMedicalHistoryUseCase: GetMedicalHistoryUseCase,
+    private readonly _GetMedicalRecordWithDoctorInfoUseCase: GetMedicalRecordWithDoctorInfoUseCase
   ) {}
 
   startConsultation = async (req: Request, res: Response) => {
@@ -103,5 +108,31 @@ export class DoctorConsultationController {
       appointmentId,
     });
     return ApiResponse.success(res, null, result.message);
+  };
+
+  GetMedicalHistory = async (req: Request, res: Response) => {
+    const appointmentId = req.params.id;
+    const { page, limit, fromDate, toDate, diagnosis } = req.query;
+
+    const result = await this._GetMedicalHistoryUseCase.execute({
+      appointmentId,
+      page: Number(page),
+      limit: Number(limit),
+      fromDate: fromDate as string,
+      toDate: toDate as string,
+      diagnosisKeyword: diagnosis as string,
+    });
+
+    ApiResponse.success(res, result, "medical History fetched successfully");
+  };
+
+  GetMedicalRecordWithDoctorInfoUseCase = async (req: Request, res: Response) => {
+    const { recordId } = req.params;
+
+    const result = await this._GetMedicalRecordWithDoctorInfoUseCase.execute(recordId);
+
+    const response = MedicalRecordPrescriptionMapper.toPrescriptionViewResponse(result);
+
+    ApiResponse.success(res, response, "Medical record fetched successfully");
   };
 }

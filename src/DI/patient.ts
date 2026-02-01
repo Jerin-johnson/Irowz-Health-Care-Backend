@@ -1,6 +1,10 @@
 import { MarkAsNoShowUseCase } from "../applications/usecases/doctor/consultation/MarkAsNoShow.UseCase";
+import { CancelAppointmentUseCase } from "../applications/usecases/patient/Appointments/CancelAppointment.useCase";
+import { CheckCancelEligibilityUseCase } from "../applications/usecases/patient/Appointments/CheckCancelEligibilityUsecase";
+import { CheckRescheduleEligibilityUseCase } from "../applications/usecases/patient/Appointments/CheckReschduleEligiblity.useCase";
 import { GetPatientAppointmentsUseCase } from "../applications/usecases/patient/Appointments/GetAppointment.UseCase";
 import { GetPatientQueueStatusUseCase } from "../applications/usecases/patient/Appointments/GetPatientQueueStatusUseCase";
+import { RescheduleAppointmentUseCase } from "../applications/usecases/patient/Appointments/RescheduleAppointment.useCase";
 import { GetDoctorAvailabileSlotUseCase } from "../applications/usecases/patient/AvailableSlot/GetDoctorAvailableSlot.UseCase";
 import { ApponintmentSuccessOrFailureUseCase } from "../applications/usecases/patient/BookingSlot/ApponintmentSuccessOrFailure.useCase";
 import { CheckoutUseCase } from "../applications/usecases/patient/BookingSlot/CheckoutUseCase";
@@ -18,6 +22,7 @@ import { PostReviewUseCase } from "../applications/usecases/patient/DoctorReview
 import { GetPatientNotifcationUseCase } from "../applications/usecases/patient/notification/PatientNotifcation";
 import { EditPatientProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/EditPatientProfileUseCase";
 import { GetProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/GetProfile.UseCase";
+import { GetWalletUseCase } from "../applications/usecases/patient/wallet/GetWalletUseCase";
 import { notificationRepo } from "../infrastructure/realTIme/realtimeConsumer";
 import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.Controller";
 import { DoctorListingController } from "../presentation/controllers/patient/DoctorListing.Controller";
@@ -41,6 +46,7 @@ import {
   hospitalSpecialityRepo,
   mongoUserRepository,
   patientProfileRepository,
+  walletRepo,
 } from "./repositers";
 import { razorpayGateway, s3FileStorage, sharpImageProcessor } from "./service";
 
@@ -128,9 +134,12 @@ const editPatientProfileUseCase = new EditPatientProfileUseCase(
   sharpImageProcessor
 );
 
+const getWalletUseCase = new GetWalletUseCase(walletRepo);
+
 const patientProfileController = new PatientProfileController(
   getProfileUseCase,
-  editPatientProfileUseCase
+  editPatientProfileUseCase,
+  getWalletUseCase
 );
 
 const getPatientQueueStatusUseCase = new GetPatientQueueStatusUseCase(
@@ -142,9 +151,31 @@ const getPatientAppointmentsUseCase = new GetPatientAppointmentsUseCase(
   doctorAppointmentRepository
 );
 
+const checkCancelEligibilityUseCase = new CheckCancelEligibilityUseCase(
+  doctorAppointmentRepository
+);
+const cancelAppointmentUseCase = new CancelAppointmentUseCase(
+  doctorAppointmentRepository,
+  walletRepo
+);
+
+const checkRescheduleEligibilityUseCase = new CheckRescheduleEligibilityUseCase(
+  doctorAppointmentRepository
+);
+
+const rescheduleAppointmentUseCase = new RescheduleAppointmentUseCase(
+  doctorAppointmentRepository,
+  walletRepo,
+  redisDoctorSlotLockService
+);
+
 const patientAppointmentController = new PatientAppointmentController(
   getPatientQueueStatusUseCase,
-  getPatientAppointmentsUseCase
+  getPatientAppointmentsUseCase,
+  cancelAppointmentUseCase,
+  checkCancelEligibilityUseCase,
+  checkRescheduleEligibilityUseCase,
+  rescheduleAppointmentUseCase
 );
 
 const getPatientNotifcationUseCase = new GetPatientNotifcationUseCase(notificationRepo);

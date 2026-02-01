@@ -107,12 +107,13 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
     };
   }
 
-  async findById(id: string): Promise<Partial<DoctorAppointmentDocument> | null> {
-    const appoinement = await DoctorAppointmentModel.findById(id).lean();
-    console.log(appoinement);
-    return appoinement ? appoinement : null;
+  async findById(id: string): Promise<DoctorAppointmentDocument | null> {
+    return await DoctorAppointmentModel.findById(id).lean();
   }
 
+  async findByIdNoLean(id: string): Promise<DoctorAppointmentDocument | null> {
+    return await DoctorAppointmentModel.findById(id);
+  }
   async getDoctorAppointmentsForDay(doctorId: string, date: string) {
     return DoctorAppointmentModel.find({
       doctorId: new Types.ObjectId(doctorId),
@@ -243,5 +244,9 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
       queuePriority: newPriority,
       noShowMarkedAt: markedAt,
     });
+  }
+
+  save(appointment: DoctorAppointmentDocument) {
+    return appointment.save();
   }
 }

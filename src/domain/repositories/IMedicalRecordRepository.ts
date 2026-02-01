@@ -15,6 +15,47 @@ export interface PaginatedMedicalRecords {
   total: number;
 }
 
+// interface Prescription {
+//   medicineName: string;
+//   dosage: string;
+//   frequency: string;
+//   duration: string;
+//   instructions?: string;
+// }
+
+// interface LabTest {
+//   testName: string;
+//   description?: string;
+//   reportUrl?: string;
+//   status: "ORDERED" | "RECEIVED";
+// }
+
+// interface MedicalRecord {
+//   appointmentId: string;
+//   patientId: string;
+//   doctorId: string;
+//   hospitalId?: string;
+//   visitType: "OPD" | "ONLINE";
+//   visitDate: Date;
+//   diagnosisSummary?: string;
+//   observationNotes?: string;
+//   clinicalObservations?: string;
+//   prescriptions: Prescription[];
+//   labTests: LabTest[];
+//   followUpDate?: Date;
+//   status: "DRAFT" | "COMPLETED" | "LOCKED";
+//   externalUpload: boolean;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
+
+// interface DoctorInfo {
+//   name: string;
+//   specialization: string;
+//   registrationNumber: string;
+//   hospital: string;
+// }
+
 export interface IMedicalRecordRepository {
   createDraft(data: {
     appointmentId: string | ObjectId;
@@ -36,4 +77,9 @@ export interface IMedicalRecordRepository {
   save(MedicalRecord: MedicalRecordDocument): Promise<void | MedicalRecordDocument | null>;
 
   findAllByVisitDateDesc(query: FindMedicalRecordsQuery): Promise<PaginatedMedicalRecords>;
+
+  findMedicalRecordWithDoctorAndHospital(recordId: string): Promise<{
+    medicalRecord: MedicalRecordDocument;
+    doctorInfo: any;
+  } | null>;
 }

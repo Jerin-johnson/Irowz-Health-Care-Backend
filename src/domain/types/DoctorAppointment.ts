@@ -70,6 +70,9 @@ export interface DoctorAppointment {
   status: AppointmentStatus;
   cancelledAt?: Date;
   cancelReason?: string;
+  isRescheduleAppointment?: boolean;
+  rescheduledFromAppointmentId?: string;
+  rescheduledAt?: Date;
 
   startedAt?: Date;
   completedAt?: Date;

@@ -15,8 +15,8 @@ export class UpdateMedicalRecordPercriptionUseCase {
       throw new Error("Medical record is locked and cannot be modified");
     }
 
-    if (input.diagnosisSummary) {
-      medicalRecord.diagnosisSummary = input.diagnosisSummary;
+    if (input.primaryDiagnosis) {
+      medicalRecord.diagnosisSummary = input.primaryDiagnosis;
     }
 
     if (input.clinicalObservations) {

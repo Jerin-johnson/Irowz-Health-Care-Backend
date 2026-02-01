@@ -28,6 +28,10 @@ export class CompleteConsultationUseCase {
       throw new Error("observation note is mandotory...please add that");
     }
 
+    if (!medicalRecord.diagnosisSummary) {
+      throw new Error("primary diagnosis is required ...please add that");
+    }
+
     await this._MedicalRecordRepo.lockRecord(String(medicalRecord._id));
     await this._DoctorAppointmentRepo.markCompleted(appointmentId, new Date());
 

@@ -6,6 +6,8 @@ export class GetAppoinmentBYIdUseCase {
 
   async execute(id: string) {
     const result = await this._DoctorAppoinmentRepo.findById(id);
+
+    console.log("the result is ", result);
     return toAppointmentDto(result);
   }
 }

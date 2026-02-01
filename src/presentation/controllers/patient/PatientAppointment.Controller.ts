@@ -3,11 +3,19 @@ import { Request, Response } from "express";
 import { ApiResponse } from "../../utils/common.response.model";
 import { GetPatientAppointmentsUseCase } from "../../../applications/usecases/patient/Appointments/GetAppointment.UseCase";
 import { mapAppointmentToResponse } from "../../../applications/dtos/patient/Appointment";
+import { CancelAppointmentUseCase } from "../../../applications/usecases/patient/Appointments/CancelAppointment.useCase";
+import { CheckCancelEligibilityUseCase } from "../../../applications/usecases/patient/Appointments/CheckCancelEligibilityUsecase";
+import { CheckRescheduleEligibilityUseCase } from "../../../applications/usecases/patient/Appointments/CheckReschduleEligiblity.useCase";
+import { RescheduleAppointmentUseCase } from "../../../applications/usecases/patient/Appointments/RescheduleAppointment.useCase";
 
 export class PatientAppointmentController {
   constructor(
     private readonly _GetPatientQueueStatusUseCase: GetPatientQueueStatusUseCase,
-    private readonly _GetPatientAppointmentsUseCase: GetPatientAppointmentsUseCase
+    private readonly _GetPatientAppointmentsUseCase: GetPatientAppointmentsUseCase,
+    private readonly _CancelAppointmentUseCase: CancelAppointmentUseCase,
+    private readonly _CheckCancelEligibilityUseCase: CheckCancelEligibilityUseCase,
+    private readonly _CheckRescheduleEligibilityUseCase: CheckRescheduleEligibilityUseCase,
+    private readonly _RescheduleAppointmentUseCase: RescheduleAppointmentUseCase
   ) {}
 
   getLiveQueue = async (req: Request, res: Response) => {
@@ -42,5 +50,35 @@ export class PatientAppointmentController {
       { data: result.data.map(mapAppointmentToResponse), total: result.total },
       "Patient Appointment fetched successfully"
     );
+  };
+
+  CancelAppointment = async (req: Request, res: Response) => {
+    const result = await this._CancelAppointmentUseCase.execute(req.params.id);
+    return ApiResponse.success(res, result);
+  };
+
+  checkCancelEligibility = async (req: Request, res: Response) => {
+    const result = await this._CheckCancelEligibilityUseCase.execute(req.params.id);
+    return ApiResponse.success(res, result);
+  };
+
+  checkRescheduleEligibility = async (req: Request, res: Response) => {
+    const result = await this._CheckRescheduleEligibilityUseCase.execute(req.params.id);
+    return ApiResponse.success(res, result);
+  };
+
+  rescheduleAppointment = async (req: Request, res: Response) => {
+    const { date: newDate, startTime: newStartTime, newEndTime } = req.body;
+
+    console.log(req.body);
+
+    const result = await this._RescheduleAppointmentUseCase.execute(
+      req.params.id,
+      newDate,
+      newStartTime,
+      newEndTime
+    );
+
+    return ApiResponse.success(res, result);
   };
 }

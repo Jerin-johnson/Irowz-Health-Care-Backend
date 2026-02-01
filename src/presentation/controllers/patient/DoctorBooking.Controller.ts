@@ -101,7 +101,7 @@ export class DoctorBookingController {
   };
 
   checkout = async (req: Request, res: Response) => {
-    const { doctorId, date, startTime, billingDetails } = req.body;
+    const { doctorId, date, startTime, billingDetails, visitType } = req.body;
     const userId = req.user?.userId;
 
     console.log("userId", userId);
@@ -115,6 +115,7 @@ export class DoctorBookingController {
       patientSnapshot: { firstName, lastName, phone, email },
       addressSnapshot: { city, country, state, street: streetAddress, zip: zipCode },
       patientId: userId as string,
+      visitType,
     });
 
     console.log(result);

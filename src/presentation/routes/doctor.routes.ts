@@ -85,8 +85,18 @@ export class DoctorRoutes {
     );
 
     this._router.get(
+      "/consultation/medical-record/:recordId",
+      asyncHandler(this._DoctorConsultationController.GetMedicalRecordWithDoctorInfoUseCase)
+    );
+
+    this._router.get(
       "/consultation/start/patient/overview/:id",
       asyncHandler(this._DoctorConsultationController.getPatientOverviewForConsulation)
+    );
+
+    this._router.get(
+      "/consultation/start/patient/medical-history/:id",
+      asyncHandler(this._DoctorConsultationController.GetMedicalHistory)
     );
 
     this._router.post(

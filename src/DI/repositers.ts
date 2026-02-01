@@ -11,6 +11,7 @@ import { DoctorReviewRepository } from "../infrastructure/repositories/DoctorRev
 import { PatientProfileRepository } from "../infrastructure/repositories/PatientProfileRepository";
 import { MedicalRecordRepository } from "../infrastructure/repositories/MedicalRecordRepository";
 import { ConsultationRepository } from "../infrastructure/repositories/ConsultationRepository";
+import { WalletRepository } from "../infrastructure/repositories/WalletRepository";
 // import { NotificationRepository } from "../infrastructure/repositories/notification/NotificationRepository";
 
 export const mongoUserRepository = new MongoUserRepository();
@@ -26,3 +27,4 @@ export const patientProfileRepository = new PatientProfileRepository();
 export const medicalRecordRepository = new MedicalRecordRepository();
 // export const notificationRepo = new NotificationRepository();
 export const consultationRepo = new ConsultationRepository();
+export const walletRepo = new WalletRepository();

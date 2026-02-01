@@ -1,8 +1,6 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, Types, Document } from "mongoose";
 
-export interface DoctorAppointmentDocument {
-  _id?: Types.ObjectId;
-
+export interface DoctorAppointmentDocument extends Document {
   doctorId: Types.ObjectId;
   patientId: Types.ObjectId;
   hospitalId?: Types.ObjectId;
@@ -74,6 +72,24 @@ export interface DoctorAppointmentDocument {
 
   createdAt: Date;
   updatedAt: Date;
+
+  // who cancelled
+  cancelledBy?: string;
+
+  // refund eligibility snapshot
+  refundEligibility?: {
+    isRefundAllowed: boolean;
+    refundAmount: number;
+    evaluatedAt: Date;
+  };
+
+  // confirmation that patient accepted no-refund
+  patientConfirmedNoRefund?: boolean;
+  isRescheduleAppointment?: boolean;
+
+  rescheduledFromAppointmentId?: Types.ObjectId;
+  rescheduledToAppointmentId?: Types.ObjectId;
+  rescheduledAt?: Date;
 }
 
 const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
@@ -171,6 +187,21 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
 
     cancelledAt: Date,
     cancelReason: String,
+
+    cancelledBy: String,
+
+    refundEligibility: {
+      isRefundAllowed: Boolean,
+      refundAmount: Number,
+      evaluatedAt: Date,
+    },
+
+    patientConfirmedNoRefund: Boolean,
+    isRescheduleAppointment: Boolean,
+
+    rescheduledFromAppointmentId: Schema.Types.ObjectId,
+    rescheduledToAppointmentId: Schema.Types.ObjectId,
+    rescheduledAt: Date,
 
     startedAt: Date,
     completedAt: Date,

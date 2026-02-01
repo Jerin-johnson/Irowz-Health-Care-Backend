@@ -11,7 +11,7 @@ export const initSocket = (httpServer: any) => {
     console.log("Socket connected:", socket.id);
 
     socket.on("join-doctor", (doctorId: string) => {
-      console.log("👨‍⚕️ Doctor joined room:", doctorId);
+      console.log(" Doctor joined room:", doctorId);
       socket.join(`doctor:${doctorId}`);
     });
 

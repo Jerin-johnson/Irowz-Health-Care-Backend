@@ -115,6 +115,8 @@ export class PatientRoutes {
       asyncHandler(this._PatientProfileController.editProfile)
     );
 
+    this._router.get("/wallet", authMiddleware, this._PatientProfileController.getMyWallet);
+
     // // -------- Appointment --------\\
 
     this._router.get(
@@ -127,6 +129,30 @@ export class PatientRoutes {
       PATIENT_ROUTES.APPOINTMENT_SUCCESS,
       authMiddleware,
       asyncHandler(this._DoctorBookingController.apponitmentSuccess)
+    );
+
+    this._router.get(
+      "/appointment/cancel-eligibility/:id",
+      authMiddleware,
+      asyncHandler(this._PatientAppointmentController.checkCancelEligibility)
+    );
+
+    this._router.post(
+      "/appointment/cancel/:id",
+      authMiddleware,
+      asyncHandler(this._PatientAppointmentController.CancelAppointment)
+    );
+
+    this._router.get(
+      "/appointment/reschedule-eligibility/:id",
+      authMiddleware,
+      asyncHandler(this._PatientAppointmentController.checkRescheduleEligibility)
+    );
+
+    this._router.post(
+      "/appointment/reschedule/:id",
+      authMiddleware,
+      asyncHandler(this._PatientAppointmentController.rescheduleAppointment)
     );
 
     //live queue
