@@ -2,15 +2,16 @@
 
 import { DomainEventPublisher } from "../../../../domain/events/event";
 import { IConsultationRepository } from "../../../../domain/repositories/IConsultationRepository";
-import { MarkAsNoShowUseCase } from "../../doctor/consultation/MarkAsNoShow.UseCase";
+import { IMarkAsNoShowUseCase } from "../../../../domain/usecase/doctor/consultation/IMarkAsNoShowUseCase";
+import { IRespondConsultationUseCase } from "../../../../domain/usecase/patient/consultation/IRespondConsultationUseCase";
 
 type ConsultationResponseAction = "ACCEPT" | "REJECT";
 
-export class RespondConsultationUseCase {
+export class RespondConsultationUseCase implements IRespondConsultationUseCase {
   constructor(
     private readonly _consultationRepo: IConsultationRepository,
     // private readonly _appointmentRepo: IDoctorAppointmentRepository,
-    private readonly _markAsNoShowUseCase: MarkAsNoShowUseCase,
+    private readonly _markAsNoShowUseCase: IMarkAsNoShowUseCase,
     private readonly _eventPublisher: DomainEventPublisher
   ) {}
 

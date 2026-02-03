@@ -1,7 +1,7 @@
-// import mongoose from "mongoose";
 import { IConsultationRepository } from "../../../../../domain/repositories/IConsultationRepository";
+import { IEndConsultationOnlineUseCase } from "../../../../../domain/usecase/doctor/consultation/online/IEndConsultationOnlineUseCase";
 
-export class EndConsultationOnlineUseCase {
+export class EndConsultationOnlineUseCase implements IEndConsultationOnlineUseCase {
   constructor(private readonly _consultationRepo: IConsultationRepository) {}
 
   async execute(consultationId: string) {

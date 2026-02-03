@@ -59,8 +59,18 @@ export class DoctorRoutes {
     );
 
     this._router.post(
+      "/availability/check",
+      asyncHandler(this._DoctorAvailabilityController.checkEditConfilt)
+    );
+
+    this._router.post(
       DOCTOR_ROUTES.AVAILABILITY,
       asyncHandler(this._DoctorAvailabilityController.upsert)
+    );
+
+    this._router.patch(
+      "/availability/confirm",
+      asyncHandler(this._DoctorAvailabilityController.confirmAvailabilityChange)
     );
 
     this._router.get("/schedule", asyncHandler(this._DoctorScheduleMangmentController.getSlots));

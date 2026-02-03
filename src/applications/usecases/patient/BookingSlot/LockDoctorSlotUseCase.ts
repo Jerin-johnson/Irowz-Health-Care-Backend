@@ -1,7 +1,8 @@
 import { IDoctorSlotCache } from "../../../../domain/cache/DoctorSlot.cache";
 import { IDoctorSlotLock } from "../../../../domain/lock/DoctorSlotLock";
+import { ILockDoctorSlotUseCase } from "../../../../domain/usecase/patient/BookingSlots/ILockDoctorSlotUseCase";
 
-export class LockDoctorSlotUseCase {
+export class LockDoctorSlotUseCase implements ILockDoctorSlotUseCase {
   constructor(
     private readonly _DoctorSlotLock: IDoctorSlotLock,
     private readonly _DoctorSlotCache: IDoctorSlotCache

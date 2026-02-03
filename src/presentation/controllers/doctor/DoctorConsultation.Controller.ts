@@ -1,32 +1,34 @@
-import { StartConsultationUseCase } from "../../../applications/usecases/doctor/consultation/StartConsultation.UseCase";
 import { Request, Response } from "express";
 import { ApiResponse } from "../../utils/common.response.model";
-import { GetPatientOverViewUseCase } from "../../../applications/usecases/doctor/consultation/GetPatientOverview.useCase";
 import { mapPatientToDTO } from "../../../applications/dtos/doctor/consultationPatientMapper";
-import { SaveQuickNoteUseCase } from "../../../applications/usecases/doctor/consultation/SaveQuickNoteUseCase";
-import { CompleteConsultationUseCase } from "../../../applications/usecases/doctor/consultation/CompleteConsultation.UseCase";
-import { MarkAsNoShowUseCase } from "../../../applications/usecases/doctor/consultation/MarkAsNoShow.UseCase";
-import { GetConsultationVideoTokenDoctorUseCase } from "../../../applications/usecases/doctor/consultation/online/GetConsultationVideoTokenUseCase";
 import { GetActiveDoctorOnlineConsultationUseCase } from "../../../applications/usecases/doctor/consultation/online/GetActiveDoctorConsultationUseCase";
-import { EndConsultationOnlineUseCase } from "../../../applications/usecases/doctor/consultation/online/EndOnlineConsultationUseCase";
-import { UpdateMedicalRecordPercriptionUseCase } from "../../../applications/usecases/doctor/consultation/SavePercription.UseCase";
-import { GetMedicalHistoryUseCase } from "../../../applications/usecases/doctor/consultation/GetPatientMedicalHistory.UseCase";
-import { GetMedicalRecordWithDoctorInfoUseCase } from "../../../applications/usecases/doctor/consultation/GetMedicalRecordWithDoctorInfo.usecase";
 import { MedicalRecordPrescriptionMapper } from "../../../applications/dtos/doctor/MedicalRecordPrescription.mapper";
+import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
+import { IStartConsultationUseCase } from "../../../domain/usecase/doctor/consultation/IStartConsultationUseCase";
+import { IGetPatientOverviewUseCase } from "../../../domain/usecase/doctor/consultation/IGetPatientOverviewUseCase";
+import { ISaveQuickNoteUseCase } from "../../../domain/usecase/doctor/consultation/ISaveQuickNoteUseCase";
+import { ICompleteConsultationUseCase } from "../../../domain/usecase/doctor/consultation/ICompleteConsultationUseCase";
+import { IMarkAsNoShowUseCase } from "../../../domain/usecase/doctor/consultation/IMarkAsNoShowUseCase";
+import { IGetConsultationVideoTokenDoctorUseCase } from "../../../domain/usecase/doctor/consultation/online/IGetConsultationVideoTokenDoctorUseCase";
+import { IEndConsultationOnlineUseCase } from "../../../domain/usecase/doctor/consultation/online/IEndConsultationOnlineUseCase";
+import { IUpdateMedicalRecordPercriptionUseCase } from "../../../domain/usecase/doctor/consultation/IUpdateMedicalRecordPercriptionUseCase";
+import { IGetMedicalHistoryUseCase } from "../../../domain/usecase/doctor/consultation/IGetMedicalHistoryUseCase";
+import { IGetMedicalRecordWithDoctorInfoUseCase } from "../../../domain/usecase/doctor/consultation/IMedicalRecordRepository";
+import { DoctorMessages } from "../../constants/message/doctor.message";
 
 export class DoctorConsultationController {
   constructor(
-    private readonly _StartConsultationUseCase: StartConsultationUseCase,
-    private readonly _GetPatientOverViewUseCase: GetPatientOverViewUseCase,
-    private readonly _SaveQuickNoteUseCase: SaveQuickNoteUseCase,
-    private readonly _CompleteConsultationUseCase: CompleteConsultationUseCase,
-    private readonly _MarkAsNoShowUseCase: MarkAsNoShowUseCase,
-    private readonly _GetConsultationVideoTokenUseCase: GetConsultationVideoTokenDoctorUseCase,
+    private readonly _StartConsultationUseCase: IStartConsultationUseCase,
+    private readonly _GetPatientOverViewUseCase: IGetPatientOverviewUseCase,
+    private readonly _SaveQuickNoteUseCase: ISaveQuickNoteUseCase,
+    private readonly _CompleteConsultationUseCase: ICompleteConsultationUseCase,
+    private readonly _MarkAsNoShowUseCase: IMarkAsNoShowUseCase,
+    private readonly _GetConsultationVideoTokenUseCase: IGetConsultationVideoTokenDoctorUseCase,
     private readonly _GetActiveDoctorOnlineConsultationUseCase: GetActiveDoctorOnlineConsultationUseCase,
-    private readonly _EndConsultationOnlineUseCase: EndConsultationOnlineUseCase,
-    private readonly _UpdateMedicalRecordPercriptionUseCase: UpdateMedicalRecordPercriptionUseCase,
-    private readonly _GetMedicalHistoryUseCase: GetMedicalHistoryUseCase,
-    private readonly _GetMedicalRecordWithDoctorInfoUseCase: GetMedicalRecordWithDoctorInfoUseCase
+    private readonly _EndConsultationOnlineUseCase: IEndConsultationOnlineUseCase,
+    private readonly _UpdateMedicalRecordPercriptionUseCase: IUpdateMedicalRecordPercriptionUseCase,
+    private readonly _GetMedicalHistoryUseCase: IGetMedicalHistoryUseCase,
+    private readonly _GetMedicalRecordWithDoctorInfoUseCase: IGetMedicalRecordWithDoctorInfoUseCase
   ) {}
 
   startConsultation = async (req: Request, res: Response) => {
@@ -34,7 +36,7 @@ export class DoctorConsultationController {
 
     const result = await this._StartConsultationUseCase.execute(appointmentId);
 
-    return ApiResponse.success(res, result, "consulation started successfully");
+    return ApiResponse.success(res, result, DoctorMessages.CONSULTATION_STARTED);
   };
 
   getPatientOverviewForConsulation = async (req: Request, res: Response) => {
@@ -51,7 +53,7 @@ export class DoctorConsultationController {
     console.log("does this work");
     const result = await this._SaveQuickNoteUseCase.execute(appointmentId, note);
 
-    return ApiResponse.success(res, null, result.message);
+    return ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
   };
 
   completeConsultation = async (req: Request, res: Response) => {
@@ -63,7 +65,7 @@ export class DoctorConsultationController {
       doctorId as string
     );
 
-    return ApiResponse.success(res, null, result.message);
+    return ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
   };
 
   MarkAsNoShow = async (req: Request, res: Response) => {
@@ -107,7 +109,7 @@ export class DoctorConsultationController {
       ...req.body,
       appointmentId,
     });
-    return ApiResponse.success(res, null, result.message);
+    return ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
   };
 
   GetMedicalHistory = async (req: Request, res: Response) => {
@@ -123,7 +125,7 @@ export class DoctorConsultationController {
       diagnosisKeyword: diagnosis as string,
     });
 
-    ApiResponse.success(res, result, "medical History fetched successfully");
+    ApiResponse.success(res, result);
   };
 
   GetMedicalRecordWithDoctorInfoUseCase = async (req: Request, res: Response) => {
@@ -133,6 +135,6 @@ export class DoctorConsultationController {
 
     const response = MedicalRecordPrescriptionMapper.toPrescriptionViewResponse(result);
 
-    ApiResponse.success(res, response, "Medical record fetched successfully");
+    ApiResponse.success(res, response);
   };
 }

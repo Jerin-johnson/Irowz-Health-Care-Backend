@@ -1,8 +1,9 @@
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { ICancelAppointmentUseCase } from "../../../../domain/usecase/patient/Appointments/ICancelAppointmentUseCase";
 import { WalletRepository } from "../../../../infrastructure/repositories/WalletRepository";
 import { getDateOnly } from "../../../utils/getDayOnly";
 
-export class CancelAppointmentUseCase {
+export class CancelAppointmentUseCase implements ICancelAppointmentUseCase {
   constructor(
     private appointmentRepo: IDoctorAppointmentRepository,
     private walletRepo: WalletRepository
@@ -17,19 +18,38 @@ export class CancelAppointmentUseCase {
       throw new Error("Appointment cannot be cancelled");
     }
 
-    const bookingDate = getDateOnly(appointment.createdAt);
-    const today = getDateOnly(new Date());
+    const isAvailabilityAffected = appointment.availabilityAffected?.isAffected === true;
 
-    const isRefundAllowed = bookingDate === today;
+    let isRefundAllowed = false;
+
+    let refundAmount = 0;
+
+    if (isAvailabilityAffected) {
+      isRefundAllowed = true;
+      refundAmount = appointment.totalAmount;
+
+      appointment.cancelReason = "DOCTOR_AVAILABILITY_CHANGED";
+      appointment.cancelledBy = "SYSTEM";
+    } else {
+      // Normal patient cancellation rules
+      const bookingDate = getDateOnly(appointment.createdAt);
+      const today = getDateOnly(new Date());
+
+      isRefundAllowed = bookingDate === today;
+      refundAmount = isRefundAllowed ? appointment.totalAmount : 0;
+
+      appointment.cancelReason = "PATIENT_CANCELLED";
+      appointment.cancelledBy = "PATIENT";
+    }
+
+    console.log(refundAmount);
 
     appointment.status = "CANCELLED";
     appointment.cancelledAt = new Date();
-    appointment.cancelledBy = "PATIENT";
-    appointment.cancelReason = "PATIENT_CANCELLED";
 
     appointment.refundEligibility = {
       isRefundAllowed,
-      refundAmount: isRefundAllowed ? appointment.totalAmount : 0,
+      refundAmount: refundAmount,
       evaluatedAt: new Date(),
     };
 
@@ -45,7 +65,7 @@ export class CancelAppointmentUseCase {
       appointment.refund = {
         amount: appointment.totalAmount,
         refundedAt: new Date(),
-        reason: "Cancelled on booking day",
+        reason: appointment.cancelReason || "Cancelled on booking day",
       };
     }
 

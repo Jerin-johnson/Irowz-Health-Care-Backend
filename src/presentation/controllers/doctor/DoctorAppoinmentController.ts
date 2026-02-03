@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { GetDoctorAppoinmentQueueUsecase } from "../../../applications/usecases/doctor/appoinment/GetDoctorAppoinmentQueue.usecase";
 import { ApiResponse } from "../../utils/common.response.model";
-import { GetAppoinmentBYIdUseCase } from "../../../applications/usecases/doctor/appoinment/GetAppoinmentBYIdUseCase";
+import { IGetDoctorAppointmentQueueUseCase } from "../../../domain/usecase/doctor/appoinments/IGetDoctorAppointmentQueueUseCase";
+import { IGetAppointmentByIdUseCase } from "../../../domain/usecase/doctor/appoinments/IGetAppointmentByIdUseCase";
 
 export class DoctorAppointmentController {
   constructor(
-    private _GetDoctorAppoinmentQueueUsecase: GetDoctorAppoinmentQueueUsecase,
-    private _GetAppoinmentBYIdUseCase: GetAppoinmentBYIdUseCase
+    private _GetDoctorAppoinmentQueueUsecase: IGetDoctorAppointmentQueueUseCase,
+    private _GetAppoinmentBYIdUseCase: IGetAppointmentByIdUseCase
   ) {}
 
   getLiveQueue = async (req: Request, res: Response) => {
@@ -17,12 +17,11 @@ export class DoctorAppointmentController {
     const formattedDate = tomorrow.toISOString().slice(0, 10);
     const { date = formattedDate } = req.query;
 
-    console.log("THe date object is", date);
     const result = await this._GetDoctorAppoinmentQueueUsecase.execute(
       doctorId as string,
       date as string
     );
-    ApiResponse.success(res, result, "THis is the doctor live queque");
+    ApiResponse.success(res, result);
   };
 
   getAppointmentById = async (req: Request, res: Response) => {
@@ -30,6 +29,6 @@ export class DoctorAppointmentController {
 
     const result = await this._GetAppoinmentBYIdUseCase.execute(id);
 
-    ApiResponse.success(res, result, "Appoinment feched succesfull");
+    ApiResponse.success(res, result);
   };
 }

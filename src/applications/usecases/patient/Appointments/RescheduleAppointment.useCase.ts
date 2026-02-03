@@ -1,10 +1,11 @@
 import { IDoctorSlotLock } from "../../../../domain/lock/DoctorSlotLock";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { IRescheduleAppointmentUseCase } from "../../../../domain/usecase/patient/Appointments/IRescheduleAppointmentUseCase";
 import { timeToMinutes } from "../../../../domain/utils/time.utils";
 import { WalletRepository } from "../../../../infrastructure/repositories/WalletRepository";
 import { getDateOnly } from "../../../utils/getDayOnly";
 
-export class RescheduleAppointmentUseCase {
+export class RescheduleAppointmentUseCase implements IRescheduleAppointmentUseCase {
   constructor(
     private _appointmentRepo: IDoctorAppointmentRepository,
     private _walletRepo: WalletRepository,
@@ -26,11 +27,15 @@ export class RescheduleAppointmentUseCase {
       throw new Error("Cannot reschedule appointment");
     }
 
-    const bookingDate = getDateOnly(oldAppt.createdAt);
-    const today = getDateOnly(new Date());
+    const isAvailabilityAffected = oldAppt.availabilityAffected?.isAffected === true;
 
-    if (bookingDate !== today) {
-      throw new Error("Reschedule allowed only on booking day");
+    if (!isAvailabilityAffected) {
+      const bookingDate = getDateOnly(oldAppt.createdAt);
+      const today = getDateOnly(new Date());
+
+      if (bookingDate !== today) {
+        throw new Error("Reschedule allowed only on booking day");
+      }
     }
 
     console.log(
@@ -77,7 +82,11 @@ export class RescheduleAppointmentUseCase {
     // CANCEL old appointment
     oldAppt.status = "CANCELLED";
     oldAppt.cancelledAt = new Date();
-    oldAppt.cancelledBy = "PATIENT";
+    oldAppt.cancelledBy = isAvailabilityAffected ? "SYSTEM" : "PATIENT";
+    oldAppt.cancelReason = isAvailabilityAffected
+      ? "DOCTOR_AVAILABILITY_CHANGED"
+      : "PATIENT_RESCHEDULED";
+
     oldAppt.isRescheduleAppointment = true;
 
     oldAppt.refundEligibility = {
@@ -90,7 +99,7 @@ export class RescheduleAppointmentUseCase {
     oldAppt.refund = {
       amount: oldAppt.totalAmount,
       refundedAt: new Date(),
-      reason: "Rescheduled on booking day",
+      reason: oldAppt.cancelReason,
     };
 
     //  CREATE new appointment

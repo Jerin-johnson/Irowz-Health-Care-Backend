@@ -7,8 +7,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
   try {
     const authHeader = req.headers.authorization;
 
-    console.log("auth middleware", authHeader);
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(HttpStatusCode.UNAUTHORIZED).json({
         success: false,

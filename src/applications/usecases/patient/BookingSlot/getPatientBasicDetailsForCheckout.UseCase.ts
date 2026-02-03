@@ -10,6 +10,9 @@ export class GetPatientBasicDetailsForCheckoutUseCase {
 
   async execute(userId: string, doctorId: string) {
     const result = await this._userRepo.findById(userId);
+
+    if (!result) throw new Error("Cannot fectch patient details something went wrong");
+
     const mappedResultUser = userMapperForCheckout.toView(result);
     const doctor = await this._DoctorRepo.findById(doctorId);
     mappedResultUser.doctorPrice = doctor?.consultationFee;

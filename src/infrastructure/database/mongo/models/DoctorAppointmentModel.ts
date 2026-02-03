@@ -76,6 +76,12 @@ export interface DoctorAppointmentDocument extends Document {
   // who cancelled
   cancelledBy?: string;
 
+  availabilityAffected?: {
+    isAffected: boolean;
+    affectedAt: Date;
+    reason: string;
+  };
+
   // refund eligibility snapshot
   refundEligibility?: {
     isRefundAllowed: boolean;
@@ -196,6 +202,12 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
       evaluatedAt: Date,
     },
 
+    availabilityAffected: {
+      isAffected: Boolean,
+      affectedAt: Date,
+      reason: String,
+    },
+
     patientConfirmedNoRefund: Boolean,
     isRescheduleAppointment: Boolean,
 
@@ -209,7 +221,10 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
   { timestamps: true }
 );
 
-DoctorAppointmentSchema.index({ doctorId: 1, date: 1, startTime: 1 }, { unique: true });
+DoctorAppointmentSchema.index(
+  { doctorId: 1, date: 1, startTime: 1, patientId: 1 },
+  { unique: true }
+);
 
 DoctorAppointmentSchema.index({
   doctorId: 1,

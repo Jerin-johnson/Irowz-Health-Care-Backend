@@ -10,6 +10,7 @@ import { TOKENS } from "../../../DI/tsyringe/tokens";
 import { ApiResponse } from "../../utils/common.response.model";
 import { IResetPasswordUseCase } from "../../../domain/usecase/auth/IResetPasswordUseCase";
 import { IForgetPasswordUseCase } from "../../../domain/usecase/auth/IForgetPasswordUseCase";
+import { AuthConstants, AuthMessages } from "../../constants/message/auth/AuthMessages";
 
 @injectable()
 export class AuthController {
@@ -36,7 +37,7 @@ export class AuthController {
       allowedRoles
     );
 
-    res.cookie("refreshToken", result.refreshToken, {
+    res.cookie(AuthConstants.REFRESH_TOKEN, result.refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
@@ -59,7 +60,7 @@ export class AuthController {
 
   register = async (req: Request, res: Response) => {
     const result = await this._RegisterUseCase.execute(req.body);
-    return res.status(200).json({ success: true, ...result });
+    return res.status(HttpStatusCode.CREATED).json({ success: true, ...result });
   };
 
   verifyOtp = async (req: Request, res: Response) => {
@@ -72,11 +73,11 @@ export class AuthController {
     if (!userId || !email || !otp) {
       return res
         .status(HttpStatusCode.BAD_REQUEST)
-        .json({ success: false, message: "fields are missing" });
+        .json({ success: false, message: AuthMessages.FIELDS_MISSING });
     }
 
     const result = await this._VerfiyOtpUseCase.execute(userId, email, otp);
-    res.cookie("refreshToken", result.refreshToken, {
+    res.cookie(AuthConstants.REFRESH_TOKEN, result.refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
@@ -93,38 +94,38 @@ export class AuthController {
     const token = req.cookies.refreshToken as string;
 
     if (!token) {
-      return res.status(HttpStatusCode.UNAUTHORIZED).json({ message: "Unauthorized" });
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({ message: AuthMessages.UNAUTHORIZED });
     }
 
     const { refreshToken, accessToken, user } = await this._RefreshTokenUseCase.execute(token);
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie(AuthConstants.REFRESH_TOKEN, refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
     });
 
-    console.log("the access token is invoked", user);
     return res.json({ success: true, accessToken, user });
   };
 
   resendOtp = async (req: Request, res: Response) => {
     const { email } = req?.body as { email: string };
-    if (!email) throw new Error("The request is not valid");
+    if (!email) throw new Error(AuthMessages.INVALID_REQUEST);
+
     const result = await this._ResendOtpUseCase.execute(email);
     return res.json({ success: true, ...result });
   };
 
   logout = async (req: Request, res: Response) => {
-    res.clearCookie("refreshToken");
+    res.clearCookie(AuthConstants.REFRESH_TOKEN);
     return res
       .status(HttpStatusCode.OK)
-      .json({ success: true, message: "User logout successfully" });
+      .json({ success: true, message: AuthMessages.LOGOUT_SUCCESS });
   };
 
   forgetPassword = async (req: Request, res: Response) => {
     const email = req.body?.email;
-    if (!email) throw new Error("Invalid request");
+    if (!email) throw new Error(AuthMessages.INVALID_REQUEST);
 
     const result = await this._ForgetPasswordUseCase.execute(email);
 
@@ -134,7 +135,7 @@ export class AuthController {
   resetPassword = async (req: Request, res: Response) => {
     const { token, newPassword } = req.body;
 
-    if (!token || !newPassword) throw new Error("Invlaid request");
+    if (!token || !newPassword) throw new Error(AuthMessages.INVALID_REQUEST);
 
     const result = await this._ResetPasswordUseCase.execute(token, newPassword);
     return ApiResponse.success(res, result.role, result.message);

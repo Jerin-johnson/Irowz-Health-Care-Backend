@@ -6,13 +6,14 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { getCurrentISTMinutes, timeToMinutes } from "../../../../domain/utils/time.utils";
+import { IStartConsultationUseCase } from "../../../../domain/usecase/doctor/consultation/IStartConsultationUseCase";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const DELAY_THRESHOLD_MINUTES = 5;
 
-export class StartConsultationUseCase {
+export class StartConsultationUseCase implements IStartConsultationUseCase {
   constructor(
     private readonly _appointmentRepo: IDoctorAppointmentRepository,
     private readonly _availabilityRepo: IDoctorAvailabilityRepository,
@@ -151,9 +152,9 @@ export class StartConsultationUseCase {
       appointmentId: updated._id.toString(),
       status: updated.status,
       startedAt: updated.startedAt,
-      patientId: updated.patientId,
+      patientId: updated.patientId.toString(),
       patientName: updated.patientSnapshot.firstName,
-      medicalRecordId: medicalRecord._id,
+      medicalRecordId: medicalRecord._id.toString(),
     };
   }
 

@@ -1,4 +1,6 @@
-interface Transaction {
+import { Types } from "mongoose";
+
+export interface TransactionDto {
   _id?: string;
   amount: number;
   type: "CREDIT" | "DEBIT";
@@ -7,20 +9,34 @@ interface Transaction {
   createdAt: Date;
 }
 
-export interface Wallet {
+export interface WalletDto {
   balance: number;
-  transactions: Transaction[];
+  transactions: TransactionDto[];
 }
 
-export const toWalletDto = (wallet: Wallet) => {
+export interface WalletTransactionSource {
+  _id?: Types.ObjectId;
+  amount: number;
+  type: "CREDIT" | "DEBIT";
+  reason: string;
+  referenceId?: Types.ObjectId;
+  createdAt: Date;
+}
+
+export interface WalletSource {
+  balance: number;
+  transactions: WalletTransactionSource[];
+}
+
+export const toWalletDto = (wallet: WalletSource): WalletDto => {
   return {
     balance: wallet.balance,
-    transactions: wallet.transactions.map((t: any) => ({
-      _id: t._id,
+    transactions: wallet.transactions.map((t) => ({
+      _id: t._id?.toString(),
       amount: t.amount,
       type: t.type,
       reason: t.reason,
-      referenceId: t.referenceId,
+      referenceId: t.referenceId?.toString(),
       createdAt: t.createdAt,
     })),
   };

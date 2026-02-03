@@ -1,7 +1,8 @@
 // import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { IMedicalRecordRepository } from "../../../../domain/repositories/IMedicalRecordRepository";
+import { ISaveQuickNoteUseCase } from "../../../../domain/usecase/doctor/consultation/ISaveQuickNoteUseCase";
 
-export class SaveQuickNoteUseCase {
+export class SaveQuickNoteUseCase implements ISaveQuickNoteUseCase {
   constructor(
     private readonly _MedicalRepo: IMedicalRecordRepository
     // private readonly _DoctorAppointmentRepo: IDoctorAppointmentRepository

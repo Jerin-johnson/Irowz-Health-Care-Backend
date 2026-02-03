@@ -14,6 +14,9 @@ export class ApponintmentSuccessOrFailureUseCase implements IAppointmentSuccessO
     if (!result?.doctorId) throw new Error("DoctorId does exist wtf");
     const doctor = await this._DoctorRepo.findById(String(result?.doctorId));
 
+    if (!doctor)
+      throw new Error("something went wrong is doctorApponintmentSuccessOrFailureUseCase ");
+
     const { fullName, hospitalName, specialtyName } = DoctorProfileMapper.toView(doctor);
 
     return { ...result, doctorName: fullName, hospitalName, specialtyName };

@@ -26,6 +26,8 @@ export interface IDoctorAppointmentRepository {
 
   attachPaymentOrder(appointmentId: string, razorpayOrderId: string): Promise<void>;
 
+  findFutureBookedAppointments(doctorId: string): Promise<DoctorAppointmentDocument[]>;
+
   markPaid(params: { appointmentId: string; transactionId: string }): Promise<{
     doctorId: string;
     date: string;
@@ -65,4 +67,6 @@ export interface IDoctorAppointmentRepository {
   markNoShow(params: { appointmentId: string; newPriority: number; markedAt: Date }): Promise<void>;
 
   save(appointment: DoctorAppointmentDocument): Promise<DoctorAppointmentDocument>;
+
+  markAvailabilityAffected(appointmentIds: string[]): Promise<void>;
 }

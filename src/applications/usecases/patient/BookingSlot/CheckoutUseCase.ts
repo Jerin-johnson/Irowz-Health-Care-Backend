@@ -2,10 +2,11 @@ import { IDoctorSlotLock } from "../../../../domain/lock/DoctorSlotLock";
 import { IPaymentGateway } from "../../../../domain/payment/PaymentGateway";
 import { IDoctorRepository } from "../../../../domain/repositories/IDoctor.repo";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { ICheckoutUseCase } from "../../../../domain/usecase/patient/BookingSlots/ICheckoutUseCase";
 import { timeToMinutes } from "../../../../domain/utils/time.utils";
 import { CheckoutInput } from "../../../dtos/patient/CheckoutInput";
 
-export class CheckoutUseCase {
+export class CheckoutUseCase implements ICheckoutUseCase {
   constructor(
     private readonly _DoctorSlotLock: IDoctorSlotLock,
     private readonly _DoctorAppoinmentRepo: IDoctorAppointmentRepository,
@@ -51,11 +52,15 @@ export class CheckoutUseCase {
       const Doctor = await this._DoctorRepo.findById(doctorId);
       if (!Doctor) throw new Error("Doctor unavailable");
 
+      const hosptial = Doctor.hospitalId as {
+        _id: string;
+      };
+
       console.log("The Doctor is", Doctor);
 
       appointment = await this._DoctorAppoinmentRepo.create({
         doctorId,
-        hospitalId: String(Doctor.hospitalId._id) as string,
+        hospitalId: hosptial._id,
         patientId,
         date,
         startTime,

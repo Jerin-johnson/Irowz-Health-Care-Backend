@@ -249,4 +249,29 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
   save(appointment: DoctorAppointmentDocument) {
     return appointment.save();
   }
+
+  async findFutureBookedAppointments(doctorId: string): Promise<DoctorAppointmentDocument[]> {
+    const today = new Date().toISOString().slice(0, 10);
+
+    return DoctorAppointmentModel.find({
+      doctorId: new Types.ObjectId(doctorId),
+      date: { $gte: today },
+      status: "BOOKED",
+    }).exec();
+  }
+
+  async markAvailabilityAffected(appointmentIds: string[]): Promise<void> {
+    await DoctorAppointmentModel.updateMany(
+      { _id: { $in: appointmentIds.map((id) => new Types.ObjectId(id)) } },
+      {
+        $set: {
+          availabilityAffected: {
+            isAffected: true,
+            affectedAt: new Date(),
+            reason: "DOCTOR_AVAILABILITY_CHANGED",
+          },
+        },
+      }
+    );
+  }
 }

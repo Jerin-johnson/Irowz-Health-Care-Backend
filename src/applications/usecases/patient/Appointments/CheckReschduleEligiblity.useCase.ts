@@ -1,7 +1,8 @@
+import { ICheckRescheduleEligibilityUseCase } from "../../../../domain/usecase/patient/Appointments/ICheckRescheduleEligibilityUseCase";
 import { DoctorAppointmentRepository } from "../../../../infrastructure/repositories/DoctorAppointment.repository";
 import { getDateOnly } from "../../../utils/getDayOnly";
 
-export class CheckRescheduleEligibilityUseCase {
+export class CheckRescheduleEligibilityUseCase implements ICheckRescheduleEligibilityUseCase {
   constructor(private appointmentRepo: DoctorAppointmentRepository) {}
 
   async execute(appointmentId: string) {
@@ -17,6 +18,17 @@ export class CheckRescheduleEligibilityUseCase {
 
     if (["STARTED", "COMPLETED", "NO_SHOW"].includes(appt.status)) {
       return { canReschedule: false };
+    }
+
+    const isAvailabilityAffected = appt.availabilityAffected?.isAffected === true;
+
+    if (isAvailabilityAffected) {
+      return {
+        canReschedule: true,
+        refundAllowed: true,
+        refundAmount: appt.totalAmount,
+        reason: "DOCTOR_AVAILABILITY_CHANGED",
+      };
     }
 
     const bookingDate = getDateOnly(appt.createdAt);

@@ -71,6 +71,6 @@ export class HospitalVerficationController {
       verificationId,
     });
 
-    return res.status(200).json({ success: true, ...result });
+    return res.status(HttpStatusCode.OK).json({ success: true, ...result });
   };
 }

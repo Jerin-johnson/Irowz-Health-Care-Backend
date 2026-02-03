@@ -1,25 +1,23 @@
-import { GetAvailableSpecialityUseCase } from "../../../applications/usecases/patient/DoctorListing/GetAvailbaleSpecialty.useCase";
 import { Request, Response } from "express";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 import { DoctorSearchQueryDTO } from "../../../applications/dtos/patient/doctor.search.Dto";
 import { Types } from "mongoose";
-import { DoctorSearchUseCase } from "../../../applications/usecases/patient/DoctorListing/DoctorSearch.UseCase";
-import { GetDoctorProfileUseCase } from "../../../applications/usecases/patient/DoctorListing/GetDoctorProfile";
+import { IGetAvailableSpecialityUseCase } from "../../../domain/usecase/patient/DoctorListing/IGetAvailableSpecialityUseCase";
+import { IDoctorSearchUseCase } from "../../../domain/usecase/patient/DoctorListing/IDoctorSearchUseCase";
+import { IGetDoctorProfileUseCase } from "../../../domain/usecase/doctor/doctorProfile/IGetDoctorProfileUseCase.usecase";
 export class DoctorListingController {
   constructor(
-    private readonly _GetAvailableSpecialityUseCase: GetAvailableSpecialityUseCase,
-    private readonly _DoctorSearchUseCase: DoctorSearchUseCase,
-    private readonly _GetDoctorProfileUseCase: GetDoctorProfileUseCase
+    private readonly _GetAvailableSpecialityUseCase: IGetAvailableSpecialityUseCase,
+    private readonly _DoctorSearchUseCase: IDoctorSearchUseCase,
+    private readonly _GetDoctorProfileUseCase: IGetDoctorProfileUseCase
   ) {}
 
   getAllSpeciality = async (req: Request, res: Response) => {
-    console.log("is this called and what is the isseu");
     const result = await this._GetAvailableSpecialityUseCase.execute();
     res.status(HttpStatusCode.OK).json({ success: true, data: result });
   };
 
   searchDoctors = async (req: Request, res: Response) => {
-    console.log("The request query is", req.query);
     const query: DoctorSearchQueryDTO = {
       search: req.query.search as string | undefined,
       specialtyId: req.query.specialtyId
@@ -38,7 +36,7 @@ export class DoctorListingController {
 
     console.log(result);
 
-    res.status(200).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       data: result,
     });
@@ -46,9 +44,8 @@ export class DoctorListingController {
 
   getDoctorProfile = async (req: Request, res: Response) => {
     const id = req.params.id;
-    console.log("hai");
     const result = await this._GetDoctorProfileUseCase.execute(id);
-    res.status(200).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       data: result,
     });

@@ -1,6 +1,7 @@
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { IGetDoctorAppointmentQueueUseCase } from "../../../../domain/usecase/doctor/appoinments/IGetDoctorAppointmentQueueUseCase";
 
-export class GetDoctorAppoinmentQueueUsecase {
+export class GetDoctorAppoinmentQueueUsecase implements IGetDoctorAppointmentQueueUseCase {
   constructor(private readonly _DoctorAppoinmentRepo: IDoctorAppointmentRepository) {}
 
   async execute(doctorId: string, date: string) {
@@ -38,7 +39,7 @@ export class GetDoctorAppoinmentQueueUsecase {
     const next = current ? null : (waitingQueue[0] ?? null);
 
     const list = appointments.map((a) => ({
-      appointmentId: a._id,
+      appointmentId: a._id.toString(),
       startTime: a.startTime,
       patientName: `${a.patientSnapshot.firstName} ${a.patientSnapshot.lastName}`,
       visitType: a.visitType,
@@ -47,8 +48,8 @@ export class GetDoctorAppoinmentQueueUsecase {
     }));
 
     return {
-      currentAppointmentId: current?._id ?? null,
-      nextAppointmentId: next?._id ?? null,
+      currentAppointmentId: current?._id.toString() ?? null,
+      nextAppointmentId: next?._id.toString() ?? null,
       stats,
       appointments: list,
     };

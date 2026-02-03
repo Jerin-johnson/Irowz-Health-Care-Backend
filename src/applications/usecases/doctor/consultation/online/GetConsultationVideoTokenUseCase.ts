@@ -2,9 +2,10 @@ import { IConsultationRepository } from "../../../../../domain/repositories/ICon
 import { IUserRepository } from "../../../../../domain/repositories/IUser.repo";
 // import { generateZegoToken04 } from "../../../../../infrastructure/services/zegoToken.service";
 import dotenv from "dotenv";
+import { IGetConsultationVideoTokenDoctorUseCase } from "../../../../../domain/usecase/doctor/consultation/online/IGetConsultationVideoTokenDoctorUseCase";
 dotenv.config();
 
-export class GetConsultationVideoTokenDoctorUseCase {
+export class GetConsultationVideoTokenDoctorUseCase implements IGetConsultationVideoTokenDoctorUseCase {
   constructor(
     private readonly _consultationRepo: IConsultationRepository,
     private readonly _IUserRepo: IUserRepository
@@ -30,7 +31,7 @@ export class GetConsultationVideoTokenDoctorUseCase {
     return {
       // token,
       roomId: consultation.roomId,
-      userId: doctorId,
+      userId: doctorId as string,
       userName: "DOCTOR",
     };
   }

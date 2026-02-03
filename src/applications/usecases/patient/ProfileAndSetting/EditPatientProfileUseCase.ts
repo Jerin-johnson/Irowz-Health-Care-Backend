@@ -3,6 +3,7 @@ import { IPatientProfileRepository } from "../../../../domain/repositories/IPati
 import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
 import { IImageProcessor } from "../../../../domain/services/ImageProcess.service";
 import { IFileStorage } from "../../../../domain/storage/IFile.storage";
+import { IEditPatientProfileUseCase } from "../../../../domain/usecase/patient/Profile&settings/IEditPatientProfileUseCase";
 
 export interface PatientProfileInputDTO {
   fullName: string;
@@ -20,7 +21,7 @@ export interface PatientProfileInputDTO {
   chronicConditions?: [string];
 }
 
-export class EditPatientProfileUseCase {
+export class EditPatientProfileUseCase implements IEditPatientProfileUseCase {
   constructor(
     private readonly _UserRepo: IUserRepository,
     private readonly _PatientProfileRepositry: IPatientProfileRepository,

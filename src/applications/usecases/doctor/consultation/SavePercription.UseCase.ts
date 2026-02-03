@@ -1,7 +1,8 @@
 import { IMedicalRecordRepository } from "../../../../domain/repositories/IMedicalRecordRepository";
+import { IUpdateMedicalRecordPercriptionUseCase } from "../../../../domain/usecase/doctor/consultation/IUpdateMedicalRecordPercriptionUseCase";
 import { UpdateMedicalRecordInput } from "../../../dtos/doctor/PercritpitonDto";
 
-export class UpdateMedicalRecordPercriptionUseCase {
+export class UpdateMedicalRecordPercriptionUseCase implements IUpdateMedicalRecordPercriptionUseCase {
   constructor(private readonly _MedicalRecordRepo: IMedicalRecordRepository) {}
 
   async execute(input: UpdateMedicalRecordInput) {

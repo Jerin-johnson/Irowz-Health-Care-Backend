@@ -1,7 +1,8 @@
 import { IDoctorSlotLock } from "../../../../domain/lock/DoctorSlotLock";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { IBlockDoctorSlotUseCase } from "../../../../domain/usecase/doctor/schudele/IBlockDoctorSlotUseCase";
 
-export class BlockDoctorSlotUseCase {
+export class BlockDoctorSlotUseCase implements IBlockDoctorSlotUseCase {
   constructor(
     private readonly _slotLock: IDoctorSlotLock,
     private readonly _appointmentRepo: IDoctorAppointmentRepository

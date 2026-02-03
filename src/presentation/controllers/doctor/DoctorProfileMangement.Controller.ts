@@ -4,6 +4,7 @@ import { IGetDoctorProfileUseCase } from "../../../domain/usecase/doctor/doctorP
 import { IResetDoctorPasswordUseCase } from "../../../domain/usecase/doctor/doctorProfile/IResetDoctorPasswordUseCase.usecase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 import { EditDoctorProfileUseCase } from "../../../applications/usecases/doctor/doctorProfile/EditDoctorProfile.UseCase";
+import { CommonMessages } from "../../constants/message/CommonMessages";
 
 export class DoctorProfileMangementController {
   constructor(
@@ -28,7 +29,7 @@ export class DoctorProfileMangementController {
     const newPassword = req.body?.newPassword;
     const currentPassword = req.body?.currentPassword;
 
-    if (!newPassword || !currentPassword) throw new Error("Fields are missing invalid request");
+    if (!newPassword || !currentPassword) throw new Error(CommonMessages.FIELDS_MISSING);
 
     const result = await this._ResetDoctorPassword.execute(
       userId as string,

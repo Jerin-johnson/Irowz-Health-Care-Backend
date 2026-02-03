@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { RespondConsultationUseCase } from "../../../applications/usecases/patient/consultation/RespondConsultationUseCase";
 import { ApiResponse } from "../../utils/common.response.model";
-import { GetConsultationVideoTokenPatientUseCase } from "../../../applications/usecases/patient/consultation/GetConsultationVideoTokenPatient";
+import { IRespondConsultationUseCase } from "../../../domain/usecase/patient/consultation/IRespondConsultationUseCase";
+import { IGetConsultationVideoTokenPatientUseCase } from "../../../domain/usecase/patient/consultation/IGetConsultationVideoTokenPatientUseCase";
 
 export class PatientOnlineConsultationController {
   constructor(
-    private readonly _RespondConsultationUseCase: RespondConsultationUseCase,
-    private readonly _GetConsultationVideoTokenDoctorUseCase: GetConsultationVideoTokenPatientUseCase
+    private readonly _RespondConsultationUseCase: IRespondConsultationUseCase,
+    private readonly _GetConsultationVideoTokenDoctorUseCase: IGetConsultationVideoTokenPatientUseCase
   ) {}
 
   RespondToCall = async (req: Request, res: Response) => {

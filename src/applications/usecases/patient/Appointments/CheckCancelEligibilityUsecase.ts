@@ -1,7 +1,8 @@
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { ICheckCancelEligibilityUseCase } from "../../../../domain/usecase/patient/Appointments/ICheckCancelEligibilityUseCase";
 import { getDateOnly } from "../../../utils/getDayOnly";
 
-export class CheckCancelEligibilityUseCase {
+export class CheckCancelEligibilityUseCase implements ICheckCancelEligibilityUseCase {
   constructor(private _appointmentRepo: IDoctorAppointmentRepository) {}
 
   async execute(appointmentId: string) {
@@ -10,7 +11,18 @@ export class CheckCancelEligibilityUseCase {
     if (!appointment) throw new Error("Appointment not found");
 
     if (["STARTED", "COMPLETED", "NO_SHOW"].includes(appointment.status)) {
-      return { canCancel: false };
+      return { canCancel: false } as const;
+    }
+
+    const isAvailabilityAffected = appointment.availabilityAffected?.isAffected === true;
+
+    if (isAvailabilityAffected) {
+      return {
+        canCancel: true,
+        isRefundAllowed: true,
+        refundAmount: appointment.totalAmount,
+        reason: "DOCTOR_AVAILABILITY_CHANGED",
+      } as const;
     }
 
     const bookingDate = getDateOnly(appointment.createdAt);
@@ -22,6 +34,6 @@ export class CheckCancelEligibilityUseCase {
       canCancel: true,
       isRefundAllowed,
       refundAmount: isRefundAllowed ? appointment.totalAmount : 0,
-    };
+    } as const;
   }
 }

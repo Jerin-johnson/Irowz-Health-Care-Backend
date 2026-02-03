@@ -1,6 +1,7 @@
 import { IMedicalRecordRepository } from "../../../../domain/repositories/IMedicalRecordRepository";
+import { IGetMedicalRecordWithDoctorInfoUseCase } from "../../../../domain/usecase/doctor/consultation/IMedicalRecordRepository";
 
-export class GetMedicalRecordWithDoctorInfoUseCase {
+export class GetMedicalRecordWithDoctorInfoUseCase implements IGetMedicalRecordWithDoctorInfoUseCase {
   constructor(private readonly _medicalRecordRepository: IMedicalRecordRepository) {}
 
   async execute(recordId: string) {

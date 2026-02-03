@@ -1,7 +1,8 @@
 import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IHospitalSpecaility.repo";
+import { IGetAvailableSpecialityUseCase } from "../../../../domain/usecase/patient/DoctorListing/IGetAvailableSpecialityUseCase";
 import { RedisDoctorSpecialityCache } from "../../../../infrastructure/cache/RedisDoctorSpecialityCache";
 
-export class GetAvailableSpecialityUseCase {
+export class GetAvailableSpecialityUseCase implements IGetAvailableSpecialityUseCase {
   constructor(
     private readonly _HospitalSpecialty: IHospitalSpecialtyRepository,
     private readonly _RedisDoctorSpecialityCache: RedisDoctorSpecialityCache

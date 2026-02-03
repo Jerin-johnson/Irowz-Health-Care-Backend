@@ -1,6 +1,6 @@
 import { IConsultationRepository } from "../../../../../domain/repositories/IConsultationRepository";
 
-export class GetActiveDoctorOnlineConsultationUseCase {
+export class GetActiveDoctorOnlineConsultationUseCase implements GetActiveDoctorOnlineConsultationUseCase {
   constructor(private readonly _consultationRepo: IConsultationRepository) {}
 
   async execute(doctorId: string) {

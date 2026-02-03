@@ -2,8 +2,9 @@ import { IDoctorSlotCache } from "../../../../domain/cache/DoctorSlot.cache";
 import { DomainEventPublisher } from "../../../../domain/events/event";
 import { IPaymentGateway } from "../../../../domain/payment/PaymentGateway";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
+import { IHandleVerifyPayment } from "../../../../domain/usecase/patient/BookingSlots/IHandleVerifyPayment";
 
-export class HandleVerifyPayment {
+export class HandleVerifyPayment implements IHandleVerifyPayment {
   constructor(
     private readonly _paymentGateway: IPaymentGateway,
     private readonly _appointmentRepo: IDoctorAppointmentRepository,

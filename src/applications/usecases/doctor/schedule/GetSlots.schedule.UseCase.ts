@@ -2,6 +2,7 @@ import { IDoctorSlotLock } from "../../../../domain/lock/DoctorSlotLock";
 import { IDoctorAvailabilityRepository } from "../../../../domain/repositories/IDoctorAvailabilityRepository";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { DoctorAvailabilityEngine } from "../../../../domain/services/DoctorAvailabilityEngine.service";
+import { IGetSlotsScheduleUseCase } from "../../../../domain/usecase/doctor/schudele/IGetSlotsScheduleUseCase";
 
 export interface DoctorSchudleSlot {
   startTime: string;
@@ -22,7 +23,7 @@ const isPastDate = (date: string): boolean => {
   return target.getTime() < today.getTime();
 };
 
-export class GetSlotsScheduleUseCase {
+export class GetSlotsScheduleUseCase implements IGetSlotsScheduleUseCase {
   constructor(
     private readonly _DoctorAvailbilityRepo: IDoctorAvailabilityRepository,
     private readonly _DoctorAppointmentRepo: IDoctorAppointmentRepository,

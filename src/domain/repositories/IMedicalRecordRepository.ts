@@ -1,5 +1,6 @@
 import { ObjectId } from "mongoose";
 import { MedicalRecordDocument } from "../../infrastructure/database/mongo/models/MedicalRecord.model";
+import { DoctorInfo } from "../usecase/doctor/consultation/IMedicalRecordRepository";
 
 export interface FindMedicalRecordsQuery {
   patientId: string;
@@ -10,8 +11,25 @@ export interface FindMedicalRecordsQuery {
   limit: number;
 }
 
+export interface MedicalRecordPopulated {
+  _id: ObjectId | string;
+  visitDate: Date;
+  diagnosisSummary?: string;
+  visitType: string;
+
+  doctorId?: {
+    userId?: {
+      name?: string;
+    };
+  };
+
+  hospitalId?: {
+    name?: string;
+  };
+}
+
 export interface PaginatedMedicalRecords {
-  data: MedicalRecordDocument[];
+  data: MedicalRecordPopulated[];
   total: number;
 }
 
@@ -80,6 +98,6 @@ export interface IMedicalRecordRepository {
 
   findMedicalRecordWithDoctorAndHospital(recordId: string): Promise<{
     medicalRecord: MedicalRecordDocument;
-    doctorInfo: any;
+    doctorInfo: DoctorInfo;
   } | null>;
 }

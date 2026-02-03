@@ -1,5 +1,8 @@
+import { Types } from "mongoose";
+import { DoctorLean } from "../../../infrastructure/database/mongo/models/Doctor.model";
+
 export interface DoctorProfileViewDTO {
-  id: string;
+  id: string | Types.ObjectId;
 
   fullName: string;
   email: string;
@@ -19,10 +22,10 @@ export interface DoctorProfileViewDTO {
 }
 
 export class DoctorProfileMapper {
-  static toView(dto: any): DoctorProfileViewDTO {
+  static toView(dto: DoctorLean): DoctorProfileViewDTO {
     console.log(dto);
     return {
-      id: dto._id,
+      id: String(dto._id),
 
       fullName: dto.userId.name,
       email: dto.userId.email,

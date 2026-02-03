@@ -11,12 +11,15 @@ import { GetConsultationVideoTokenDoctorUseCase } from "../applications/usecases
 import { UpdateMedicalRecordPercriptionUseCase } from "../applications/usecases/doctor/consultation/SavePercription.UseCase";
 import { SaveQuickNoteUseCase } from "../applications/usecases/doctor/consultation/SaveQuickNoteUseCase";
 import { StartConsultationUseCase } from "../applications/usecases/doctor/consultation/StartConsultation.UseCase";
+import { CheckDoctorAvailabilityUseCase } from "../applications/usecases/doctor/doctorAvailability/CheckDoctorAvailbiltyConfict.UseCase";
+import { ConfirmDoctorAvailabilityChangeUseCase } from "../applications/usecases/doctor/doctorAvailability/ConfirmDoctorAvailabilityChangeUseCase";
 import { UpsertDoctorAvailabilityUseCase } from "../applications/usecases/doctor/doctorAvailability/DoctorAvailabilityController";
 import { EditDoctorProfileUseCase } from "../applications/usecases/doctor/doctorProfile/EditDoctorProfile.UseCase";
 import { GetDoctorProfileUseCase } from "../applications/usecases/doctor/doctorProfile/GetDoctorProfile.UseCase";
 import { ResetDoctorPasswordUseCase } from "../applications/usecases/doctor/doctorProfile/ResetPassword.UseCase";
 import { BlockDoctorSlotUseCase } from "../applications/usecases/doctor/schedule/BlockSlots.Schedule.useCase";
 import { GetSlotsScheduleUseCase } from "../applications/usecases/doctor/schedule/GetSlots.schedule.UseCase";
+import { notificationRepo } from "../infrastructure/realTIme/realtimeConsumer";
 import { DoctorAppointmentController } from "../presentation/controllers/doctor/DoctorAppoinmentController";
 import { DoctorAvailabilityController } from "../presentation/controllers/doctor/DoctorAvailabilityController";
 import { DoctorConsultationController } from "../presentation/controllers/doctor/DoctorConsultation.Controller";
@@ -56,8 +59,21 @@ const upsertDoctorAvailabilityUseCase = new UpsertDoctorAvailabilityUseCase(
   doctorAvailabilityRepository
 );
 
+const confirmDoctorAvailabilityChangeUseCase = new ConfirmDoctorAvailabilityChangeUseCase(
+  doctorAvailabilityRepository,
+  doctorAppointmentRepository,
+  notificationRepo,
+  realtimePublisher
+);
+
+const checkDoctorAvailabilityUseCase = new CheckDoctorAvailabilityUseCase(
+  doctorAppointmentRepository
+);
+
 const doctorAvailabilityController = new DoctorAvailabilityController(
-  upsertDoctorAvailabilityUseCase
+  upsertDoctorAvailabilityUseCase,
+  confirmDoctorAvailabilityChangeUseCase,
+  checkDoctorAvailabilityUseCase
 );
 
 const getSlotsScheduleUseCase = new GetSlotsScheduleUseCase(

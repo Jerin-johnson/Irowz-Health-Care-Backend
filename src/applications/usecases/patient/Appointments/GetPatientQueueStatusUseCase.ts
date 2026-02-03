@@ -1,5 +1,8 @@
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { IDoctorAvailabilityRepository } from "../../../../domain/repositories/IDoctorAvailabilityRepository";
+import { IGetPatientQueueStatusUseCase } from "../../../../domain/usecase/patient/Appointments/IGetPatientQueueStatusUseCase";
+
+// import { IGetPatientQueueStatusUseCase } from "../../../../domain/usecase/patient/Appointments/IGetPatientQueueStatusUseCase";
 import { timeToMinutes } from "../../../../domain/utils/time.utils";
 
 // type PatientState =
@@ -17,7 +20,7 @@ function getTodayDay(): "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN" {
 
 type DoctorStatus = "NOT_STARTED" | "CONSULTING" | "ON_LUNCH_BREAK";
 
-export class GetPatientQueueStatusUseCase {
+export class GetPatientQueueStatusUseCase implements IGetPatientQueueStatusUseCase {
   constructor(
     private readonly availabilityRepo: IDoctorAvailabilityRepository,
     private readonly appointmentRepo: IDoctorAppointmentRepository
@@ -31,9 +34,12 @@ export class GetPatientQueueStatusUseCase {
       return {
         appointmentId,
         status: appointment.status,
+        queuePosition: null,
+        patientsAhead: null,
+        estimatedWaitMinutes: null,
         patientState: "NOT_IN_QUEUE",
         message: "Live queue available only on appointment day",
-      };
+      } as const;
     }
 
     if (["COMPLETED", "CANCELLED", "NO_SHOW"].includes(String(appointment?.status))) {
@@ -44,7 +50,7 @@ export class GetPatientQueueStatusUseCase {
         queuePosition: null,
         patientsAhead: null,
         estimatedWaitMinutes: null,
-      };
+      } as const;
     }
 
     const availability = await this.availabilityRepo.findByDoctorId(String(appointment.doctorId));
@@ -70,7 +76,7 @@ export class GetPatientQueueStatusUseCase {
         queuePosition: 0,
         patientsAhead: 0,
         estimatedWaitMinutes: 0,
-      };
+      } as const;
     }
 
     const index = waitingQueue.findIndex((a) => String(a._id) === appointmentId);
@@ -83,7 +89,7 @@ export class GetPatientQueueStatusUseCase {
         queuePosition: null,
         patientsAhead: null,
         estimatedWaitMinutes: null,
-      };
+      } as const;
     }
 
     const queuePosition = index + 1;
@@ -100,7 +106,7 @@ export class GetPatientQueueStatusUseCase {
         patientsAhead,
         estimatedWaitMinutes: null,
         message: "Doctor has not started consultations yet",
-      };
+      } as const;
     }
 
     // ---- ETA calculation ----
@@ -153,7 +159,7 @@ export class GetPatientQueueStatusUseCase {
         name: appointment.patientSnapshot?.firstName,
         appointmentDate: appointment.date,
         appointmentTime: appointment.startTime,
-      },
+      } as const,
     };
   }
 }

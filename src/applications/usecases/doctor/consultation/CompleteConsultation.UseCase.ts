@@ -1,7 +1,8 @@
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { IMedicalRecordRepository } from "../../../../domain/repositories/IMedicalRecordRepository";
+import { ICompleteConsultationUseCase } from "../../../../domain/usecase/doctor/consultation/ICompleteConsultationUseCase";
 
-export class CompleteConsultationUseCase {
+export class CompleteConsultationUseCase implements ICompleteConsultationUseCase {
   constructor(
     private readonly _DoctorAppointmentRepo: IDoctorAppointmentRepository,
     private readonly _MedicalRecordRepo: IMedicalRecordRepository

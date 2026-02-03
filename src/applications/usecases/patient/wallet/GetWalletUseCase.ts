@@ -1,11 +1,11 @@
-import { Wallet } from "../../../../domain/types/Wallet";
+import { IGetWalletUseCase } from "../../../../domain/usecase/patient/wallet/IGetWalletUseCase";
 import { WalletRepository } from "../../../../infrastructure/repositories/WalletRepository";
-import { toWalletDto } from "../../../dtos/patient/Wallet";
+import { toWalletDto, WalletDto, WalletSource } from "../../../dtos/patient/Wallet";
 
-export class GetWalletUseCase {
+export class GetWalletUseCase implements IGetWalletUseCase {
   constructor(private _walletRepository: WalletRepository) {}
 
-  async execute(userId: string) {
+  async execute(userId: string): Promise<WalletDto> {
     const wallet = await this._walletRepository.findByUserId(userId);
 
     if (!wallet) {
@@ -17,6 +17,6 @@ export class GetWalletUseCase {
 
     console.log("The wallet is", wallet);
 
-    return toWalletDto(wallet as Wallet);
+    return toWalletDto(wallet as WalletSource);
   }
 }

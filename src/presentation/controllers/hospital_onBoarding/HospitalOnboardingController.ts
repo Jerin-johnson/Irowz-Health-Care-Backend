@@ -3,6 +3,9 @@ import { ISubmitHospitalVerificationRequestUseCase } from "../../../domain/useca
 import { ResubmitHospitalVerificationUseCase } from "../../../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
 import { ICheckHospitalVerificationStatusByIdUseCase } from "../../../domain/usecase/hospitalOnBoarding/ICheckHospitalVerificationStatusById.usecase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
+import { ApiResponse } from "../../utils/common.response.model";
+import { CommonMessages } from "../../constants/message/CommonMessages";
+import { HospitalOnboardingMessages } from "../../constants/message/HospitalOnboardingMessages";
 
 export class HospitalOnBoradingController {
   constructor(
@@ -15,7 +18,9 @@ export class HospitalOnBoradingController {
     const { body, file } = req;
 
     if (!file) {
-      return res.status(400).json({ message: "License PDF required" });
+      return res
+        .status(HttpStatusCode.BAD_REQUEST)
+        .json({ message: HospitalOnboardingMessages.LICENSE_PDF_REQUIRED });
     }
     const result = await this.SubmitHospitalVerificationUseCase.execute({
       ...body,
@@ -26,7 +31,7 @@ export class HospitalOnBoradingController {
     return res.json({
       success: true,
       ...result,
-      message: "Hospital registration submitted",
+      message: HospitalOnboardingMessages.VERIFICATION_SUBMITTED,
     });
   };
 
@@ -35,7 +40,11 @@ export class HospitalOnBoradingController {
     const verficationId = req.params.id;
 
     if (!file) {
-      return res.status(400).json({ message: "License PDF required" });
+      return ApiResponse.error(
+        res,
+        HospitalOnboardingMessages.LICENSE_PDF_REQUIRED,
+        HttpStatusCode.BAD_REQUEST
+      );
     }
 
     const result = this.ResubmitHospitalVerificationUseCase.execute(verficationId, {
@@ -50,7 +59,7 @@ export class HospitalOnBoradingController {
     const { id } = req.params;
 
     if (!id) {
-      return res.status(HttpStatusCode.BAD_GATEWAY).json("The request is invalid");
+      return ApiResponse.error(res, CommonMessages.INVALID_REQUEST, HttpStatusCode.BAD_REQUEST);
     }
     const result = await this.checkStatusBYId.execute(id);
 

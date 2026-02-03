@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { IDoctorRepository } from "../../domain/repositories/IDoctor.repo";
-import { DoctorDocument, DoctorModel } from "../database/mongo/models/Doctor.model";
+import { DoctorDocument, DoctorLean, DoctorModel } from "../database/mongo/models/Doctor.model";
 
 export class DoctorRepositoryImpl implements IDoctorRepository {
   async create(data: Partial<DoctorDocument>): Promise<DoctorDocument> {
@@ -25,8 +25,8 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
   //     .populate("specialtyId");
   // }
 
-  async findById(doctorId: string): Promise<DoctorDocument | null> {
-    return await DoctorModel.findById(doctorId)
+  async findById(doctorId: string): Promise<DoctorLean | null> {
+    return (await DoctorModel.findById(doctorId)
       .select(
         "userId hospitalId specialtyId location experienceYears consultationFee bio medicalRegistrationNumber medicalCouncil teleConsultationEnabled averageRating totalReviews isActive createdAt"
       )
@@ -39,7 +39,7 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
         select: "name description",
       })
       .populate({ path: "userId", select: "name email phone profileImage" })
-      .lean();
+      .lean()) as DoctorLean | null;
   }
 
   async findByUserId(userId: string): Promise<DoctorDocument | null> {

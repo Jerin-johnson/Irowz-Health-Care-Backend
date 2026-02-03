@@ -1,5 +1,6 @@
 import { IDoctorAvailabilityRepository } from "../../../../domain/repositories/IDoctorAvailabilityRepository";
 import { IDoctorSearchRepository } from "../../../../domain/repositories/IDoctorSearchRepo";
+import { IDoctorSearchUseCase } from "../../../../domain/usecase/patient/DoctorListing/IDoctorSearchUseCase";
 import {
   DoctorSearchQueryDTO,
   DoctorSearchResponseDTO,
@@ -7,7 +8,7 @@ import {
 
 const DAY_ORDER = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-export class DoctorSearchUseCase {
+export class DoctorSearchUseCase implements IDoctorSearchUseCase {
   constructor(
     private readonly _searchRepo: IDoctorSearchRepository,
     private readonly _availabilityRepo: IDoctorAvailabilityRepository

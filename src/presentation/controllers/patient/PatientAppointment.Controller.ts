@@ -1,21 +1,22 @@
-import { GetPatientQueueStatusUseCase } from "../../../applications/usecases/patient/Appointments/GetPatientQueueStatusUseCase";
 import { Request, Response } from "express";
 import { ApiResponse } from "../../utils/common.response.model";
-import { GetPatientAppointmentsUseCase } from "../../../applications/usecases/patient/Appointments/GetAppointment.UseCase";
 import { mapAppointmentToResponse } from "../../../applications/dtos/patient/Appointment";
-import { CancelAppointmentUseCase } from "../../../applications/usecases/patient/Appointments/CancelAppointment.useCase";
-import { CheckCancelEligibilityUseCase } from "../../../applications/usecases/patient/Appointments/CheckCancelEligibilityUsecase";
-import { CheckRescheduleEligibilityUseCase } from "../../../applications/usecases/patient/Appointments/CheckReschduleEligiblity.useCase";
-import { RescheduleAppointmentUseCase } from "../../../applications/usecases/patient/Appointments/RescheduleAppointment.useCase";
+import { IGetPatientQueueStatusUseCase } from "../../../domain/usecase/patient/Appointments/IGetPatientQueueStatusUseCase";
+import { IGetPatientAppointmentsUseCase } from "../../../domain/usecase/patient/Appointments/IGetPatientAppointmentsUseCase";
+import { ICancelAppointmentUseCase } from "../../../domain/usecase/patient/Appointments/ICancelAppointmentUseCase";
+import { ICheckCancelEligibilityUseCase } from "../../../domain/usecase/patient/Appointments/ICheckCancelEligibilityUseCase";
+import { ICheckRescheduleEligibilityUseCase } from "../../../domain/usecase/patient/Appointments/ICheckRescheduleEligibilityUseCase";
+import { IRescheduleAppointmentUseCase } from "../../../domain/usecase/patient/Appointments/IRescheduleAppointmentUseCase";
+import { PatientMessages } from "../../constants/message/Patient.message";
 
 export class PatientAppointmentController {
   constructor(
-    private readonly _GetPatientQueueStatusUseCase: GetPatientQueueStatusUseCase,
-    private readonly _GetPatientAppointmentsUseCase: GetPatientAppointmentsUseCase,
-    private readonly _CancelAppointmentUseCase: CancelAppointmentUseCase,
-    private readonly _CheckCancelEligibilityUseCase: CheckCancelEligibilityUseCase,
-    private readonly _CheckRescheduleEligibilityUseCase: CheckRescheduleEligibilityUseCase,
-    private readonly _RescheduleAppointmentUseCase: RescheduleAppointmentUseCase
+    private readonly _GetPatientQueueStatusUseCase: IGetPatientQueueStatusUseCase,
+    private readonly _GetPatientAppointmentsUseCase: IGetPatientAppointmentsUseCase,
+    private readonly _CancelAppointmentUseCase: ICancelAppointmentUseCase,
+    private readonly _CheckCancelEligibilityUseCase: ICheckCancelEligibilityUseCase,
+    private readonly _CheckRescheduleEligibilityUseCase: ICheckRescheduleEligibilityUseCase,
+    private readonly _RescheduleAppointmentUseCase: IRescheduleAppointmentUseCase
   ) {}
 
   getLiveQueue = async (req: Request, res: Response) => {
@@ -27,7 +28,7 @@ export class PatientAppointmentController {
 
     const result = await this._GetPatientQueueStatusUseCase.execute(appointmentId, formattedDate);
 
-    return ApiResponse.success(res, result, "Live queue status");
+    return ApiResponse.success(res, result, PatientMessages.LIVE_QUEUE_STATUS);
   };
 
   getAppointments = async (req: Request, res: Response) => {
@@ -43,12 +44,10 @@ export class PatientAppointmentController {
       limit: Number(limit),
     });
 
-    console.log("the result", result);
-
     return ApiResponse.success(
       res,
       { data: result.data.map(mapAppointmentToResponse), total: result.total },
-      "Patient Appointment fetched successfully"
+      PatientMessages.APPOINTMENTS_FETCHED
     );
   };
 

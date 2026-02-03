@@ -1,7 +1,8 @@
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { AppointmentFilterDTO } from "../../../../domain/types/DoctorAppointment";
+import { IGetPatientAppointmentsUseCase } from "../../../../domain/usecase/patient/Appointments/IGetPatientAppointmentsUseCase";
 
-export class GetPatientAppointmentsUseCase {
+export class GetPatientAppointmentsUseCase implements IGetPatientAppointmentsUseCase {
   constructor(private _appointmentRepo: IDoctorAppointmentRepository) {}
 
   async execute(filters: AppointmentFilterDTO) {

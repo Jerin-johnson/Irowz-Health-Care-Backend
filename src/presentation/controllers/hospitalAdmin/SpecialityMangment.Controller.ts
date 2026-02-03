@@ -6,6 +6,9 @@ import { IEditSpecialityUseCase } from "../../../domain/usecase/hosptialAdmin/sp
 import { IGetAllSpecialtyNameUseCase } from "../../../domain/usecase/hosptialAdmin/specialityMangement/IGetAllSpecialtyNameUseCase.usecase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 import { createSpeciltyDtoInput } from "../../../applications/dtos/hosptial/createSpecailityDto";
+import { ApiResponse } from "../../utils/common.response.model";
+import { CommonMessages } from "../../constants/message/CommonMessages";
+import { HospitalAdminMessages } from "../../constants/message/HospitalAdminMessages";
 
 export class SpecialtyMangmentController {
   constructor(
@@ -21,10 +24,7 @@ export class SpecialtyMangmentController {
     const hospitalId = req.user?.hospitalId;
 
     if (!hospitalId) {
-      return res.status(HttpStatusCode.UNAUTHORIZED).json({
-        success: false,
-        message: "Unauthorized",
-      });
+      return ApiResponse.error(res, CommonMessages.INVALID_REQUEST, HttpStatusCode.UNAUTHORIZED);
     }
 
     const specialty = await this.createHospitalSpecialtyUseCase.execute({
@@ -36,7 +36,7 @@ export class SpecialtyMangmentController {
 
     return res.status(HttpStatusCode.CREATED).json({
       success: true,
-      message: "Hospital specialty created successfully",
+      message: HospitalAdminMessages.SPECIALTY_CREATED,
       data: specialty,
     });
   };
@@ -45,12 +45,9 @@ export class SpecialtyMangmentController {
     const { page = "1", limit = "10", search, isActive } = req.query;
     const hosptialId = req.user?.hospitalId;
 
-    if (!hosptialId)
-      return res
-        .status(HttpStatusCode.UNAUTHORIZED)
-        .json({ success: false, message: "unAthrozied User" });
-    console.log(req.query, "query");
-    console.log(isActive);
+    if (!hosptialId) {
+      return ApiResponse.error(res, CommonMessages.INVALID_REQUEST, HttpStatusCode.UNAUTHORIZED);
+    }
 
     let isActivePresent = false;
     if (isActive) {

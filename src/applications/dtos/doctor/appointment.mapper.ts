@@ -1,3 +1,5 @@
+import { DoctorAppointmentDocument } from "../../../infrastructure/database/mongo/models/DoctorAppointmentModel";
+
 export interface AppointmentDto {
   id: string;
   doctorId: string;
@@ -40,7 +42,7 @@ export interface AppointmentDto {
   updatedAt: string;
 }
 
-export const toAppointmentDto = (doc: any): AppointmentDto => ({
+export const toAppointmentDto = (doc: DoctorAppointmentDocument): AppointmentDto => ({
   id: doc._id.toString(),
   doctorId: doc.doctorId.toString(),
   patientId: doc.patientId.toString(),
@@ -58,11 +60,11 @@ export const toAppointmentDto = (doc: any): AppointmentDto => ({
   },
 
   address: {
-    country: doc.addressSnapshot?.country,
-    state: doc.addressSnapshot?.state,
-    city: doc.addressSnapshot?.city,
-    zip: doc.addressSnapshot?.zip,
-    street: doc.addressSnapshot?.street,
+    country: String(doc.addressSnapshot?.country),
+    state: String(doc.addressSnapshot?.state),
+    city: String(doc.addressSnapshot?.city),
+    zip: String(doc.addressSnapshot?.zip),
+    street: String(doc.addressSnapshot?.street),
   },
 
   consultationFee: doc.consultationFee,
@@ -73,7 +75,7 @@ export const toAppointmentDto = (doc: any): AppointmentDto => ({
   paymentMethod: doc.paymentMethod as AppointmentDto["paymentMethod"],
 
   queuePriority: doc.queuePriority,
-  isLate: doc.isLate,
+  isLate: Boolean(doc.isLate),
   status: doc.status as AppointmentDto["status"],
   isRescheduleAppointment: doc?.isRescheduleAppointment || false,
 

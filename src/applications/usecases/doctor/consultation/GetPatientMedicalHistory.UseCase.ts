@@ -1,5 +1,6 @@
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { IMedicalRecordRepository } from "../../../../domain/repositories/IMedicalRecordRepository";
+import { IGetMedicalHistoryUseCase } from "../../../../domain/usecase/doctor/consultation/IGetMedicalHistoryUseCase";
 import { mapMedicalRecordToDTO } from "../../../dtos/doctor/medicalRecord.mapper";
 
 interface Input {
@@ -11,7 +12,7 @@ interface Input {
   diagnosisKeyword?: string;
 }
 
-export class GetMedicalHistoryUseCase {
+export class GetMedicalHistoryUseCase implements IGetMedicalHistoryUseCase {
   constructor(
     private readonly _medicalRecordRepo: IMedicalRecordRepository,
     private readonly _doctorAppoinmentRepo: IDoctorAppointmentRepository

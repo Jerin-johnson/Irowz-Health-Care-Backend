@@ -36,6 +36,11 @@ export interface AppointmentResponseDTO {
   cancelReason?: string;
   isRescheduleAppointment: boolean;
 
+  availabilityAffected?: {
+    isAffected: boolean;
+    reason: string;
+  };
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -76,6 +81,10 @@ export const mapAppointmentToResponse = (appointment: any) => {
 
     status: appointment.status,
 
+    availabilityAffected: {
+      isAffected: appointment?.availabilityAffected?.isAffected || false,
+      reason: appointment?.availabilityAffected?.reason || "",
+    },
     cancelledAt: appointment.cancelledAt,
     cancelReason: appointment.cancelReason,
 

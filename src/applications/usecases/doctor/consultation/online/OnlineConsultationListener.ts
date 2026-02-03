@@ -1,7 +1,8 @@
 import { DomainEventPublisher } from "../../../../../domain/events/event";
 import { IConsultationRepository } from "../../../../../domain/repositories/IConsultationRepository";
+import { IOnlineConsultationListener } from "../../../../../domain/usecase/doctor/consultation/online/IOnlineConsultationListener";
 
-export class OnlineConsultationListener {
+export class OnlineConsultationListener implements IOnlineConsultationListener {
   constructor(
     private readonly consultationRepo: IConsultationRepository,
     private readonly eventPublisher: DomainEventPublisher

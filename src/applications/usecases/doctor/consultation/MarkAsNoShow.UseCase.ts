@@ -1,7 +1,11 @@
 import { DomainEventPublisher } from "../../../../domain/events/event";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 
-export class MarkAsNoShowUseCase {
+interface IMarkAsNoShowUseCase {
+  execute(appointmentId: string, doctorId: string): Promise<{ message: string }>;
+}
+
+export class MarkAsNoShowUseCase implements IMarkAsNoShowUseCase {
   constructor(
     private readonly _DoctorAppointmentRepo: IDoctorAppointmentRepository,
     private readonly _eventPublisher: DomainEventPublisher

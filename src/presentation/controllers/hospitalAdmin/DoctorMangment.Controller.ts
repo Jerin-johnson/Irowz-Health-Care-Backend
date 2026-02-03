@@ -4,6 +4,8 @@ import { IAdminCreateDoctorUseCase } from "../../../domain/usecase/hosptialAdmin
 import { IGetAllDoctorUseCase } from "../../../domain/usecase/hosptialAdmin/doctorMangement/IGetAllDoctorUseCase.usecase";
 import { IBlockOrUnblockDoctorUseCase } from "../../../domain/usecase/hosptialAdmin/doctorMangement/IBlockOrUnblockDoctorUseCase.usecase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
+import { HospitalAdminMessages } from "../../constants/message/HospitalAdminMessages";
+import { CommonMessages } from "../../constants/message/CommonMessages";
 
 export class DoctorMangmentController {
   constructor(
@@ -36,7 +38,7 @@ export class DoctorMangmentController {
 
     return res.status(HttpStatusCode.CREATED).json({
       success: true,
-      message: "Doctor created successfully",
+      message: HospitalAdminMessages.DOCTOR_CREATED,
       data: result,
     });
   };
@@ -47,7 +49,7 @@ export class DoctorMangmentController {
     if (!hospitalId) {
       return res.status(HttpStatusCode.UNAUTHORIZED).json({
         success: false,
-        message: "Unauthorized",
+        message: CommonMessages.INVALID_REQUEST,
       });
     }
 
@@ -64,7 +66,7 @@ export class DoctorMangmentController {
 
     return res.status(HttpStatusCode.OK).json({
       success: true,
-      message: "Doctors fetched successfully",
+      message: HospitalAdminMessages.DOCTORS_FETCHED,
       ...data,
     });
   };

@@ -1,7 +1,8 @@
 import { IDoctorAvailabilityRepository } from "../../../../domain/repositories/IDoctorAvailabilityRepository";
 import { DoctorAvailability } from "../../../../domain/types/DoctorAvailability";
+import { IUpsertDoctorAvailabilityUseCase } from "../../../../domain/usecase/doctor/doctorAvailbility/IUpsertDoctorAvailabilityUseCase";
 
-export class UpsertDoctorAvailabilityUseCase {
+export class UpsertDoctorAvailabilityUseCase implements IUpsertDoctorAvailabilityUseCase {
   constructor(private readonly _availabilityRepo: IDoctorAvailabilityRepository) {}
 
   async execute(

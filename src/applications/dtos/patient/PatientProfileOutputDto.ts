@@ -1,7 +1,7 @@
 import { IPatientProfile } from "../../../domain/types/IPatientProfile";
 import { UserResponse } from "../../../domain/types/IUser.types";
 
-interface PatientProfileDTO {
+export interface PatientProfileDTO {
   fullName: string;
   mobile: string;
   dateOfBirth: string;

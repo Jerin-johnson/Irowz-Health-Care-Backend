@@ -1,5 +1,8 @@
 import { Types } from "mongoose";
-import { DoctorDocument } from "../../infrastructure/database/mongo/models/Doctor.model";
+import {
+  DoctorDocument,
+  DoctorLean,
+} from "../../infrastructure/database/mongo/models/Doctor.model";
 
 export interface IDoctorRepository {
   create(data: Partial<DoctorDocument>): Promise<DoctorDocument>;
@@ -9,7 +12,7 @@ export interface IDoctorRepository {
     data: Partial<DoctorDocument>
   ): Promise<DoctorDocument | null>;
 
-  findById(doctorId: string): Promise<DoctorDocument | null>;
+  findById(doctorId: string): Promise<DoctorLean | null>;
 
   findByUserId(userId: string): Promise<DoctorDocument | null>;
 

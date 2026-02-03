@@ -1,8 +1,9 @@
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { IPatientProfileRepository } from "../../../../domain/repositories/IPatientProfileRepository";
 import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
+import { IGetPatientOverviewUseCase } from "../../../../domain/usecase/doctor/consultation/IGetPatientOverviewUseCase";
 
-export class GetPatientOverViewUseCase {
+export class GetPatientOverViewUseCase implements IGetPatientOverviewUseCase {
   constructor(
     private _PatientProfileRepository: IPatientProfileRepository,
     private _DoctorAppointmentRepo: IDoctorAppointmentRepository,

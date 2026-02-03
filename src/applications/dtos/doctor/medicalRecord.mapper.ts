@@ -1,3 +1,22 @@
+import { MedicalRecordPopulated } from "../../../domain/repositories/IMedicalRecordRepository";
+
+// export interface MedicalRecordPopulated {
+//   _id: Types.ObjectId;
+//   visitDate: Date;
+//   diagnosisSummary?: string;
+//   visitType: string;
+
+//   doctorId?: {
+//     userId?: {
+//       name?: string;
+//     };
+//   };
+
+//   hospitalId?: {
+//     name?: string;
+//   };
+// }
+
 export interface MedicalRecord {
   id: string;
   date: string;
@@ -7,7 +26,7 @@ export interface MedicalRecord {
   visitType: string;
 }
 
-export function mapMedicalRecordToDTO(record: any): MedicalRecord {
+export function mapMedicalRecordToDTO(record: MedicalRecordPopulated): MedicalRecord {
   return {
     id: record._id.toString(),
     date: record.visitDate.toISOString(),

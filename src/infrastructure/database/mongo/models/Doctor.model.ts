@@ -1,7 +1,12 @@
 import { Schema, model, Document, Types } from "mongoose";
 export interface DoctorDocument extends Document {
   userId: Types.ObjectId | string;
-  hospitalId: Types.ObjectId | string;
+  hospitalId:
+    | Types.ObjectId
+    | string
+    | {
+        _id: string;
+      };
 
   fullName?: string;
   email?: string;
@@ -27,6 +32,48 @@ export interface DoctorDocument extends Document {
 
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface DoctorLean {
+  _id: Types.ObjectId;
+
+  userId: {
+    _id: Types.ObjectId;
+    name: string;
+    email: string;
+    phone: string;
+    profileImage: string;
+  };
+
+  hospitalId: {
+    _id: Types.ObjectId;
+    name: string;
+    city?: string;
+    state?: string;
+    isActive?: boolean;
+  };
+
+  specialtyId: {
+    _id: Types.ObjectId;
+    name: string;
+    description?: string;
+  };
+
+  experienceYears: number;
+  consultationFee: number;
+  bio: string;
+
+  medicalRegistrationNumber: string;
+  medicalCouncil: "MCI" | "NMC" | "STATE_MEDICAL_COUNCIL";
+
+  teleConsultationEnabled: boolean;
+
+  averageRating: number;
+  totalReviews: number;
+
+  isActive: boolean;
+
+  createdAt: Date;
 }
 
 const DoctorSchema = new Schema<DoctorDocument>(

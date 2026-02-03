@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
-import { GetProfileUseCase } from "../../../applications/usecases/patient/ProfileAndSetting/GetProfile.UseCase";
 import { ApiResponse } from "../../utils/common.response.model";
-import { EditPatientProfileUseCase } from "../../../applications/usecases/patient/ProfileAndSetting/EditPatientProfileUseCase";
-import { GetWalletUseCase } from "../../../applications/usecases/patient/wallet/GetWalletUseCase";
+import { IGetProfileUseCase } from "../../../domain/usecase/patient/Profile&settings/IGetProfileUseCase";
+import { IEditPatientProfileUseCase } from "../../../domain/usecase/patient/Profile&settings/IEditPatientProfileUseCase";
+import { IGetWalletUseCase } from "../../../domain/usecase/patient/wallet/IGetWalletUseCase";
+import { PatientMessages } from "../../constants/message/Patient.message";
 
 export class PatientProfileController {
   constructor(
-    private _GetProfileUseCase: GetProfileUseCase,
-    private _EditPatientProfileUseCase: EditPatientProfileUseCase,
-    private _GetWalletUseCase: GetWalletUseCase
+    private _GetProfileUseCase: IGetProfileUseCase,
+    private _EditPatientProfileUseCase: IEditPatientProfileUseCase,
+    private _GetWalletUseCase: IGetWalletUseCase
   ) {}
 
   getProfile = async (req: Request, res: Response) => {
@@ -16,7 +17,7 @@ export class PatientProfileController {
 
     const userProfile = await this._GetProfileUseCase.execute(userId as string);
 
-    return ApiResponse.success(res, userProfile, "Profile fetched successfully");
+    return ApiResponse.success(res, userProfile, PatientMessages.PROFILE_FETCHED);
   };
 
   editProfile = async (req: Request, res: Response) => {
@@ -32,8 +33,6 @@ export class PatientProfileController {
     const userId = req.user?.userId;
 
     const wallet = await this._GetWalletUseCase.execute(userId as string);
-
-    console.log("the final wallet", wallet);
 
     return ApiResponse.success(res, wallet);
   };

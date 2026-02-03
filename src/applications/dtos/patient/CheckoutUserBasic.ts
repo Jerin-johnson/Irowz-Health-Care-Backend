@@ -1,11 +1,19 @@
+export interface CheckoutUserSource {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+export interface CheckoutUserView {
+  firstName: string;
+  secondName: string;
+  email: string;
+  phone: string;
+  doctorPrice?: number;
+}
+
 export class userMapperForCheckout {
-  static toView(dto: any): {
-    firstName: string;
-    secondName: string;
-    email: string;
-    phone: string;
-    doctorPrice?: number | string;
-  } {
+  static toView(dto: CheckoutUserSource): CheckoutUserView {
     console.log(dto);
     return {
       firstName: dto.name.split(" ")[0],
