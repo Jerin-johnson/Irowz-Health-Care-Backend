@@ -6,13 +6,17 @@ import { authMiddleware } from "../middlewares/authMiddleware";
 import { HospitalMangementController } from "../controllers/superAdmin/HosptialMangementController";
 import { authorizeRoles } from "../middlewares/role.middleware";
 import { SUPER_ADMIN_ROUTES } from "../constants/routes/super-admin.constants.routes";
+import { SubscriptionController } from "../controllers/superAdmin/SubscriptionController";
+import { SubscriptionSchema } from "../validators/superadmin/subscription.validator";
+import { validate } from "../middlewares/validate.middleware";
 
 export class SuperAdminRoutes {
   private router: Router;
 
   constructor(
     private readonly HosptialVerifcationController: HospitalVerficationController,
-    private readonly HospitalMangementController: HospitalMangementController
+    private readonly HospitalMangementController: HospitalMangementController,
+    private readonly SubscriptionController: SubscriptionController
   ) {
     this.router = Router();
   }
@@ -63,6 +67,21 @@ export class SuperAdminRoutes {
       asyncHandler(this.HospitalMangementController.BlockOrUnBlockHospital)
     );
 
+    this.router.post(
+      "/subscription",
+      validate(SubscriptionSchema),
+      asyncHandler(this.SubscriptionController.createSubscriptionPlan)
+    );
+
+    this.router.get("/subscription", asyncHandler(this.SubscriptionController.getSubscriptionPlan));
+    this.router.patch(
+      "/subscription/toggle/:id",
+      asyncHandler(this.SubscriptionController.ToggleSubscription)
+    );
+    this.router.delete(
+      "/subscription/:id",
+      asyncHandler(this.SubscriptionController.deleteSubscription)
+    );
     return this.router;
   }
 }

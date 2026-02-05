@@ -1,5 +1,3 @@
-// import { Types } from "mongoose";
-
 import { MedicalRecordDocument } from "../../../infrastructure/database/mongo/models/MedicalRecord.model";
 
 export interface BackendHospitalInfoDTO {

@@ -5,6 +5,7 @@ import { EmailQueueService } from "../../queue/EmailQueueService";
 import { IForgetPasswordUseCase } from "../../../domain/usecase/auth/IForgetPasswordUseCase";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../../DI/tsyringe/tokens";
+import { AuthEvent } from "../../../domain/constants/auth/AuthEvent";
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ export class ForgetPasswordUseCase implements IForgetPasswordUseCase {
   async execute(email: string) {
     const user = await this._UserRepo.findByEmail(email);
 
-    if (!user) throw new Error("If the email exists, a reset link has been sent");
+    if (!user) throw new Error(AuthEvent.PASSWORD_RESET_LINK_SENT);
 
     const resetToken = crypto.randomBytes(32).toString("hex");
 
@@ -33,6 +34,6 @@ export class ForgetPasswordUseCase implements IForgetPasswordUseCase {
     const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
 
     await this._EmailQueueService.sendResetPasswordEmail(email, resetLink);
-    return { message: "Password reset link sent" };
+    return { message: AuthEvent.PASSWORD_RESET_SUCCESS };
   }
 }

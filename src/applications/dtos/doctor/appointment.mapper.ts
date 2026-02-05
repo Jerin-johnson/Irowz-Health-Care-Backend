@@ -8,8 +8,7 @@ export interface AppointmentDto {
   date: string; // "2026-01-21" (ISO local date)
   startTime: string; // "14:30" (HH:mm)
   timezone: string; // "Asia/Kolkata"
-  visitType: "OPD" | "ONLINE" | "HOME_VISIT"; // adjust as per your enums
-
+  visitType: "OPD" | "ONLINE" | "HOME_VISIT";
   patient: {
     firstName: string;
     lastName: string;

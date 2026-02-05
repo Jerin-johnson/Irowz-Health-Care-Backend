@@ -1,4 +1,5 @@
 import { TOKENS } from "../../../DI/tsyringe/tokens";
+import { AuthErrorCode } from "../../../domain/constants/auth/AuthErrorCode";
 import { ITokenService, TokenPayload } from "../../../domain/services/jwt.interface.service";
 import { IRefreshTokenUseCase } from "../../../domain/usecase/auth/IRefreshToken.useCase";
 import { injectable, inject } from "tsyringe";
@@ -39,7 +40,7 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase {
 
     const newRefreshToken = this.TokenService.generateRefreshToken(payload);
 
-    if (!payload) throw new Error("Invalid refresh token");
+    if (!payload) throw new Error(AuthErrorCode.INVALID_RESET_TOKEN);
 
     return {
       accessToken: newAccessToken,

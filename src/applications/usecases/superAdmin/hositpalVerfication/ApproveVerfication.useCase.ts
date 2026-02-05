@@ -1,5 +1,7 @@
 import { IHospitalRepository } from "../../../../domain/repositories/IHospital.repo";
+import { IHospitalSubscriptionRepository } from "../../../../domain/repositories/IHospitalSubscriptionRepository";
 import { IHospitalVerificationRepository } from "../../../../domain/repositories/IHospitalVerification.repo";
+import { ISubscriptionPlanRepository } from "../../../../domain/repositories/ISubscriptionPlanRepository";
 import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
 import { IApproveVerificationRequestUseCase } from "../../../../domain/usecase/superAdmin/hospitalVerfication/IApproveVerificationRequestUseCase.usecase";
 
@@ -7,7 +9,9 @@ export class ApproveVerficationRequest implements IApproveVerificationRequestUse
   constructor(
     private HosptialVerficationRepo: IHospitalVerificationRepository,
     private HosptialRepo: IHospitalRepository,
-    private userRepo: IUserRepository
+    private userRepo: IUserRepository,
+    private planRepo: ISubscriptionPlanRepository,
+    private hospitalSubRepo: IHospitalSubscriptionRepository
   ) {}
 
   async execute(hospitalId: string, adminRemarks?: string) {
@@ -62,6 +66,38 @@ export class ApproveVerficationRequest implements IApproveVerificationRequestUse
     await this.userRepo.markVerified(hosptialVerficationInfo.userId);
 
     await this.HosptialVerficationRepo.updateStatus(hospitalId, "APPROVED", adminRemarks);
+
+    //subscription plan assignment
+
+    const freeTrial = await this.planRepo.findByName("Free Trial");
+
+    if (!freeTrial) {
+      throw new Error("Free Trial plan missing in system");
+    }
+
+    const activeSub = await this.hospitalSubRepo.findActiveByHospital(
+      hosptialVerficationInfo.userId
+    );
+
+    if (!activeSub) {
+      const startDate = new Date();
+
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + freeTrial.durationInDays);
+
+      await this.hospitalSubRepo.create({
+        hospitalId: hosptialVerficationInfo.userId,
+        planId: freeTrial._id,
+
+        doctorLimitSnapshot: freeTrial.doctorLimit,
+        priceSnapshot: freeTrial.price,
+        durationSnapshot: freeTrial.durationInDays,
+
+        startDate,
+        endDate,
+        status: "ACTIVE",
+      });
+    }
 
     return { message: "Hospital verified successfully" };
   }

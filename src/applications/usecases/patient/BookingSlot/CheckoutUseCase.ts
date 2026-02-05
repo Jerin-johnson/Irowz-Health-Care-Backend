@@ -52,15 +52,11 @@ export class CheckoutUseCase implements ICheckoutUseCase {
       const Doctor = await this._DoctorRepo.findById(doctorId);
       if (!Doctor) throw new Error("Doctor unavailable");
 
-      const hosptial = Doctor.hospitalId as {
-        _id: string;
-      };
-
       console.log("The Doctor is", Doctor);
 
       appointment = await this._DoctorAppoinmentRepo.create({
         doctorId,
-        hospitalId: hosptial._id,
+        hospitalId: String(Doctor.hospitalId._id),
         patientId,
         date,
         startTime,

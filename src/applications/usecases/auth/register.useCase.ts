@@ -8,6 +8,8 @@ import { EmailQueueService } from "../../queue/EmailQueueService";
 import { IRegisterUserUseCase } from "../../../domain/usecase/auth/IRegisterUser.useCase";
 import { injectable, inject } from "tsyringe";
 import { TOKENS } from "../../../DI/tsyringe/tokens";
+import { AuthErrorCode } from "../../../domain/constants/auth/AuthErrorCode";
+import { AuthEvent } from "../../../domain/constants/auth/AuthEvent";
 
 @injectable()
 export class RegisterUserCase implements IRegisterUserUseCase {
@@ -26,10 +28,9 @@ export class RegisterUserCase implements IRegisterUserUseCase {
   async execute(input: createUser) {
     const existUser = await this.userRepo.findByEmail(input.email);
 
-    if (existUser) throw new Error("User Already exists");
+    if (existUser) throw new Error(AuthErrorCode.USER_ALREADY_EXISTS);
     const hashPassword = await this.passwordService.hash(input.password);
 
-    console.log("the input", input);
     const newUser = await this.userRepo.create({
       ...input,
       password: hashPassword,
@@ -47,7 +48,7 @@ export class RegisterUserCase implements IRegisterUserUseCase {
     await this.emailService.sendOtpEmail(newUser.email, Number(otp));
 
     return {
-      message: "OTP sent",
+      message: AuthEvent.OTP_SENT,
       userId: newUser._id,
       email: newUser.email,
       name: newUser.name,

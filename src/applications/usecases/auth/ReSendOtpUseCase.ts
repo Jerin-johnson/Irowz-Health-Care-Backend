@@ -1,11 +1,10 @@
 import { IOtpRepository } from "../../../domain/repositories/IOtp.repo";
-
 import { IOtpService } from "../../../domain/services/otp.interface.service";
-
 import { EmailQueueService } from "../../queue/EmailQueueService";
 import { IReSendOtpUseCase } from "../../../domain/usecase/auth/IResendOtp.useCase";
 import { injectable, inject } from "tsyringe";
 import { TOKENS } from "../../../DI/tsyringe/tokens";
+import { AuthEvent } from "../../../domain/constants/auth/AuthEvent";
 
 @injectable()
 export class ReSendOtpUseCase implements IReSendOtpUseCase {
@@ -25,6 +24,6 @@ export class ReSendOtpUseCase implements IReSendOtpUseCase {
 
     await this.emailService.sendOtpEmail(email, Number(otp));
 
-    return { message: "OTP sent", email };
+    return { message: AuthEvent.OTP_SENT, email };
   }
 }

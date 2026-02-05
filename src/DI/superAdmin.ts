@@ -1,6 +1,12 @@
 import { ApproveVerficationRequest } from "../applications/usecases/superAdmin/hositpalVerfication/ApproveVerfication.useCase";
 import { RejectVerficationRequest } from "../applications/usecases/superAdmin/hositpalVerfication/RejectVerfication.useCase";
-import { hosptialRepository, hosptialVerficatinRepo, mongoUserRepository } from "./repositers";
+import {
+  hospitalSubscriptionRepository,
+  hosptialRepository,
+  hosptialVerficatinRepo,
+  mongoUserRepository,
+  subscriptionPlanRepository,
+} from "./repositers";
 import { HospitalVerficationController } from "../presentation/controllers/superAdmin/HosptialVerfication.controller";
 import { SuperAdminRoutes } from "../presentation/routes/super_admin.routes";
 import { GetALLVerficationRequest } from "../applications/usecases/superAdmin/hositpalVerfication/GetALLVerfication.useCase";
@@ -11,10 +17,18 @@ import { HospitalMangementController } from "../presentation/controllers/superAd
 import { BlockOrUnblockHospitalUseCase } from "../applications/usecases/superAdmin/hosptialMangement/BlockOrUnBlockHospital.useCase";
 import { ViewHospitalLicenseUseCase } from "../applications/usecases/superAdmin/hositpalVerfication/ViewHospitalLicenseUseCase";
 import { s3FileStorage } from "./service";
+import { CreateSubscriptionPlanUseCase } from "../applications/usecases/superAdmin/subscriptionMangement/CreateSubscription.UseCase";
+import { GetActivePlansUseCase } from "../applications/usecases/superAdmin/subscriptionMangement/GetSubscription.UseCase";
+import { SubscriptionController } from "../presentation/controllers/superAdmin/SubscriptionController";
+import { DeleteSubscriptionUseCase } from "../applications/usecases/superAdmin/subscriptionMangement/DeleteSubscription.UseCase";
+import { ToggleSubscription } from "../applications/usecases/superAdmin/subscriptionMangement/ToggleSubscription.UseCase";
+
 const approveVerficationRequest = new ApproveVerficationRequest(
   hosptialVerficatinRepo,
   hosptialRepository,
-  mongoUserRepository
+  mongoUserRepository,
+  subscriptionPlanRepository,
+  hospitalSubscriptionRepository
 );
 
 const rejectVerficationRequest = new RejectVerficationRequest(hosptialVerficatinRepo);
@@ -49,7 +63,21 @@ const hospitalMangementController = new HospitalMangementController(
   blockOrUnblockHospitalUseCase
 );
 
+const createSubscriptionPlanUseCase = new CreateSubscriptionPlanUseCase(subscriptionPlanRepository);
+const getActivePlansUseCase = new GetActivePlansUseCase(subscriptionPlanRepository);
+
+const toggleSubscription = new ToggleSubscription(subscriptionPlanRepository);
+const deleteSubscriptionUseCase = new DeleteSubscriptionUseCase(subscriptionPlanRepository);
+
+const subscriptionController = new SubscriptionController(
+  createSubscriptionPlanUseCase,
+  getActivePlansUseCase,
+  toggleSubscription,
+  deleteSubscriptionUseCase
+);
+
 export const superAdminRoutes = new SuperAdminRoutes(
   hospitalVerficationController,
-  hospitalMangementController
+  hospitalMangementController,
+  subscriptionController
 );

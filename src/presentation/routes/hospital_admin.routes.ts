@@ -11,6 +11,8 @@ import { authorizeRoles } from "../middlewares/role.middleware";
 import { DoctorMangmentController } from "../controllers/hospitalAdmin/DoctorMangment.Controller";
 import { AdminCreateDoctorSchema } from "../validators/hosptial/AdminCreateDoctor";
 import { HOSPITAL_ADMIN_ROUTES } from "../constants/routes/hospital-admin.constants.routes";
+import { subscriptionPlanChecker } from "../middlewares/subscription/subsciptionPlanChecker";
+import { HospitalADminSubscriptionController } from "../controllers/hospitalAdmin/SubscriptionController";
 
 export class HospitalAdminRoutes {
   private router: Router;
@@ -18,7 +20,8 @@ export class HospitalAdminRoutes {
   constructor(
     private readonly _HospitalOnBoradingController: HospitalOnBoradingController,
     private readonly _SpecialtyMangmentController: SpecialtyMangmentController,
-    private readonly _DoctorMangmentController: DoctorMangmentController
+    private readonly _DoctorMangmentController: DoctorMangmentController,
+    private readonly _HospitalADminSubscriptionController: HospitalADminSubscriptionController
   ) {
     this.router = Router();
   }
@@ -84,6 +87,7 @@ export class HospitalAdminRoutes {
     // -------- Doctor management --------
     this.router.post(
       HOSPITAL_ADMIN_ROUTES.DOCTOR,
+      subscriptionPlanChecker,
       validate(AdminCreateDoctorSchema),
       asyncHandler(this._DoctorMangmentController.createDoctor)
     );
@@ -96,6 +100,11 @@ export class HospitalAdminRoutes {
     this.router.patch(
       HOSPITAL_ADMIN_ROUTES.DOCTOR_TOGGLE_STATUS,
       asyncHandler(this._DoctorMangmentController.BlockOrUnblockDoctor)
+    );
+
+    this.router.get(
+      "/subscription/plans",
+      asyncHandler(this._HospitalADminSubscriptionController.GetSubcriptionPlans)
     );
 
     return this.router;

@@ -4,6 +4,8 @@ import crypto from "crypto";
 import { IResetPasswordUseCase } from "../../../domain/usecase/auth/IResetPasswordUseCase";
 import { TOKENS } from "../../../DI/tsyringe/tokens";
 import { inject, injectable } from "tsyringe";
+import { AuthEvent } from "../../../domain/constants/auth/AuthEvent";
+import { AuthErrorCode } from "../../../domain/constants/auth/AuthErrorCode";
 
 @injectable()
 export class ResetPasswordUseCase implements IResetPasswordUseCase {
@@ -18,7 +20,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     const user = await this._UserRepo.findOneByResetPasswordToken(hashedToken);
-    if (!user) throw new Error("Invlaid request such user not found");
+    if (!user) throw new Error(AuthErrorCode.USER_NOT_FOUND);
 
     const hashedPassword = await this._PasswordService.hash(newPassword);
 
@@ -29,6 +31,6 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
       resetPasswordToken: null,
     });
 
-    return { message: "password reseted successfully", role: user.role };
+    return { message: AuthEvent.PASSWORD_RESET_SUCCESS, role: user.role };
   }
 }

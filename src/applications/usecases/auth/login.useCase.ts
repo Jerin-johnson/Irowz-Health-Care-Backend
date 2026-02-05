@@ -1,4 +1,6 @@
 import { TOKENS } from "../../../DI/tsyringe/tokens";
+import { AuthErrorCode } from "../../../domain/constants/auth/AuthErrorCode";
+import UserRoles from "../../../domain/constants/UserRole";
 import { IDoctorRepository } from "../../../domain/repositories/IDoctor.repo";
 import { IHospitalRepository } from "../../../domain/repositories/IHospital.repo";
 import { IPatientProfileRepository } from "../../../domain/repositories/IPatientProfileRepository";
@@ -31,17 +33,16 @@ export class LoginUseCase implements ILoginUseCase {
 
     console.log(user);
 
-    if (!user) throw new Error("User not exist");
-    if (!user.isVerified || user.isBlocked) throw new Error("Restricted entry");
+    if (!user) throw new Error(AuthErrorCode.USER_NOT_FOUND);
+    if (!user.isVerified || user.isBlocked) throw new Error(AuthErrorCode.USER_BLOCKED);
 
-    console.log(allowedRoles, user.role);
     if (!allowedRoles.includes(user.role)) {
-      throw new Error("Invalid Access Request");
+      throw new Error(AuthErrorCode.INVALID_ACCESS);
     }
 
     const validPassword = await this.PasswordService.compare(input.password, user.password);
 
-    if (!validPassword) throw new Error("Invalid creditionals");
+    if (!validPassword) throw new Error(AuthErrorCode.INVALID_CREDENTIALS);
 
     const tokenPayload: TokenPayload = {
       userId: user._id,
@@ -50,25 +51,24 @@ export class LoginUseCase implements ILoginUseCase {
       email: user.email,
     };
 
-    if (user.role === "HOSPITAL_ADMIN") {
+    if (user.role === UserRoles.HOSPITAL_ADMIN) {
       const hospital = await this.HosptialRepo.findByAdminUserId(user._id);
       console.log(hospital);
-      if (!hospital) throw new Error("Hospital not found");
+      if (!hospital) throw new Error(AuthErrorCode.USER_NOT_FOUND);
       tokenPayload.hosptialId = hospital._id;
     }
 
-    if (user.role === "DOCTOR") {
+    if (user.role === UserRoles.DOCTOR) {
       const doctor = await this.DoctorRepo.findByUserId(user._id);
-      console.log("doctor Id ", doctor);
-      if (!doctor) throw new Error("Doctor profile not found");
+
+      if (!doctor) throw new Error(AuthErrorCode.USER_NOT_FOUND);
       tokenPayload.doctorId = doctor._id.toString();
       tokenPayload.hosptialId = doctor.hospitalId.toString();
     }
 
     tokenPayload.forcePasswordReset = user.forcePasswordReset ? true : false;
-    console.log("The token payload", tokenPayload);
 
-    if (user.role === "PATIENT") {
+    if (user.role === UserRoles.PATIENT) {
       const patient = await this.IPatientProfileRepository.findByUserId(user._id);
       if (patient) tokenPayload.patientId = String(patient._id);
     }

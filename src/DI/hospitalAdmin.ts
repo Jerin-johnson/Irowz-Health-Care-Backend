@@ -6,6 +6,8 @@ import {
   hospitalSpecialityRepo,
   doctorRepo,
   hosptialRepository,
+  subscriptionPlanRepository,
+  hospitalSubscriptionRepository,
 } from "./repositers";
 import { emailQueueService, passwordService, s3FileStorage } from "./service";
 import { ResubmitHospitalVerificationUseCase } from "../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
@@ -22,6 +24,8 @@ import { DoctorMangmentController } from "../presentation/controllers/hospitalAd
 import { GetAllDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/GetDoctor.useCase";
 import { GetAllSpecialtyNameUseCase } from "../applications/usecases/hospitalAdmin/specialityMangement/GetAllSpecialityName.userCae";
 import { BlockOrUnblockDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/BlockOrUnBlockDoctor.UseCase";
+import { HospitalADminSubscriptionController } from "../presentation/controllers/hospitalAdmin/SubscriptionController";
+import { GetActivePlansForListingHospitalAdminUseCase } from "../applications/usecases/hospitalAdmin/subscription/GetSubscriptionPlans";
 
 const submitHositalVerficationRequest = new SubmitHositalVerficationRequest(
   mongoUserRepository,
@@ -84,8 +88,19 @@ const doctorMangmentController = new DoctorMangmentController(
   blockOrUnblockDoctorUseCase
 );
 
+const getActivePlansForListingHospitalAdminUseCase =
+  new GetActivePlansForListingHospitalAdminUseCase(
+    subscriptionPlanRepository,
+    hospitalSubscriptionRepository
+  );
+
+const hospitalADminSubscriptionController = new HospitalADminSubscriptionController(
+  getActivePlansForListingHospitalAdminUseCase
+);
+
 export const hospitalAdminRoutes = new HospitalAdminRoutes(
   hospitalOnBoradingController,
   specialityMangementController,
-  doctorMangmentController
+  doctorMangmentController,
+  hospitalADminSubscriptionController
 );

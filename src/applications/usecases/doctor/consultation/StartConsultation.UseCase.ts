@@ -27,10 +27,6 @@ export class StartConsultationUseCase implements IStartConsultationUseCase {
       throw new Error("Appointment not found");
     }
 
-    // if (appointment.status !== "BOOKED" || appointment.status !== "NO_SHOW") {
-    //   throw new Error("Only BOOKED appointments can be started");
-    // }
-
     const active = await this._appointmentRepo.findActiveConsultation(
       String(appointment.doctorId),
       String(appointment.date)
@@ -59,10 +55,6 @@ export class StartConsultationUseCase implements IStartConsultationUseCase {
 
       delayMinutes = nowMinutes - scheduledMinutes;
 
-      console.log("Scheduled minutes:", scheduledMinutes);
-      console.log("Current IST minutes:", nowMinutes);
-      console.log("Delay minutes:", delayMinutes);
-
       if (delayMinutes < 0) delayMinutes = 0;
 
       if (delayMinutes > DELAY_THRESHOLD_MINUTES) {
@@ -75,14 +67,12 @@ export class StartConsultationUseCase implements IStartConsultationUseCase {
         delayApplied = true;
       } else {
         // Mark delay nevverer  caluculated today today
-        console.log("to know which is called");
+
         await this._availabilityRepo.markDelayEvaluated(String(appointment.doctorId));
       }
     }
 
     const updated = await this._appointmentRepo.startConsultation(appointmentId);
-
-    console.log("the doctor updated", updated);
 
     let medicalRecord = await this._medicalRecordRepo.findByAppointmentId(String(updated._id));
 
@@ -101,8 +91,6 @@ export class StartConsultationUseCase implements IStartConsultationUseCase {
       String(updated.date),
       1
     );
-
-    console.log("The next patient are", nextPatientIds);
 
     await this._eventPublisher.publish({
       type: "CONSULTATION_STARTED",

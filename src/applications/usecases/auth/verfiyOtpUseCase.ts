@@ -1,4 +1,6 @@
 import { TOKENS } from "../../../DI/tsyringe/tokens";
+import { AuthErrorCode } from "../../../domain/constants/auth/AuthErrorCode";
+import { AuthEvent } from "../../../domain/constants/auth/AuthEvent";
 import { IOtpRepository } from "../../../domain/repositories/IOtp.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 import { ITokenService } from "../../../domain/services/jwt.interface.service";
@@ -22,14 +24,14 @@ export class VerfiyOtpUseCase implements IVerifyOtpUseCase {
   async execute(userId: string, email: string, otp: string) {
     const UserOtpRecord = await this.OtpRepo.findByUserEmail(email);
 
-    if (!UserOtpRecord) throw new Error("No Otp record find");
+    if (!UserOtpRecord) throw new Error(AuthErrorCode.OTP_NOT_FOUND);
 
     // const otpHash = await this.OtpService.hash(otp);
     const valid = await this.OtpService.compare(otp, UserOtpRecord.otpHash);
-    if (!valid) throw new Error("Invalid OTP");
+    if (!valid) throw new Error(AuthErrorCode.INVALID_OTP);
     const user = await this.UserRepo.findById(userId);
 
-    if (!user) throw new Error("User not found");
+    if (!user) throw new Error(AuthErrorCode.USER_NOT_FOUND);
     await this.UserRepo.markVerified(userId);
     await this.OtpRepo.deleteByEmail(email);
 
@@ -45,7 +47,7 @@ export class VerfiyOtpUseCase implements IVerifyOtpUseCase {
         name: user.name,
       }),
       role: user.role,
-      message: "Verified successfully",
+      message: AuthEvent.VERIFIED,
     };
   }
 }

@@ -46,7 +46,8 @@ export class JwtTokenService implements ITokenService {
       }
 
       return decoded as TokenPayload;
-    } catch (error) {
+    } catch (e) {
+      console.log(e);
       throw new Error("Invalid or expired token");
     }
   }

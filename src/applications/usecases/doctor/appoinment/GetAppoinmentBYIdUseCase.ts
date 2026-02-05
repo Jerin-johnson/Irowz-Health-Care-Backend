@@ -10,7 +10,6 @@ export class GetAppoinmentBYIdUseCase implements IGetAppointmentByIdUseCase {
 
     if (!result) throw new Error("something went wrong in appointmemt get");
 
-    console.log("the result is ", result);
     return toAppointmentDto(result);
   }
 }

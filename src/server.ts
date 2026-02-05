@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import http from "http";
 import app from "./app";
+// import { oneTime } from "./onetime";
 import { connectRedis } from "./infrastructure/redis/redisClient";
 import { connectDB } from "./infrastructure/database/mongo/mongoose.connect";
 import { initSocket } from "./socket";
@@ -19,6 +20,9 @@ async function startServer() {
     startDoctorDelayResetCron();
 
     const server = http.createServer(app);
+    // oneTime().then(() => {
+    //   console.log("success");
+    // });
 
     initSocket(server);
     setupRealtimeConsumer();
