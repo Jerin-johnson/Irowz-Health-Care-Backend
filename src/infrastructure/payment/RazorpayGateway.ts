@@ -14,18 +14,23 @@ export class RazorpayGateway implements IPaymentGateway {
   }
 
   async createOrder(params: { amount: number; receipt: string }) {
-    const order = await this.client.orders.create({
-      amount: params.amount,
-      currency: "INR",
-      receipt: params.receipt,
-      payment_capture: true,
-    });
+    try {
+      const order = await this.client.orders.create({
+        amount: params.amount,
+        currency: "INR",
+        receipt: params.receipt,
+        payment_capture: true,
+      });
 
-    return {
-      id: order.id,
-      amount: Number(order.amount),
-      currency: order.currency,
-    };
+      return {
+        id: order.id,
+        amount: Number(order.amount),
+        currency: order.currency,
+      };
+    } catch (error: any) {
+      console.error("RAZORPAY ERROR:", error);
+      throw new Error(error?.error?.description || error.message);
+    }
   }
 
   verifyPaymentSignature(params: {

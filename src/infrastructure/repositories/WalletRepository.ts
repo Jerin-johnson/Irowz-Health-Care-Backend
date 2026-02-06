@@ -59,6 +59,16 @@ export class WalletRepository {
   }
 
   async findByUserId(userId: string): Promise<WalletDocument | null> {
-    return await WalletModel.findOne({ userId }).lean();
+    // return await WalletModel.findOne({ userId }).sort({ "transactions.createdAt": -1 }).lean();
+    const limit = 30;
+    const wallet = await WalletModel.findOne(
+      { userId },
+      { transactions: { $slice: -limit } }
+    ).lean();
+
+    if (!wallet) return null;
+
+    wallet.transactions = wallet.transactions.reverse();
+    return wallet;
   }
 }

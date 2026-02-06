@@ -11,6 +11,7 @@ import { GetConsultationVideoTokenDoctorUseCase } from "../applications/usecases
 import { UpdateMedicalRecordPercriptionUseCase } from "../applications/usecases/doctor/consultation/SavePercription.UseCase";
 import { SaveQuickNoteUseCase } from "../applications/usecases/doctor/consultation/SaveQuickNoteUseCase";
 import { StartConsultationUseCase } from "../applications/usecases/doctor/consultation/StartConsultation.UseCase";
+import { GetDoctorDashboardOverviewUseCase } from "../applications/usecases/doctor/dashboard/GetDoctorDashboardOverviewUseCase";
 import { CheckDoctorAvailabilityUseCase } from "../applications/usecases/doctor/doctorAvailability/CheckDoctorAvailbiltyConfict.UseCase";
 import { ConfirmDoctorAvailabilityChangeUseCase } from "../applications/usecases/doctor/doctorAvailability/ConfirmDoctorAvailabilityChangeUseCase";
 import { UpsertDoctorAvailabilityUseCase } from "../applications/usecases/doctor/doctorAvailability/DoctorAvailabilityController";
@@ -23,6 +24,7 @@ import { notificationRepo } from "../infrastructure/realTIme/realtimeConsumer";
 import { DoctorAppointmentController } from "../presentation/controllers/doctor/DoctorAppoinmentController";
 import { DoctorAvailabilityController } from "../presentation/controllers/doctor/DoctorAvailabilityController";
 import { DoctorConsultationController } from "../presentation/controllers/doctor/DoctorConsultation.Controller";
+import { DoctorDashboardController } from "../presentation/controllers/doctor/DoctorDashboardController";
 import { DoctorProfileMangementController } from "../presentation/controllers/doctor/DoctorProfileMangement.Controller";
 import { DoctorScheduleMangmentController } from "../presentation/controllers/doctor/DoctorScheduleMangment.Controller";
 import { DoctorRoutes } from "../presentation/routes/doctor.routes";
@@ -32,6 +34,7 @@ import {
   consultationRepo,
   doctorAppointmentRepository,
   doctorAvailabilityRepository,
+  doctorDashboardRepository,
   doctorRepo,
   medicalRecordRepository,
   mongoUserRepository,
@@ -163,10 +166,17 @@ const doctorConsultationController = new DoctorConsultationController(
   getMedicalRecordWithDoctorInfoUseCase
 );
 
+const getDoctorDashboardOverviewUseCase = new GetDoctorDashboardOverviewUseCase(
+  doctorDashboardRepository
+);
+
+const doctorDashboardController = new DoctorDashboardController(getDoctorDashboardOverviewUseCase);
+
 export const doctorRoutes = new DoctorRoutes(
   doctorProfileMangementController,
   doctorAvailabilityController,
   doctorScheduleMangmentController,
   doctorAppointmentController,
-  doctorConsultationController
+  doctorConsultationController,
+  doctorDashboardController
 );

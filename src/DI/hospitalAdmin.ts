@@ -8,8 +8,10 @@ import {
   hosptialRepository,
   subscriptionPlanRepository,
   hospitalSubscriptionRepository,
+  walletRepo,
+  hospitalDashboardRepository,
 } from "./repositers";
-import { emailQueueService, passwordService, s3FileStorage } from "./service";
+import { emailQueueService, passwordService, razorpayGateway, s3FileStorage } from "./service";
 import { ResubmitHospitalVerificationUseCase } from "../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
 import { HospitalAdminRoutes } from "../presentation/routes/hospital_admin.routes";
 import { CheckHospitalVerfcationStatusById } from "../applications/usecases/hosptialOnBorading/checkStatusById";
@@ -26,6 +28,10 @@ import { GetAllSpecialtyNameUseCase } from "../applications/usecases/hospitalAdm
 import { BlockOrUnblockDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/BlockOrUnBlockDoctor.UseCase";
 import { HospitalADminSubscriptionController } from "../presentation/controllers/hospitalAdmin/SubscriptionController";
 import { GetActivePlansForListingHospitalAdminUseCase } from "../applications/usecases/hospitalAdmin/subscription/GetSubscriptionPlans";
+import { CreateSubscriptionOrderUseCase } from "../applications/usecases/hospitalAdmin/subscription/CreateSubscriptionOrderUseCase";
+import { BuySubscriptionUseCase } from "../applications/usecases/hospitalAdmin/subscription/BuySubscriptionUseCase";
+import { HospitalDashboardController } from "../presentation/controllers/hospitalAdmin/HospitalDashboardController";
+import { GetHospitalDashboardOverviewUseCase } from "../applications/usecases/hospitalAdmin/dashboard/HosptialAdminDashboardUseCase";
 
 const submitHositalVerficationRequest = new SubmitHositalVerficationRequest(
   mongoUserRepository,
@@ -94,13 +100,35 @@ const getActivePlansForListingHospitalAdminUseCase =
     hospitalSubscriptionRepository
   );
 
+const createSubscriptionOrderUseCase = new CreateSubscriptionOrderUseCase(
+  razorpayGateway,
+  subscriptionPlanRepository
+);
+
+const buySubscriptionUseCase = new BuySubscriptionUseCase(
+  razorpayGateway,
+  subscriptionPlanRepository,
+  hospitalSubscriptionRepository,
+  walletRepo
+);
+
 const hospitalADminSubscriptionController = new HospitalADminSubscriptionController(
-  getActivePlansForListingHospitalAdminUseCase
+  getActivePlansForListingHospitalAdminUseCase,
+  createSubscriptionOrderUseCase,
+  buySubscriptionUseCase
+);
+
+const getHospitalDashboardOverviewUseCase = new GetHospitalDashboardOverviewUseCase(
+  hospitalDashboardRepository
+);
+const hospitalDashboardController = new HospitalDashboardController(
+  getHospitalDashboardOverviewUseCase
 );
 
 export const hospitalAdminRoutes = new HospitalAdminRoutes(
   hospitalOnBoradingController,
   specialityMangementController,
   doctorMangmentController,
-  hospitalADminSubscriptionController
+  hospitalADminSubscriptionController,
+  hospitalDashboardController
 );

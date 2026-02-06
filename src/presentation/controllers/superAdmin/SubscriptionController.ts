@@ -4,13 +4,15 @@ import { GetActivePlansUseCase } from "../../../applications/usecases/superAdmin
 import { ApiResponse } from "../../utils/common.response.model";
 import { ToggleSubscription } from "../../../applications/usecases/superAdmin/subscriptionMangement/ToggleSubscription.UseCase";
 import { DeleteSubscriptionUseCase } from "../../../applications/usecases/superAdmin/subscriptionMangement/DeleteSubscription.UseCase";
+import { GetWalletSuperAdminUseCase } from "../../../applications/usecases/superAdmin/wallet/SuperAdminGetWallet.UseCase";
 
 export class SubscriptionController {
   constructor(
     private readonly _CreateSubscriptionPlanUseCase: CreateSubscriptionPlanUseCase,
     private readonly _GetActivePlansUseCase: GetActivePlansUseCase,
     private readonly _ToggleSubscriptionUseCase: ToggleSubscription,
-    private readonly _DeleteSubscriptionUseCase: DeleteSubscriptionUseCase
+    private readonly _DeleteSubscriptionUseCase: DeleteSubscriptionUseCase,
+    private readonly _GetWalletSuperAdminUseCase: GetWalletSuperAdminUseCase
   ) {}
 
   createSubscriptionPlan = async (req: Request, res: Response) => {
@@ -36,5 +38,13 @@ export class SubscriptionController {
     const id = req.params.id;
     const result = await this._DeleteSubscriptionUseCase.execute(id);
     return ApiResponse.success(res, result);
+  };
+
+  getMyWallet = async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+
+    const wallet = await this._GetWalletSuperAdminUseCase.execute(userId as string);
+
+    return ApiResponse.success(res, wallet);
   };
 }

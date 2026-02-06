@@ -9,6 +9,8 @@ import { SUPER_ADMIN_ROUTES } from "../constants/routes/super-admin.constants.ro
 import { SubscriptionController } from "../controllers/superAdmin/SubscriptionController";
 import { SubscriptionSchema } from "../validators/superadmin/subscription.validator";
 import { validate } from "../middlewares/validate.middleware";
+import { SuperAdminDashboardController } from "../controllers/superAdmin/SuperAdminDashboardController";
+import { SuperAdminUserMangmentController } from "../controllers/superAdmin/UserMangmentController";
 
 export class SuperAdminRoutes {
   private router: Router;
@@ -16,7 +18,9 @@ export class SuperAdminRoutes {
   constructor(
     private readonly HosptialVerifcationController: HospitalVerficationController,
     private readonly HospitalMangementController: HospitalMangementController,
-    private readonly SubscriptionController: SubscriptionController
+    private readonly SubscriptionController: SubscriptionController,
+    private readonly SuperAdminDashboardController: SuperAdminDashboardController,
+    private readonly _SuperAdminUserMangmentController: SuperAdminUserMangmentController
   ) {
     this.router = Router();
   }
@@ -81,6 +85,33 @@ export class SuperAdminRoutes {
     this.router.delete(
       "/subscription/:id",
       asyncHandler(this.SubscriptionController.deleteSubscription)
+    );
+
+    //wallet route
+
+    this.router.get("/wallet", asyncHandler(this.SubscriptionController.getMyWallet));
+
+    //dashborad
+
+    this.router.get(
+      "/dashboard/overview",
+      asyncHandler(this.SuperAdminDashboardController.getOverview)
+    );
+
+    //UserMangment
+
+    this.router.get("/users", asyncHandler(this._SuperAdminUserMangmentController.getAllUsers));
+    this.router.post(
+      "/users/:userId/verify",
+      asyncHandler(this._SuperAdminUserMangmentController.MarkUserAsVerfied)
+    );
+    this.router.post(
+      "/users/:userId/block",
+      asyncHandler(this._SuperAdminUserMangmentController.BlockUser)
+    );
+    this.router.post(
+      "/users/:userId/unblock",
+      asyncHandler(this._SuperAdminUserMangmentController.UnBlockUser)
     );
     return this.router;
   }

@@ -14,6 +14,10 @@ import { ConsultationRepository } from "../infrastructure/repositories/Consultat
 import { WalletRepository } from "../infrastructure/repositories/WalletRepository";
 import { SubscriptionPlanRepository } from "../infrastructure/repositories/SubscriptionPlanRepository";
 import { HospitalSubscriptionRepository } from "../infrastructure/repositories/HospitalSubscriptionRepository";
+import { SuperAdminDashboardRepo } from "../infrastructure/repositories/SuperAdminDashboardRepo";
+import { HospitalDashboardMongoRepository } from "../infrastructure/repositories/HospitalDashboard.repository";
+import { DoctorDashboardMongoRepository } from "../infrastructure/repositories/DoctorDashboard.Repository";
+import { PatientDashboardMongoRepository } from "../infrastructure/repositories/PatientDashboardMongoRepository";
 // import { NotificationRepository } from "../infrastructure/repositories/notification/NotificationRepository";
 
 export const mongoUserRepository = new MongoUserRepository();
@@ -32,3 +36,7 @@ export const consultationRepo = new ConsultationRepository();
 export const walletRepo = new WalletRepository();
 export const subscriptionPlanRepository = new SubscriptionPlanRepository();
 export const hospitalSubscriptionRepository = new HospitalSubscriptionRepository();
+export const superAdminDashboardRepo = new SuperAdminDashboardRepo();
+export const hospitalDashboardRepository = new HospitalDashboardMongoRepository();
+export const doctorDashboardRepository = new DoctorDashboardMongoRepository();
+export const patientDashboardRepository = new PatientDashboardMongoRepository();

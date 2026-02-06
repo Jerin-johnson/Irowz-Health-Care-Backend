@@ -1,4 +1,9 @@
-import { IUserRepository } from "../../domain/repositories/IUser.repo";
+import {
+  IUserRepository,
+  PaginatedResult,
+  PaginationParams,
+  UserStatusFilter,
+} from "../../domain/repositories/IUser.repo";
 import { createUser, updateUser, UserResponse } from "../../domain/types/IUser.types";
 import User from "../database/mongo/models/User.model";
 
@@ -74,5 +79,66 @@ export class MongoUserRepository implements IUserRepository {
       resetPasswordToken,
       resetPasswordExpires: { $gt: Date.now() },
     });
+  }
+
+  async findAllUsers(
+    pagination: PaginationParams,
+    role?: string,
+    status?: UserStatusFilter,
+    search?: string
+  ): Promise<PaginatedResult<UserResponse>> {
+    const { page, limit } = pagination;
+    const skip = (page - 1) * limit;
+
+    const filter: any = {};
+
+    if (role) {
+      filter.role = role.toUpperCase();
+    }
+
+    if (status === "VERIFIED") {
+      filter.isVerified = true;
+      filter.isBlocked = false;
+    }
+
+    if (status === "UNVERIFIED") {
+      filter.isVerified = false;
+      filter.isBlocked = false;
+    }
+
+    if (status === "BLOCKED") {
+      filter.isBlocked = true;
+    }
+
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const [users, totalItems] = await Promise.all([
+      User.find(filter)
+        .select(
+          "_id name email phone role profileImage isVerified isBlocked dob gender forcePasswordReset"
+        )
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 })
+        .lean<UserResponse[]>(),
+
+      User.countDocuments(filter),
+    ]);
+
+    return {
+      items: users,
+      meta: {
+        page,
+        limit,
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+      },
+    };
   }
 }

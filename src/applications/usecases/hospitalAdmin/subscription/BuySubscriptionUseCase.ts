@@ -1,66 +1,75 @@
 import { Types } from "mongoose";
 import { ISubscriptionPlanRepository } from "../../../../domain/repositories/ISubscriptionPlanRepository";
-import { IHospitalSubscriptionRepository } from "../../../../domain/repositories/IHospitalSubscriptionRepository";
+import { HospitalSubscriptionRepository } from "../../../../infrastructure/repositories/HospitalSubscriptionRepository";
 import { WalletRepository } from "../../../../infrastructure/repositories/WalletRepository";
+import { IPaymentGateway } from "../../../../domain/payment/PaymentGateway";
 
 export class BuySubscriptionUseCase {
   constructor(
-    private readonly planRepo: ISubscriptionPlanRepository,
-    private readonly hospitalSubRepo: IHospitalSubscriptionRepository,
-    private readonly walletRepo: WalletRepository
+    private _paymentGateway: IPaymentGateway,
+    private _planRepo: ISubscriptionPlanRepository,
+    private _hospitalSubRepo: HospitalSubscriptionRepository,
+    private _walletRepo: WalletRepository
   ) {}
 
-  async execute(hospitalId: string, planId: string, superAdminId: string) {
-    // const session = await mongoose.startSession();
-    // session.startTransaction();
+  async execute(payload: {
+    hospitalId: string;
+    planId: string;
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+    superAdminId: string;
+  }) {
+    const isValid = this._paymentGateway.verifyPaymentSignature({
+      razorpayOrderId: payload.razorpayOrderId,
+      razorpayPaymentId: payload.razorpayPaymentId,
+      razorpaySignature: payload.razorpaySignature,
+    });
 
-    const active = await this.hospitalSubRepo.findActiveByHospital(hospitalId);
+    if (!isValid) throw new Error("Payment verification failed");
 
-    if (active) throw new Error("Active subscription already exists");
+    const active = await this._hospitalSubRepo.findActiveByHospital(payload.hospitalId);
 
-    const plan = await this.planRepo.findById(planId);
+    if (active) {
+      active.status = "CANCELLED";
+      await this._hospitalSubRepo.save(active);
+    }
+
+    const plan = await this._planRepo.findById(payload.planId);
     if (!plan || !plan.isActive || plan.isDeleted) throw new Error("Plan not available");
 
-    await this.walletRepo.debit(
-      new Types.ObjectId(hospitalId),
-      plan.price,
-      "SUBSCRIPTION_PURCHASE",
-      plan._id
-      // session
-    );
+    // await this._walletRepo.debit(
+    //   new Types.ObjectId(payload.hospitalId),
+    //   plan.price,
+    //   "SUBSCRIPTION_PURCHASE",
+    //   plan._id
+    // );
 
-    // 4. create subscription snapshot
     const startDate = new Date();
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + plan.durationInDays);
 
-    const subscription = await this.hospitalSubRepo.create(
-      {
-        hospitalId: new Types.ObjectId(hospitalId),
-        planId: plan._id,
-        doctorLimitSnapshot: plan.doctorLimit,
-        priceSnapshot: plan.price,
-        durationSnapshot: plan.durationInDays,
-        startDate,
-        endDate,
-        status: "ACTIVE",
-      }
-      //   session
-    );
+    const subscription = await this._hospitalSubRepo.create({
+      hospitalId: payload.hospitalId,
+      planId: plan._id,
 
-    if (!subscription) throw new Error("subscription is created");
+      doctorLimitSnapshot: plan.doctorLimit,
+      priceSnapshot: plan.price,
+      durationSnapshot: plan.durationInDays,
 
-    // 5. credit superadmin wallet
-    await this.walletRepo.credit(
-      new Types.ObjectId(superAdminId),
+      startDate,
+      endDate,
+      status: "ACTIVE",
+    });
+
+    if (!subscription) throw new Error("something went wrong");
+
+    await this._walletRepo.credit(
+      new Types.ObjectId(payload.superAdminId),
       plan.price,
       "SUBSCRIPTION_SALE",
       subscription._id
-      //   session
     );
-
-    // await session.commitTransaction();
-    // session.endSession();
 
     return subscription;
   }

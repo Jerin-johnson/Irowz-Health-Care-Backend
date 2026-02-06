@@ -10,5 +10,7 @@ export interface IHospitalSubscriptionRepository extends IBaseRepository<
 
   expireOldSubscriptions(): Promise<void>;
 
+  save(HospitalSubscription: HospitalSubscriptionDocument): Promise<HospitalSubscriptionDocument>;
+
   // findCurrent(hospitalId: string): Promise<HospitalSubscriptionDocument | null>;
 }

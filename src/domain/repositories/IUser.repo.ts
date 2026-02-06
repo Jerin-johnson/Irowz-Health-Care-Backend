@@ -1,5 +1,24 @@
 import { createUser, UserResponse, updateUser } from "../types/IUser.types";
 
+export interface PaginationParams {
+  page: number;
+  limit: number;
+}
+
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export interface PaginatedResult<T> {
+  items: T[];
+  meta: PaginationMeta;
+}
+
+export type UserStatusFilter = "VERIFIED" | "UNVERIFIED" | "BLOCKED";
+
 export interface IUserRepository {
   create(user: createUser): Promise<UserResponse | null>;
   findById(id: string): Promise<UserResponse | null>;
@@ -17,4 +36,11 @@ export interface IUserRepository {
   ): Promise<any>;
 
   findOneByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse | null>;
+
+  findAllUsers(
+    pagination: PaginationParams,
+    role?: string,
+    status?: UserStatusFilter,
+    search?: string
+  ): Promise<PaginatedResult<UserResponse>>;
 }

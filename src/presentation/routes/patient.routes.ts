@@ -12,6 +12,7 @@ import { patientProfileSchema } from "../validators/patient/PatientProfileSchme"
 import { PatientAppointmentController } from "../controllers/patient/PatientAppointment.Controller";
 import { PatientNotificationController } from "../controllers/patient/PatientNotifcation.Controller";
 import { PatientOnlineConsultationController } from "../controllers/patient/PatientOnlineConsultation.Controller";
+import { PatientDashboardController } from "../controllers/patient/PatientDashboardController";
 
 export class PatientRoutes {
   private _router: Router;
@@ -23,7 +24,8 @@ export class PatientRoutes {
     private readonly _PatientProfileController: PatientProfileController,
     private readonly _PatientAppointmentController: PatientAppointmentController,
     private readonly _PatientNotificationController: PatientNotificationController,
-    private readonly _PatientOnlineConsultationController: PatientOnlineConsultationController
+    private readonly _PatientOnlineConsultationController: PatientOnlineConsultationController,
+    private readonly _PatientDashboardController: PatientDashboardController
   ) {
     this._router = Router();
   }
@@ -182,6 +184,14 @@ export class PatientRoutes {
       "/video/token",
       authMiddleware,
       asyncHandler(this._PatientOnlineConsultationController.videoToken)
+    );
+
+    //dashboard
+
+    this._router.get(
+      "/dashboard/overview",
+      authMiddleware,
+      asyncHandler(this._PatientDashboardController.overview)
     );
 
     return this._router;

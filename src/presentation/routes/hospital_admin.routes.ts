@@ -13,6 +13,7 @@ import { AdminCreateDoctorSchema } from "../validators/hosptial/AdminCreateDocto
 import { HOSPITAL_ADMIN_ROUTES } from "../constants/routes/hospital-admin.constants.routes";
 import { subscriptionPlanChecker } from "../middlewares/subscription/subsciptionPlanChecker";
 import { HospitalADminSubscriptionController } from "../controllers/hospitalAdmin/SubscriptionController";
+import { HospitalDashboardController } from "../controllers/hospitalAdmin/HospitalDashboardController";
 
 export class HospitalAdminRoutes {
   private router: Router;
@@ -21,7 +22,8 @@ export class HospitalAdminRoutes {
     private readonly _HospitalOnBoradingController: HospitalOnBoradingController,
     private readonly _SpecialtyMangmentController: SpecialtyMangmentController,
     private readonly _DoctorMangmentController: DoctorMangmentController,
-    private readonly _HospitalADminSubscriptionController: HospitalADminSubscriptionController
+    private readonly _HospitalADminSubscriptionController: HospitalADminSubscriptionController,
+    private readonly _HospitalDashboardController: HospitalDashboardController
   ) {
     this.router = Router();
   }
@@ -105,6 +107,23 @@ export class HospitalAdminRoutes {
     this.router.get(
       "/subscription/plans",
       asyncHandler(this._HospitalADminSubscriptionController.GetSubcriptionPlans)
+    );
+
+    this.router.post(
+      "/subscription/order",
+      asyncHandler(this._HospitalADminSubscriptionController.createOrder)
+    );
+
+    this.router.post(
+      "/subscription/confirm",
+      asyncHandler(this._HospitalADminSubscriptionController.confirmPayment)
+    );
+
+    //dashboard
+
+    this.router.get(
+      "/dashboard/overview",
+      asyncHandler(this._HospitalDashboardController.overview)
     );
 
     return this.router;

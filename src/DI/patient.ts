@@ -14,6 +14,7 @@ import { LockDoctorSlotUseCase } from "../applications/usecases/patient/BookingS
 import { UnLockDoctorSlotUseCase } from "../applications/usecases/patient/BookingSlot/UnLockDoctorSlot.useCase";
 import { GetConsultationVideoTokenPatientUseCase } from "../applications/usecases/patient/consultation/GetConsultationVideoTokenPatient";
 import { RespondConsultationUseCase } from "../applications/usecases/patient/consultation/RespondConsultationUseCase";
+import { GetPatientDashboardOverviewUseCase } from "../applications/usecases/patient/dashboard/GetPatientDashboardOverviewUseCase";
 import { DoctorSearchUseCase } from "../applications/usecases/patient/DoctorListing/DoctorSearch.UseCase";
 import { GetAvailableSpecialityUseCase } from "../applications/usecases/patient/DoctorListing/GetAvailbaleSpecialty.useCase";
 import { GetDoctorProfileUseCase } from "../applications/usecases/patient/DoctorListing/GetDoctorProfile";
@@ -28,6 +29,7 @@ import { DoctorBookingController } from "../presentation/controllers/patient/Doc
 import { DoctorListingController } from "../presentation/controllers/patient/DoctorListing.Controller";
 import { DoctorReviewController } from "../presentation/controllers/patient/DoctorReview.Controller";
 import { PatientAppointmentController } from "../presentation/controllers/patient/PatientAppointment.Controller";
+import { PatientDashboardController } from "../presentation/controllers/patient/PatientDashboardController";
 import { PatientNotificationController } from "../presentation/controllers/patient/PatientNotifcation.Controller";
 import { PatientOnlineConsultationController } from "../presentation/controllers/patient/PatientOnlineConsultation.Controller";
 import { PatientProfileController } from "../presentation/controllers/patient/PatientProfile.Controller";
@@ -45,6 +47,7 @@ import {
   doctorSearchMongoRepository,
   hospitalSpecialityRepo,
   mongoUserRepository,
+  patientDashboardRepository,
   patientProfileRepository,
   walletRepo,
 } from "./repositers";
@@ -200,6 +203,14 @@ const patientOnlineConsultationController = new PatientOnlineConsultationControl
   getConsultationVideoTokenPatientUseCase
 );
 
+const getPatientDashboardOverviewUseCase = new GetPatientDashboardOverviewUseCase(
+  patientDashboardRepository
+);
+
+const patientDashboardController = new PatientDashboardController(
+  getPatientDashboardOverviewUseCase
+);
+
 export const patientRoutes = new PatientRoutes(
   doctorBookingController,
   doctorListingController,
@@ -207,5 +218,6 @@ export const patientRoutes = new PatientRoutes(
   patientProfileController,
   patientAppointmentController,
   patientNotificationController,
-  patientOnlineConsultationController
+  patientOnlineConsultationController,
+  patientDashboardController
 );

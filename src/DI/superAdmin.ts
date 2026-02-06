@@ -6,6 +6,8 @@ import {
   hosptialVerficatinRepo,
   mongoUserRepository,
   subscriptionPlanRepository,
+  superAdminDashboardRepo,
+  walletRepo,
 } from "./repositers";
 import { HospitalVerficationController } from "../presentation/controllers/superAdmin/HosptialVerfication.controller";
 import { SuperAdminRoutes } from "../presentation/routes/super_admin.routes";
@@ -22,6 +24,14 @@ import { GetActivePlansUseCase } from "../applications/usecases/superAdmin/subsc
 import { SubscriptionController } from "../presentation/controllers/superAdmin/SubscriptionController";
 import { DeleteSubscriptionUseCase } from "../applications/usecases/superAdmin/subscriptionMangement/DeleteSubscription.UseCase";
 import { ToggleSubscription } from "../applications/usecases/superAdmin/subscriptionMangement/ToggleSubscription.UseCase";
+import { GetWalletSuperAdminUseCase } from "../applications/usecases/superAdmin/wallet/SuperAdminGetWallet.UseCase";
+import { SuperAdminDashboardController } from "../presentation/controllers/superAdmin/SuperAdminDashboardController";
+import { GetFullDashboardOverviewUseCase } from "../applications/usecases/superAdmin/dashborad/GetDashboardOverviewUseCase";
+import { SuperAdminUserMangmentController } from "../presentation/controllers/superAdmin/UserMangmentController";
+import { SuperAdminGetAllUserUseCase } from "../applications/usecases/superAdmin/userMangment/GetAllUserUseCase";
+import { UnBlockUserUserCase } from "../applications/usecases/superAdmin/userMangment/UnBlockUserUseCase";
+import { BlockUserUserCase } from "../applications/usecases/superAdmin/userMangment/BlockUserUseCase";
+import { MarkAsVerfiedUser } from "../applications/usecases/superAdmin/userMangment/MarkAsVerfiedUseCase";
 
 const approveVerficationRequest = new ApproveVerficationRequest(
   hosptialVerficatinRepo,
@@ -69,15 +79,40 @@ const getActivePlansUseCase = new GetActivePlansUseCase(subscriptionPlanReposito
 const toggleSubscription = new ToggleSubscription(subscriptionPlanRepository);
 const deleteSubscriptionUseCase = new DeleteSubscriptionUseCase(subscriptionPlanRepository);
 
+const getWalletSuperAdminUseCase = new GetWalletSuperAdminUseCase(walletRepo);
+
 const subscriptionController = new SubscriptionController(
   createSubscriptionPlanUseCase,
   getActivePlansUseCase,
   toggleSubscription,
-  deleteSubscriptionUseCase
+  deleteSubscriptionUseCase,
+  getWalletSuperAdminUseCase
+);
+
+const getFullDashboardOverviewUseCase = new GetFullDashboardOverviewUseCase(
+  superAdminDashboardRepo
+);
+
+const superAdminDashboardController = new SuperAdminDashboardController(
+  getFullDashboardOverviewUseCase
+);
+const superAdminGetAllUserUseCase = new SuperAdminGetAllUserUseCase(mongoUserRepository);
+
+const markAsVerfiedUser = new MarkAsVerfiedUser(mongoUserRepository);
+
+const blockUserUserCase = new BlockUserUserCase(mongoUserRepository);
+const unBlockUserUserCase = new UnBlockUserUserCase(mongoUserRepository);
+const superAdminUserMangmentController = new SuperAdminUserMangmentController(
+  superAdminGetAllUserUseCase,
+  markAsVerfiedUser,
+  blockUserUserCase,
+  unBlockUserUserCase
 );
 
 export const superAdminRoutes = new SuperAdminRoutes(
   hospitalVerficationController,
   hospitalMangementController,
-  subscriptionController
+  subscriptionController,
+  superAdminDashboardController,
+  superAdminUserMangmentController
 );

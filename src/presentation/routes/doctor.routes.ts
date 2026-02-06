@@ -10,6 +10,7 @@ import { DOCTOR_ROUTES } from "../constants/routes/doctor.constants.routes";
 import { DoctorScheduleMangmentController } from "../controllers/doctor/DoctorScheduleMangment.Controller";
 import { DoctorAppointmentController } from "../controllers/doctor/DoctorAppoinmentController";
 import { DoctorConsultationController } from "../controllers/doctor/DoctorConsultation.Controller";
+import { DoctorDashboardController } from "../controllers/doctor/DoctorDashboardController";
 
 export class DoctorRoutes {
   private _router: Router;
@@ -19,7 +20,8 @@ export class DoctorRoutes {
     private readonly _DoctorAvailabilityController: DoctorAvailabilityController,
     private readonly _DoctorScheduleMangmentController: DoctorScheduleMangmentController,
     private readonly _DoctorAppointmentController: DoctorAppointmentController,
-    private readonly _DoctorConsultationController: DoctorConsultationController
+    private readonly _DoctorConsultationController: DoctorConsultationController,
+    private readonly _DoctorDashboardController: DoctorDashboardController
   ) {
     this._router = Router();
   }
@@ -138,6 +140,10 @@ export class DoctorRoutes {
       "/consultation/online/end",
       asyncHandler(this._DoctorConsultationController.EndConsultationOnline)
     );
+
+    //dashboard
+
+    this._router.get("/dashboard/overview", asyncHandler(this._DoctorDashboardController.overview));
 
     return this._router;
   }

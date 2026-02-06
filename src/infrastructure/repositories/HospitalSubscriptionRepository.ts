@@ -32,6 +32,10 @@ export class HospitalSubscriptionRepository
     );
   }
 
+  async save(HospitalSubscription: HospitalSubscriptionDocument) {
+    return await HospitalSubscription.save();
+  }
+
   // findCurrent(hospitalId: string) {
   //   return HospitalSubscriptionModel.findOne({
   //     hospitalId,
