@@ -97,8 +97,13 @@ export class DoctorRoutes {
     );
 
     this._router.get(
-      "/consultation/medical-record/:recordId",
+      "/consultation/medical-record/precription/:recordId",
       asyncHandler(this._DoctorConsultationController.GetMedicalRecordWithDoctorInfoUseCase)
+    );
+
+    this._router.get(
+      "/consultation/medical-record/lab/:id",
+      asyncHandler(this._DoctorConsultationController.getLabTests)
     );
 
     this._router.get(
@@ -139,6 +144,11 @@ export class DoctorRoutes {
     this._router.post(
       "/consultation/online/end",
       asyncHandler(this._DoctorConsultationController.EndConsultationOnline)
+    );
+
+    this._router.post(
+      "/consultation/lab/create-lab-order",
+      asyncHandler(this._DoctorConsultationController.CreateLabOrder)
     );
 
     //dashboard

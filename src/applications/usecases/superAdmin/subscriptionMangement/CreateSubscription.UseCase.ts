@@ -1,6 +1,7 @@
 import { ISubscriptionPlanRepository } from "../../../../domain/repositories/ISubscriptionPlanRepository";
+import { ICreateSubscriptionPlanUseCase } from "../../../../domain/usecase/superAdmin/subcriptionMangment/ICreateSubscriptionPlanUseCase";
 
-export class CreateSubscriptionPlanUseCase {
+export class CreateSubscriptionPlanUseCase implements ICreateSubscriptionPlanUseCase {
   constructor(private readonly _planRepo: ISubscriptionPlanRepository) {}
 
   async execute(data: {

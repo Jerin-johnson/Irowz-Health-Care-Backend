@@ -1,9 +1,10 @@
-import { IPaymentGateway } from "../../../../domain/payment/PaymentGateway";
+import { IExternalGateway } from "../../../../domain/payment/PaymentGateway";
 import { ISubscriptionPlanRepository } from "../../../../domain/repositories/ISubscriptionPlanRepository";
+import { ICreateSubscriptionOrderUseCase } from "../../../../domain/usecase/hosptialAdmin/subscription/ICreateSubscriptionOrderUseCase";
 
-export class CreateSubscriptionOrderUseCase {
+export class CreateSubscriptionOrderUseCase implements ICreateSubscriptionOrderUseCase {
   constructor(
-    private _paymentGateway: IPaymentGateway,
+    private _paymentGateway: IExternalGateway,
     private _planRepo: ISubscriptionPlanRepository
   ) {}
 

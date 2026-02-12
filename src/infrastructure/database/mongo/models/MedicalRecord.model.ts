@@ -3,23 +3,41 @@ import { Schema, model, Types, Document } from "mongoose";
 const PrescriptionSchema = new Schema(
   {
     medicineName: { type: String, required: true },
-    dosage: { type: String, required: true }, // e.g. 500mg
-    frequency: { type: String, required: true }, // e.g. twice a day
-    duration: { type: String, required: true }, // e.g. 5 days
-    instructions: { type: String }, // optional notes
+    dosage: { type: String, required: true },
+    frequency: { type: String, required: true },
+    duration: { type: String, required: true },
+    instructions: { type: String },
   },
   { _id: false }
 );
 
 const LabTestSchema = new Schema(
   {
-    testName: { type: String, required: true }, // e.g. CBC
-    description: { type: String }, // optional reason
-    reportUrl: { type: String }, // uploaded report
+    testName: { type: String, required: true },
+
+    description: { type: String },
+
+    action: {
+      type: String,
+      enum: ["Hospital", "Outside"],
+      required: true,
+    },
+
+    reportUrl: { type: String },
+
     status: {
       type: String,
-      enum: ["ORDERED", "RECEIVED"],
+      enum: ["ORDERED", "RESULT_UPLOADED", "REVIEWED"],
       default: "ORDERED",
+    },
+
+    orderedAt: {
+      type: Date,
+      default: Date.now,
+    },
+
+    uploadedAt: {
+      type: Date,
     },
   },
   { _id: false }
@@ -28,7 +46,7 @@ const LabTestSchema = new Schema(
 export interface MedicalRecordDocument extends Document {
   // _id?: Types.ObjectId;
 
-  appointmentId: Types.ObjectId; // 🔑 one-to-one with appointment
+  appointmentId: Types.ObjectId;
   patientId: Types.ObjectId;
   doctorId: Types.ObjectId;
   hospitalId?: Types.ObjectId;
@@ -51,8 +69,15 @@ export interface MedicalRecordDocument extends Document {
   labTests: {
     testName: string;
     description?: string;
+
+    action: "Hospital" | "Outside";
+
     reportUrl?: string;
-    status: "ORDERED" | "RECEIVED";
+
+    status: "ORDERED" | "RESULT_UPLOADED" | "REVIEWED";
+
+    orderedAt: Date;
+    uploadedAt?: Date;
   }[];
 
   followUpDate?: Date;
@@ -146,9 +171,6 @@ const MedicalRecordSchema = new Schema<MedicalRecordDocument>(
   { timestamps: true }
 );
 
-/* ----------------------------------
-   Export Model
------------------------------------ */
 export const MedicalRecordModel = model<MedicalRecordDocument>(
   "MedicalRecord",
   MedicalRecordSchema

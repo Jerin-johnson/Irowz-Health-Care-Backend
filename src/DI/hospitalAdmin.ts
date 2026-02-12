@@ -10,6 +10,8 @@ import {
   hospitalSubscriptionRepository,
   walletRepo,
   hospitalDashboardRepository,
+  hospitalLabOrderRepository,
+  medicalRecordRepository,
 } from "./repositers";
 import { emailQueueService, passwordService, razorpayGateway, s3FileStorage } from "./service";
 import { ResubmitHospitalVerificationUseCase } from "../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
@@ -32,6 +34,9 @@ import { CreateSubscriptionOrderUseCase } from "../applications/usecases/hospita
 import { BuySubscriptionUseCase } from "../applications/usecases/hospitalAdmin/subscription/BuySubscriptionUseCase";
 import { HospitalDashboardController } from "../presentation/controllers/hospitalAdmin/HospitalDashboardController";
 import { GetHospitalDashboardOverviewUseCase } from "../applications/usecases/hospitalAdmin/dashboard/HosptialAdminDashboardUseCase";
+import { ListHospitalLabOrdersUseCase } from "../applications/usecases/hospitalAdmin/LabOrder/ListHospitalLabOrdersUseCase";
+import { UploadHospitalLabTestUseCase } from "../applications/usecases/hospitalAdmin/LabOrder/UploadHospitalLabTestUseCase";
+import { HospitalLabAdminController } from "../presentation/controllers/hospitalAdmin/LabOrderMangment.Controller";
 
 const submitHositalVerficationRequest = new SubmitHositalVerficationRequest(
   mongoUserRepository,
@@ -125,10 +130,24 @@ const hospitalDashboardController = new HospitalDashboardController(
   getHospitalDashboardOverviewUseCase
 );
 
+const listHospitalLabOrdersUseCase = new ListHospitalLabOrdersUseCase(hospitalLabOrderRepository);
+
+const uploadHospitalLabTestUseCase = new UploadHospitalLabTestUseCase(
+  hospitalLabOrderRepository,
+  medicalRecordRepository,
+  s3FileStorage
+);
+
+const hospitalLabAdminController = new HospitalLabAdminController(
+  listHospitalLabOrdersUseCase,
+  uploadHospitalLabTestUseCase
+);
+
 export const hospitalAdminRoutes = new HospitalAdminRoutes(
   hospitalOnBoradingController,
   specialityMangementController,
   doctorMangmentController,
   hospitalADminSubscriptionController,
-  hospitalDashboardController
+  hospitalDashboardController,
+  hospitalLabAdminController
 );

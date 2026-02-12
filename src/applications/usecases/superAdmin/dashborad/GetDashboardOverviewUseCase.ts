@@ -1,6 +1,7 @@
 import { ISuperAdminDashboardRepo } from "../../../../domain/repositories/ISuperAdminDashboardRepo";
+import { IGetFullDashboardOverviewUseCase } from "../../../../domain/usecase/superAdmin/dashboard/IGetFullDashboardOverviewUseCase";
 
-export class GetFullDashboardOverviewUseCase {
+export class GetFullDashboardOverviewUseCase implements IGetFullDashboardOverviewUseCase {
   constructor(private repo: ISuperAdminDashboardRepo) {}
 
   async execute() {

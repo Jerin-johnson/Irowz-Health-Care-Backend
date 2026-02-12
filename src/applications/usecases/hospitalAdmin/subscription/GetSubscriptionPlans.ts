@@ -1,7 +1,8 @@
 import { IHospitalSubscriptionRepository } from "../../../../domain/repositories/IHospitalSubscriptionRepository";
 import { ISubscriptionPlanRepository } from "../../../../domain/repositories/ISubscriptionPlanRepository";
+import { IGetActivePlansForListingHospitalAdminUseCase } from "../../../../domain/usecase/hosptialAdmin/subscription/IGetActivePlansForListingHospitalAdminUseCase";
 
-export class GetActivePlansForListingHospitalAdminUseCase {
+export class GetActivePlansForListingHospitalAdminUseCase implements IGetActivePlansForListingHospitalAdminUseCase {
   constructor(
     private readonly _planRepo: ISubscriptionPlanRepository,
     private readonly _hospitalSubRepo: IHospitalSubscriptionRepository

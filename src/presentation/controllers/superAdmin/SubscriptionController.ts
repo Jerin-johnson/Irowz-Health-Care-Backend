@@ -1,24 +1,22 @@
 import { Response, Request } from "express";
-import { CreateSubscriptionPlanUseCase } from "../../../applications/usecases/superAdmin/subscriptionMangement/CreateSubscription.UseCase";
-import { GetActivePlansUseCase } from "../../../applications/usecases/superAdmin/subscriptionMangement/GetSubscription.UseCase";
 import { ApiResponse } from "../../utils/common.response.model";
-import { ToggleSubscription } from "../../../applications/usecases/superAdmin/subscriptionMangement/ToggleSubscription.UseCase";
-import { DeleteSubscriptionUseCase } from "../../../applications/usecases/superAdmin/subscriptionMangement/DeleteSubscription.UseCase";
-import { GetWalletSuperAdminUseCase } from "../../../applications/usecases/superAdmin/wallet/SuperAdminGetWallet.UseCase";
+import { ICreateSubscriptionPlanUseCase } from "../../../domain/usecase/superAdmin/subcriptionMangment/ICreateSubscriptionPlanUseCase";
+import { IGetActivePlansUseCase } from "../../../domain/usecase/superAdmin/subcriptionMangment/IGetActivePlansUseCase";
+import { IToggleSubscription } from "../../../domain/usecase/superAdmin/subcriptionMangment/IToggleSubscription";
+import { IDeleteSubscriptionUseCase } from "../../../domain/usecase/superAdmin/subcriptionMangment/IDeleteSubscriptionUseCase";
+import { IGetWalletUseCase } from "../../../domain/usecase/patient/wallet/IGetWalletUseCase";
 
 export class SubscriptionController {
   constructor(
-    private readonly _CreateSubscriptionPlanUseCase: CreateSubscriptionPlanUseCase,
-    private readonly _GetActivePlansUseCase: GetActivePlansUseCase,
-    private readonly _ToggleSubscriptionUseCase: ToggleSubscription,
-    private readonly _DeleteSubscriptionUseCase: DeleteSubscriptionUseCase,
-    private readonly _GetWalletSuperAdminUseCase: GetWalletSuperAdminUseCase
+    private readonly _CreateSubscriptionPlanUseCase: ICreateSubscriptionPlanUseCase,
+    private readonly _GetActivePlansUseCase: IGetActivePlansUseCase,
+    private readonly _ToggleSubscriptionUseCase: IToggleSubscription,
+    private readonly _DeleteSubscriptionUseCase: IDeleteSubscriptionUseCase,
+    private readonly _GetWalletSuperAdminUseCase: IGetWalletUseCase
   ) {}
 
   createSubscriptionPlan = async (req: Request, res: Response) => {
-    console.log("The req body is", req.body);
     const result = await this._CreateSubscriptionPlanUseCase.execute(req.body);
-    console.log("The result  is ", result);
     return ApiResponse.success(res, result);
   };
 
@@ -42,7 +40,6 @@ export class SubscriptionController {
 
   getMyWallet = async (req: Request, res: Response) => {
     const userId = req.user?.userId;
-
     const wallet = await this._GetWalletSuperAdminUseCase.execute(userId as string);
 
     return ApiResponse.success(res, wallet);

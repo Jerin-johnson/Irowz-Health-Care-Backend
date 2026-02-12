@@ -6,7 +6,9 @@ export type VisitType = "OPD" | "ONLINE";
 
 export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED" | "PARTIALLY_REFUNDED";
 
-export type PaymentMethod = "RAZORPAY"; //  keep only what you support
+export type PaymentMethod = "RAZORPAY" | "WALLET";
+
+//  keep only what you support
 
 //  Snapshot of patient at booking time
 export interface PatientSnapshot {

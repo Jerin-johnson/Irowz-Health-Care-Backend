@@ -1,16 +1,16 @@
 import { IDoctorSlotLock } from "../../../../domain/lock/DoctorSlotLock";
-import { IPaymentGateway } from "../../../../domain/payment/PaymentGateway";
 import { IDoctorRepository } from "../../../../domain/repositories/IDoctor.repo";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { ICheckoutUseCase } from "../../../../domain/usecase/patient/BookingSlots/ICheckoutUseCase";
 import { timeToMinutes } from "../../../../domain/utils/time.utils";
+import { PaymentProviderFactory } from "../../../../infrastructure/payment/PaymentProviderFactory";
 import { CheckoutInput } from "../../../dtos/patient/CheckoutInput";
 
 export class CheckoutUseCase implements ICheckoutUseCase {
   constructor(
     private readonly _DoctorSlotLock: IDoctorSlotLock,
     private readonly _DoctorAppoinmentRepo: IDoctorAppointmentRepository,
-    private readonly _RazorpayService: IPaymentGateway,
+    private readonly _PaymentFactory: PaymentProviderFactory,
     private readonly _DoctorRepo: IDoctorRepository
   ) {}
 
@@ -25,6 +25,7 @@ export class CheckoutUseCase implements ICheckoutUseCase {
       patientSnapshot,
       addressSnapshot,
       notes,
+      paymentMethod,
     } = input;
 
     const isLocked = await this._DoctorSlotLock.isLocked(doctorId, date, startTime, patientId);
@@ -70,23 +71,48 @@ export class CheckoutUseCase implements ICheckoutUseCase {
         consultationFee: Doctor.consultationFee,
         totalAmount: Doctor.consultationFee,
         paymentStatus: "PENDING",
-        paymentMethod: "RAZORPAY",
+        paymentMethod: paymentMethod,
         status: "PENDING",
       });
     }
 
-    const razorpayOrder = await this._RazorpayService.createOrder({
-      amount: appointment.totalAmount * 100,
-      receipt: appointment.id,
+    console.log(appointment);
+
+    const provider = this._PaymentFactory.get(paymentMethod);
+
+    const payment = await provider.initiate({
+      appointmentId: appointment.id,
+      amount: appointment.totalAmount,
+      patientId: input.patientId,
     });
 
-    await this._DoctorAppoinmentRepo.attachPaymentOrder(appointment.id, razorpayOrder.id);
+    if (payment.method === "WALLET") {
+      await this._DoctorAppoinmentRepo.markPaid({
+        appointmentId: appointment.id,
+        transactionId: "WALLET",
+      });
+    }
+
+    if (payment.method === "RAZORPAY") {
+      await this._DoctorAppoinmentRepo.attachPaymentOrder(appointment.id, payment.orderId);
+
+      return {
+        appointmentId: appointment._id,
+        razorpayOrderId: payment.orderId,
+        amount: payment.amount,
+        currency: payment.currency,
+      };
+    }
+
+    // const razorpayOrder = await this._RazorpayService.createOrder({
+    //   amount: appointment.totalAmount * 100,
+    //   receipt: appointment.id,
+    // });
+
+    // await this._DoctorAppoinmentRepo.attachPaymentOrder(appointment.id, razorpayOrder.id);
 
     return {
       appointmentId: appointment._id,
-      razorpayOrderId: razorpayOrder.id,
-      amount: razorpayOrder.amount,
-      currency: razorpayOrder.currency,
     };
   }
 }

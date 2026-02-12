@@ -2,6 +2,8 @@ import { ObjectId } from "mongoose";
 import {
   FindMedicalRecordsQuery,
   IMedicalRecordRepository,
+  LabTestDomain,
+  MedicalRecordPopulated,
   PaginatedMedicalRecords,
 } from "../../domain/repositories/IMedicalRecordRepository";
 import {
@@ -100,7 +102,15 @@ export class MedicalRecordRepository implements IMedicalRecordRepository {
       MedicalRecordModel.countDocuments(filter),
     ]);
 
-    return { data: records, total };
+    // return { data: records, total };
+
+    return {
+      data: records.map((record) => ({
+        ...record,
+        _id: record._id.toString(),
+      })) as MedicalRecordPopulated[],
+      total,
+    };
   }
 
   async findMedicalRecordWithDoctorAndHospital(
@@ -150,6 +160,49 @@ export class MedicalRecordRepository implements IMedicalRecordRepository {
     return {
       medicalRecord: record,
       doctorInfo,
+    };
+  }
+
+  async addLabTests(appointmentId: string, labTests: LabTestDomain[]): Promise<void> {
+    await MedicalRecordModel.updateOne(
+      { appointmentId },
+      { $push: { labTests: { $each: labTests } } }
+    );
+  }
+
+  async updateSingleLabTestResult(params: {
+    appointmentId: string;
+    testName: string;
+    reportUrl: string;
+  }) {
+    await MedicalRecordModel.updateOne(
+      {
+        appointmentId: params.appointmentId,
+        "labTests.testName": params.testName,
+        "labTests.action": "Hospital",
+      },
+      {
+        $set: {
+          "labTests.$.reportUrl": params.reportUrl,
+          "labTests.$.status": "RESULT_UPLOADED",
+          "labTests.$.uploadedAt": new Date(),
+        },
+      }
+    );
+  }
+
+  async getLabTestsByMedicalRecordId(medicalRecordId: string) {
+    const record = await MedicalRecordModel.findById(medicalRecordId)
+      .select("labTests status")
+      .lean();
+
+    if (!record) {
+      throw new Error("Medical record not found");
+    }
+
+    return {
+      medicalRecordId,
+      labTests: record.labTests,
     };
   }
 }

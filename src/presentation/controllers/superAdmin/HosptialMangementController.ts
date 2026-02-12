@@ -12,8 +12,6 @@ export class HospitalMangementController {
   getAllHospital = async (req: Request, res: Response) => {
     const { page = "1", limit = "10", search, isActive, city } = req.query;
 
-    console.log(isActive);
-
     const result = await this.GetALLHosptialLists.execute({
       search: search as string | undefined,
       city: city as string | undefined,

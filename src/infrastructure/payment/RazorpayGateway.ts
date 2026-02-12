@@ -1,9 +1,9 @@
 import Razorpay from "razorpay";
 import crypto from "crypto";
-import { IPaymentGateway } from "../../domain/payment/PaymentGateway";
+import { IExternalGateway } from "../../domain/payment/PaymentGateway";
 import dotenv from "dotenv";
 dotenv.config();
-export class RazorpayGateway implements IPaymentGateway {
+export class RazorpayGateway implements IExternalGateway {
   private client: Razorpay;
 
   constructor() {
@@ -33,16 +33,34 @@ export class RazorpayGateway implements IPaymentGateway {
     }
   }
 
-  verifyPaymentSignature(params: {
-    razorpayOrderId: string;
-    razorpayPaymentId: string;
-    razorpaySignature: string;
-  }): boolean {
+  verifySignature(input: { orderId: string; paymentId: string; signature: string }): boolean {
     const generatedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
-      .update(`${params.razorpayOrderId}|${params.razorpayPaymentId}`)
+      .update(`${input.orderId}|${input.paymentId}`)
       .digest("hex");
 
-    return generatedSignature === params.razorpaySignature;
+    return generatedSignature === input.signature;
   }
+
+  // verifySignature({ orderId, paymentId, signature }: any): boolean {
+  //   const generated = crypto
+  //     .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
+  //     .update(`${orderId}|${paymentId}`)
+  //     .digest("hex");
+
+  //   return generated === signature;
+  // }
+
+  // verifyPaymentSignature(input: {
+  //   orderId: string;
+  //   paymentId: string;
+  //   signature: string;
+  // }): boolean {
+  //   const generatedSignature = crypto
+  //     .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
+  //     .update(`${input.orderId}|${input.paymentId}`)
+  //     .digest("hex");
+
+  //   return generatedSignature === input.signature;
+  // }
 }

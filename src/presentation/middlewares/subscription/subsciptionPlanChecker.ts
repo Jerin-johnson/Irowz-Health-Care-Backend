@@ -2,12 +2,22 @@ import { NextFunction, Request, Response } from "express";
 import { HospitalSubscriptionRepository } from "../../../infrastructure/repositories/HospitalSubscriptionRepository";
 import { DoctorModel } from "../../../infrastructure/database/mongo/models/Doctor.model";
 import { HttpStatusCode } from "axios";
+
 const hospitalSubRepo = new HospitalSubscriptionRepository();
 
 export const subscriptionPlanChecker = async (req: Request, res: Response, next: NextFunction) => {
-  const user = (req as any).user;
+  const user = req.user as {
+    userId: string;
+    role: "PATIENT" | "DOCTOR" | "HOSPITAL_ADMIN" | "SUPER_ADMIN";
+    hospitalId?: string;
+    doctorId?: string;
+    patientId?: string;
+    forcePasswordReset?: string;
+  };
 
-  const sub = await hospitalSubRepo.findActiveByHospital(user.hospitalId);
+  const sub = await hospitalSubRepo.findActiveByHospital(user?.userId);
+
+  console.log("The subscription ", sub);
 
   if (!sub || sub.endDate < new Date()) {
     return res

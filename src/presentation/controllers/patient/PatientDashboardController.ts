@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { GetPatientDashboardOverviewUseCase } from "../../../applications/usecases/patient/dashboard/GetPatientDashboardOverviewUseCase";
+import { HttpStatusCode } from "axios";
 
 export class PatientDashboardController {
   constructor(
@@ -11,7 +12,7 @@ export class PatientDashboardController {
 
     const dashboard = await this._GetPatientDashboardOverviewUseCase.execute(patientId!, userId!);
 
-    res.status(200).json({
+    res.status(HttpStatusCode.Ok).json({
       success: true,
       data: dashboard,
     });

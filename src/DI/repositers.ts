@@ -18,6 +18,7 @@ import { SuperAdminDashboardRepo } from "../infrastructure/repositories/SuperAdm
 import { HospitalDashboardMongoRepository } from "../infrastructure/repositories/HospitalDashboard.repository";
 import { DoctorDashboardMongoRepository } from "../infrastructure/repositories/DoctorDashboard.Repository";
 import { PatientDashboardMongoRepository } from "../infrastructure/repositories/PatientDashboardMongoRepository";
+import { HospitalLabOrderRepository } from "../infrastructure/repositories/HospitalLabOrderRepository";
 // import { NotificationRepository } from "../infrastructure/repositories/notification/NotificationRepository";
 
 export const mongoUserRepository = new MongoUserRepository();
@@ -40,3 +41,4 @@ export const superAdminDashboardRepo = new SuperAdminDashboardRepo();
 export const hospitalDashboardRepository = new HospitalDashboardMongoRepository();
 export const doctorDashboardRepository = new DoctorDashboardMongoRepository();
 export const patientDashboardRepository = new PatientDashboardMongoRepository();
+export const hospitalLabOrderRepository = new HospitalLabOrderRepository();

@@ -13,6 +13,7 @@ import { PatientAppointmentController } from "../controllers/patient/PatientAppo
 import { PatientNotificationController } from "../controllers/patient/PatientNotifcation.Controller";
 import { PatientOnlineConsultationController } from "../controllers/patient/PatientOnlineConsultation.Controller";
 import { PatientDashboardController } from "../controllers/patient/PatientDashboardController";
+import { MedicalRecordPatientController } from "../controllers/patient/MedicalRecordPatient.Controller";
 
 export class PatientRoutes {
   private _router: Router;
@@ -25,7 +26,8 @@ export class PatientRoutes {
     private readonly _PatientAppointmentController: PatientAppointmentController,
     private readonly _PatientNotificationController: PatientNotificationController,
     private readonly _PatientOnlineConsultationController: PatientOnlineConsultationController,
-    private readonly _PatientDashboardController: PatientDashboardController
+    private readonly _PatientDashboardController: PatientDashboardController,
+    private readonly _MedicalRecordPatientController: MedicalRecordPatientController
   ) {
     this._router = Router();
   }
@@ -192,6 +194,25 @@ export class PatientRoutes {
       "/dashboard/overview",
       authMiddleware,
       asyncHandler(this._PatientDashboardController.overview)
+    );
+
+    //medical-Record
+    this._router.get(
+      "/medical-records",
+      authMiddleware,
+      asyncHandler(this._MedicalRecordPatientController.GetMedicalHistoryPatient)
+    );
+
+    this._router.get(
+      "/medical-record/prescription/:id",
+      authMiddleware,
+      asyncHandler(this._MedicalRecordPatientController.GetPatientPercriptionWithDoctorInfo)
+    );
+
+    this._router.get(
+      "/medical-record/lab/:id",
+      authMiddleware,
+      asyncHandler(this._MedicalRecordPatientController.GetPatientLabTests)
     );
 
     return this._router;

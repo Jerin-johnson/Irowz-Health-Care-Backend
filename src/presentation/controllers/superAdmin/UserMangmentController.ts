@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import { SuperAdminGetAllUserUseCase } from "../../../applications/usecases/superAdmin/userMangment/GetAllUserUseCase";
 import { ApiResponse } from "../../utils/common.response.model";
 import { UserStatusFilter } from "../../../domain/repositories/IUser.repo";
 import { MarkAsVerfiedUser } from "../../../applications/usecases/superAdmin/userMangment/MarkAsVerfiedUseCase";
-import { BlockUserUserCase } from "../../../applications/usecases/superAdmin/userMangment/BlockUserUseCase";
-import { UnBlockUserUserCase } from "../../../applications/usecases/superAdmin/userMangment/UnBlockUserUseCase";
+import { ISuperAdminGetAllUserUseCase } from "../../../domain/usecase/superAdmin/userMangment/ISuperAdminGetAllUserUseCase";
+import { IBlockUserUserCase } from "../../../domain/usecase/superAdmin/userMangment/IBlockUserUserCase";
+import { IUnBlockUserUserCase } from "../../../domain/usecase/superAdmin/userMangment/IUnBlockUserUserCase";
 
 export class SuperAdminUserMangmentController {
   constructor(
-    private _SuperAdminGetAllUserUseCase: SuperAdminGetAllUserUseCase,
+    private _SuperAdminGetAllUserUseCase: ISuperAdminGetAllUserUseCase,
     private _MarkAsVerfiedUser: MarkAsVerfiedUser,
-    private _BlockUserUserCase: BlockUserUserCase,
-    private _UnBlockUserUserCase: UnBlockUserUserCase
+    private _BlockUserUserCase: IBlockUserUserCase,
+    private _UnBlockUserUserCase: IUnBlockUserUserCase
   ) {}
 
   getAllUsers = async (req: Request, res: Response) => {

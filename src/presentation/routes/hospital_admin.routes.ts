@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { HospitalOnBoradingController } from "../controllers/hospital_onBoarding/HospitalOnboardingController";
 import { asyncHandler } from "../middlewares/asyncHandler";
-import { licenseUpload } from "../middlewares/UploadPdfLiensches";
+import { Upload } from "../middlewares/UploadPdfLiensches";
 import { hospitalVerificationBodySchema } from "../validators/hosptial/HosptialVerfication";
 import { validate } from "../middlewares/validate.middleware";
 import { SpecialtyMangmentController } from "../controllers/hospitalAdmin/SpecialityMangment.Controller";
@@ -14,6 +14,7 @@ import { HOSPITAL_ADMIN_ROUTES } from "../constants/routes/hospital-admin.consta
 import { subscriptionPlanChecker } from "../middlewares/subscription/subsciptionPlanChecker";
 import { HospitalADminSubscriptionController } from "../controllers/hospitalAdmin/SubscriptionController";
 import { HospitalDashboardController } from "../controllers/hospitalAdmin/HospitalDashboardController";
+import { HospitalLabAdminController } from "../controllers/hospitalAdmin/LabOrderMangment.Controller";
 
 export class HospitalAdminRoutes {
   private router: Router;
@@ -23,7 +24,8 @@ export class HospitalAdminRoutes {
     private readonly _SpecialtyMangmentController: SpecialtyMangmentController,
     private readonly _DoctorMangmentController: DoctorMangmentController,
     private readonly _HospitalADminSubscriptionController: HospitalADminSubscriptionController,
-    private readonly _HospitalDashboardController: HospitalDashboardController
+    private readonly _HospitalDashboardController: HospitalDashboardController,
+    private readonly _HospitalLabAdminController: HospitalLabAdminController
   ) {
     this.router = Router();
   }
@@ -31,7 +33,7 @@ export class HospitalAdminRoutes {
   register(): Router {
     this.router.post(
       HOSPITAL_ADMIN_ROUTES.VERIFICATION,
-      licenseUpload.single("licenseDocument"),
+      Upload.single("licenseDocument"),
       (req, res, next) => {
         console.log(req.body);
         console.log(req.file);
@@ -43,7 +45,7 @@ export class HospitalAdminRoutes {
 
     this.router.post(
       HOSPITAL_ADMIN_ROUTES.VERIFICATION_REAPPLY,
-      licenseUpload.single("licenseDocument"),
+      Upload.single("licenseDocument"),
       (req, res, next) => {
         console.log(req.body);
         console.log(req.file);
@@ -124,6 +126,15 @@ export class HospitalAdminRoutes {
     this.router.get(
       "/dashboard/overview",
       asyncHandler(this._HospitalDashboardController.overview)
+    );
+
+    //lab Orders
+
+    this.router.get("/lab-orders", asyncHandler(this._HospitalLabAdminController.listLabOrders));
+    this.router.post(
+      "/lab-orders",
+      Upload.single("file"),
+      asyncHandler(this._HospitalLabAdminController.uploadLabReport)
     );
 
     return this.router;

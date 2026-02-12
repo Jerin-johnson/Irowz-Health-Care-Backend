@@ -3,8 +3,9 @@ import {
   PaginationParams,
   UserStatusFilter,
 } from "../../../../domain/repositories/IUser.repo";
+import { ISuperAdminGetAllUserUseCase } from "../../../../domain/usecase/superAdmin/userMangment/ISuperAdminGetAllUserUseCase";
 
-export class SuperAdminGetAllUserUseCase {
+export class SuperAdminGetAllUserUseCase implements ISuperAdminGetAllUserUseCase {
   constructor(private readonly _UserRepo: IUserRepository) {}
 
   async execute(

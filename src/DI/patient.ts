@@ -20,6 +20,9 @@ import { GetAvailableSpecialityUseCase } from "../applications/usecases/patient/
 import { GetDoctorProfileUseCase } from "../applications/usecases/patient/DoctorListing/GetDoctorProfile";
 import { GetReviewUseCase } from "../applications/usecases/patient/DoctorReview/GetReviewUseCase";
 import { PostReviewUseCase } from "../applications/usecases/patient/DoctorReview/PostReviewUseCase";
+import { GetPatientLabTestsUseCase } from "../applications/usecases/patient/MedicalRecord/GetPatientLabReports";
+import { GetMedicalHistoryPatientUseCase } from "../applications/usecases/patient/MedicalRecord/GetPatientMedicalRecord";
+import { GetPatientPercriptionWithDoctorInfoUseCase } from "../applications/usecases/patient/MedicalRecord/GetPatientPrecriptionWithDoctorInfo.UseCase";
 import { GetPatientNotifcationUseCase } from "../applications/usecases/patient/notification/PatientNotifcation";
 import { EditPatientProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/EditPatientProfileUseCase";
 import { GetProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/GetProfile.UseCase";
@@ -28,6 +31,7 @@ import { notificationRepo } from "../infrastructure/realTIme/realtimeConsumer";
 import { DoctorBookingController } from "../presentation/controllers/patient/DoctorBooking.Controller";
 import { DoctorListingController } from "../presentation/controllers/patient/DoctorListing.Controller";
 import { DoctorReviewController } from "../presentation/controllers/patient/DoctorReview.Controller";
+import { MedicalRecordPatientController } from "../presentation/controllers/patient/MedicalRecordPatient.Controller";
 import { PatientAppointmentController } from "../presentation/controllers/patient/PatientAppointment.Controller";
 import { PatientDashboardController } from "../presentation/controllers/patient/PatientDashboardController";
 import { PatientNotificationController } from "../presentation/controllers/patient/PatientNotifcation.Controller";
@@ -46,12 +50,18 @@ import {
   doctorReviewRepository,
   doctorSearchMongoRepository,
   hospitalSpecialityRepo,
+  medicalRecordRepository,
   mongoUserRepository,
   patientDashboardRepository,
   patientProfileRepository,
   walletRepo,
 } from "./repositers";
-import { razorpayGateway, s3FileStorage, sharpImageProcessor } from "./service";
+import {
+  paymentProviderFactory,
+  razorpayGateway,
+  s3FileStorage,
+  sharpImageProcessor,
+} from "./service";
 
 export const getDoctorAvailabileSlotUseCase = new GetDoctorAvailabileSlotUseCase(
   doctorAvailabilityRepository,
@@ -65,7 +75,7 @@ export const lockDoctorSlotUseCase = new LockDoctorSlotUseCase(
   redisDoctorAvailabilityCache
 );
 
-const unLockDoctorSlotUseCase = new UnLockDoctorSlotUseCase(
+export const unLockDoctorSlotUseCase = new UnLockDoctorSlotUseCase(
   redisDoctorSlotLockService,
   redisDoctorAvailabilityCache
 );
@@ -75,10 +85,10 @@ const getPatientBasicDetailsForCheckoutUseCase = new GetPatientBasicDetailsForCh
   doctorRepo
 );
 
-const checkoutUseCase = new CheckoutUseCase(
+export const checkoutUseCase = new CheckoutUseCase(
   redisDoctorSlotLockService,
   doctorAppointmentRepository,
-  razorpayGateway,
+  paymentProviderFactory,
   doctorRepo
 );
 
@@ -104,19 +114,19 @@ export const doctorBookingController = new DoctorBookingController(
   apponintmentSuccessOrFailureUseCase
 );
 
-const doctorSearchUseCase = new DoctorSearchUseCase(
+export const doctorSearchUseCase = new DoctorSearchUseCase(
   doctorSearchMongoRepository,
   doctorAvailabilityRepository
 );
 
-const getAvailableSpecialityUseCase = new GetAvailableSpecialityUseCase(
+export const getAvailableSpecialityUseCase = new GetAvailableSpecialityUseCase(
   hospitalSpecialityRepo,
   redisDoctorSpecialityCache
 );
 
 const getDoctorProfileUseCase = new GetDoctorProfileUseCase(doctorRepo);
 
-const doctorListingController = new DoctorListingController(
+export const doctorListingController = new DoctorListingController(
   getAvailableSpecialityUseCase,
   doctorSearchUseCase,
   getDoctorProfileUseCase
@@ -128,7 +138,10 @@ const getReviewUseCase = new GetReviewUseCase(doctorReviewRepository);
 
 const doctorReviewController = new DoctorReviewController(postReviewUseCase, getReviewUseCase);
 
-const getProfileUseCase = new GetProfileUseCase(patientProfileRepository, mongoUserRepository);
+export const getProfileUseCase = new GetProfileUseCase(
+  patientProfileRepository,
+  mongoUserRepository
+);
 
 const editPatientProfileUseCase = new EditPatientProfileUseCase(
   mongoUserRepository,
@@ -211,6 +224,22 @@ const patientDashboardController = new PatientDashboardController(
   getPatientDashboardOverviewUseCase
 );
 
+const getMedicalHistoryPatientUseCase = new GetMedicalHistoryPatientUseCase(
+  medicalRecordRepository
+);
+
+const getPatientPercriptionWithDoctorInfoUseCase = new GetPatientPercriptionWithDoctorInfoUseCase(
+  medicalRecordRepository
+);
+
+const getPatientLabTestsUseCase = new GetPatientLabTestsUseCase(medicalRecordRepository);
+
+const medicalRecordPatientController = new MedicalRecordPatientController(
+  getMedicalHistoryPatientUseCase,
+  getPatientPercriptionWithDoctorInfoUseCase,
+  getPatientLabTestsUseCase
+);
+
 export const patientRoutes = new PatientRoutes(
   doctorBookingController,
   doctorListingController,
@@ -219,5 +248,6 @@ export const patientRoutes = new PatientRoutes(
   patientAppointmentController,
   patientNotificationController,
   patientOnlineConsultationController,
-  patientDashboardController
+  patientDashboardController,
+  medicalRecordPatientController
 );

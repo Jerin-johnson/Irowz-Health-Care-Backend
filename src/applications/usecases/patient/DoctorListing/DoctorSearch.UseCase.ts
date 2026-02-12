@@ -23,6 +23,7 @@ export class DoctorSearchUseCase implements IDoctorSearchUseCase {
       totalPages: number;
     };
   }> {
+    console.log("the query get to the usecase is ", query);
     const { items: doctors, total } = await this._searchRepo.searchDoctors(query);
 
     const doctorIds = doctors.map((d) => d._id);

@@ -7,6 +7,8 @@ export interface MedicalRecord {
   diagnosisSummary: string;
   hospitalName: string;
   visitType: string;
+  isLabReport?: boolean;
+  isPrecription?: boolean;
 }
 
 export function mapMedicalRecordToDTO(record: MedicalRecordPopulated): MedicalRecord {

@@ -1,6 +1,22 @@
 import { ObjectId } from "mongoose";
 import { MedicalRecordDocument } from "../../infrastructure/database/mongo/models/MedicalRecord.model";
-import { DoctorInfo } from "../usecase/doctor/consultation/IMedicalRecordRepository";
+import { DoctorInfoDTO } from "../usecase/doctor/consultation/IMedicalRecordRepository";
+// import { DoctorInfo } from "../usecase/doctor/consultation/IMedicalRecordRepository";
+
+export interface LabTestDTO {
+  testName: string;
+  description?: string;
+  action: "Hospital" | "Outside";
+  reportUrl?: string;
+  status: "ORDERED" | "RESULT_UPLOADED" | "REVIEWED";
+  orderedAt: Date;
+  uploadedAt?: Date;
+}
+
+export interface LabTestsByRecordResult {
+  medicalRecordId: string;
+  labTests: LabTestDTO[];
+}
 
 export interface FindMedicalRecordsQuery {
   patientId: string;
@@ -33,46 +49,16 @@ export interface PaginatedMedicalRecords {
   total: number;
 }
 
-// interface Prescription {
-//   medicineName: string;
-//   dosage: string;
-//   frequency: string;
-//   duration: string;
-//   instructions?: string;
-// }
+export type LabAction = "Hospital" | "Outside";
 
-// interface LabTest {
-//   testName: string;
-//   description?: string;
-//   reportUrl?: string;
-//   status: "ORDERED" | "RECEIVED";
-// }
-
-// interface MedicalRecord {
-//   appointmentId: string;
-//   patientId: string;
-//   doctorId: string;
-//   hospitalId?: string;
-//   visitType: "OPD" | "ONLINE";
-//   visitDate: Date;
-//   diagnosisSummary?: string;
-//   observationNotes?: string;
-//   clinicalObservations?: string;
-//   prescriptions: Prescription[];
-//   labTests: LabTest[];
-//   followUpDate?: Date;
-//   status: "DRAFT" | "COMPLETED" | "LOCKED";
-//   externalUpload: boolean;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// interface DoctorInfo {
-//   name: string;
-//   specialization: string;
-//   registrationNumber: string;
-//   hospital: string;
-// }
+export interface LabTestDomain {
+  testName: string;
+  description?: string;
+  action: LabAction;
+  status: "ORDERED" | "RESULT_UPLOADED" | "REVIEWED";
+  orderedAt: Date;
+  uploadedAt?: Date;
+}
 
 export interface IMedicalRecordRepository {
   createDraft(data: {
@@ -98,6 +84,16 @@ export interface IMedicalRecordRepository {
 
   findMedicalRecordWithDoctorAndHospital(recordId: string): Promise<{
     medicalRecord: MedicalRecordDocument;
-    doctorInfo: DoctorInfo;
+    doctorInfo: DoctorInfoDTO;
   } | null>;
+
+  addLabTests(appointmentId: string, labTests: LabTestDomain[]): Promise<void>;
+
+  updateSingleLabTestResult(params: {
+    appointmentId: string;
+    testName: string;
+    reportUrl: string;
+  }): Promise<void>;
+
+  getLabTestsByMedicalRecordId(medicalRecordId: string): Promise<LabTestsByRecordResult>;
 }

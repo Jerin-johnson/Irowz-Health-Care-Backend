@@ -1,16 +1,26 @@
-import { Types } from "mongoose";
 import {
   DoctorSearchQueryDTO,
   DoctorSearchRawDTO,
 } from "../../applications/dtos/patient/doctor.search.Dto";
 import { IDoctorSearchRepository } from "../../domain/repositories/IDoctorSearchRepo";
 import { DoctorModel } from "../database/mongo/models/Doctor.model";
+import { HospitalSpecialtyModel } from "../database/mongo/models/HospitalSpeciality.model";
 
 export class DoctorSearchMongoRepository implements IDoctorSearchRepository {
   async searchDoctors(
     query: DoctorSearchQueryDTO
   ): Promise<{ items: DoctorSearchRawDTO[]; total: number }> {
     const { search, specialtyId, lat, lng, radiusKm, page, limit } = query;
+
+    console.log("the console log from repo", {
+      search,
+      specialtyId,
+      lat,
+      lng,
+      radiusKm,
+      page,
+      limit,
+    });
 
     const skip = (page - 1) * limit;
 
@@ -29,6 +39,8 @@ export class DoctorSearchMongoRepository implements IDoctorSearchRepository {
           query: { isActive: true },
         },
       });
+    } else {
+      pipeline.push({ $match: { isActive: true } });
     }
 
     pipeline.push(
@@ -69,13 +81,26 @@ export class DoctorSearchMongoRepository implements IDoctorSearchRepository {
 
     pipeline.push({ $match: { isActive: true } });
 
+    let specialtyName;
+
     if (specialtyId) {
-      pipeline.push({
-        $match: {
-          specialtyId: new Types.ObjectId(specialtyId),
-        },
-      });
+      specialtyName = await HospitalSpecialtyModel.findById(specialtyId);
+      // pipeline.push({
+      //   $match: {
+      //     specialtyId: new Types.ObjectId(specialtyId),
+      //   },
+      // });
     }
+
+    // if (specialtyId && specialtyName) {
+    //   pipeline.push({
+    //     $match: {
+    //       "specialty.name": { $regex: specialtyName, $options: "i" },
+    //     },
+    //   });
+    // }
+
+    console.log(specialtyName?.name);
 
     if (search) {
       pipeline.push({
@@ -84,8 +109,17 @@ export class DoctorSearchMongoRepository implements IDoctorSearchRepository {
             { "user.name": { $regex: search, $options: "i" } },
             { "hospital.name": { $regex: search, $options: "i" } },
             { "specialty.name": { $regex: search, $options: "i" } },
+            // { "specialty.name": { $regex: specialtyName?.name, $options: "i" } },
             { "specialty.symptoms": { $regex: search, $options: "i" } },
           ],
+        },
+      });
+    }
+
+    if (specialtyName) {
+      pipeline.push({
+        $match: {
+          $or: [{ "specialty.name": { $regex: specialtyName?.name, $options: "i" } }],
         },
       });
     }

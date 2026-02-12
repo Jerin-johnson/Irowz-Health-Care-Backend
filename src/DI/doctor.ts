@@ -1,6 +1,8 @@
 import { GetAppoinmentBYIdUseCase } from "../applications/usecases/doctor/appoinment/GetAppoinmentBYIdUseCase";
 import { GetDoctorAppoinmentQueueUsecase } from "../applications/usecases/doctor/appoinment/GetDoctorAppoinmentQueue.usecase";
 import { CompleteConsultationUseCase } from "../applications/usecases/doctor/consultation/CompleteConsultation.UseCase";
+import { CreateLabOrderUseCase } from "../applications/usecases/doctor/consultation/CreateLabOrderUseCase";
+import { GetMedicalRecordLabTestsUseCase } from "../applications/usecases/doctor/consultation/GetMedicalRecordLabTestsUseCase";
 import { GetMedicalRecordWithDoctorInfoUseCase } from "../applications/usecases/doctor/consultation/GetMedicalRecordWithDoctorInfo.usecase";
 import { GetMedicalHistoryUseCase } from "../applications/usecases/doctor/consultation/GetPatientMedicalHistory.UseCase";
 import { GetPatientOverViewUseCase } from "../applications/usecases/doctor/consultation/GetPatientOverview.useCase";
@@ -36,6 +38,7 @@ import {
   doctorAvailabilityRepository,
   doctorDashboardRepository,
   doctorRepo,
+  hospitalLabOrderRepository,
   medicalRecordRepository,
   mongoUserRepository,
   patientProfileRepository,
@@ -152,6 +155,15 @@ const getMedicalRecordWithDoctorInfoUseCase = new GetMedicalRecordWithDoctorInfo
   medicalRecordRepository
 );
 
+const createLabOrderUseCase = new CreateLabOrderUseCase(
+  medicalRecordRepository,
+  hospitalLabOrderRepository
+);
+
+const getMedicalRecordLabTestsUseCase = new GetMedicalRecordLabTestsUseCase(
+  medicalRecordRepository
+);
+
 const doctorConsultationController = new DoctorConsultationController(
   startConsultationUseCase,
   getPatientOverViewUseCase,
@@ -163,7 +175,9 @@ const doctorConsultationController = new DoctorConsultationController(
   endConsultationOnlineUseCase,
   updateMedicalRecordPercriptionUseCase,
   getMedicalHistoryUseCase,
-  getMedicalRecordWithDoctorInfoUseCase
+  getMedicalRecordWithDoctorInfoUseCase,
+  createLabOrderUseCase,
+  getMedicalRecordLabTestsUseCase
 );
 
 const getDoctorDashboardOverviewUseCase = new GetDoctorDashboardOverviewUseCase(

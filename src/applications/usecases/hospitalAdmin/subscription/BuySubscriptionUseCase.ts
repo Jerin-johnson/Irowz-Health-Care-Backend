@@ -2,11 +2,12 @@ import { Types } from "mongoose";
 import { ISubscriptionPlanRepository } from "../../../../domain/repositories/ISubscriptionPlanRepository";
 import { HospitalSubscriptionRepository } from "../../../../infrastructure/repositories/HospitalSubscriptionRepository";
 import { WalletRepository } from "../../../../infrastructure/repositories/WalletRepository";
-import { IPaymentGateway } from "../../../../domain/payment/PaymentGateway";
+import { IExternalGateway } from "../../../../domain/payment/PaymentGateway";
+import { IBuySubscriptionUseCase } from "../../../../domain/usecase/hosptialAdmin/subscription/IBuySubscriptionUseCase";
 
-export class BuySubscriptionUseCase {
+export class BuySubscriptionUseCase implements IBuySubscriptionUseCase {
   constructor(
-    private _paymentGateway: IPaymentGateway,
+    private _paymentGateway: IExternalGateway,
     private _planRepo: ISubscriptionPlanRepository,
     private _hospitalSubRepo: HospitalSubscriptionRepository,
     private _walletRepo: WalletRepository
@@ -20,10 +21,10 @@ export class BuySubscriptionUseCase {
     razorpaySignature: string;
     superAdminId: string;
   }) {
-    const isValid = this._paymentGateway.verifyPaymentSignature({
-      razorpayOrderId: payload.razorpayOrderId,
-      razorpayPaymentId: payload.razorpayPaymentId,
-      razorpaySignature: payload.razorpaySignature,
+    const isValid = this._paymentGateway.verifySignature({
+      orderId: payload.razorpayOrderId,
+      paymentId: payload.razorpayPaymentId,
+      signature: payload.razorpaySignature,
     });
 
     if (!isValid) throw new Error("Payment verification failed");

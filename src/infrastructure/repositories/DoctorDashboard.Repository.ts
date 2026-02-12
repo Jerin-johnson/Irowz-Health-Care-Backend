@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
+
+import { DoctorAppointmentModel } from "../database/mongo/models/DoctorAppointmentModel";
+import { DoctorReviewModel } from "../database/mongo/models/DoctorReview.model";
 import {
   DoctorDashboardOverviewDTO,
   IDoctorDashboardRepository,
   MonthlyAppointmentStatDTO,
-} from "./IDoctorDashboard.repo";
-import { DoctorAppointmentModel } from "../database/mongo/models/DoctorAppointmentModel";
-import { DoctorReviewModel } from "../database/mongo/models/DoctorReview.model";
+} from "../../domain/repositories/IDoctorDashboard.repo";
 
 const MONTHS = [
   "",

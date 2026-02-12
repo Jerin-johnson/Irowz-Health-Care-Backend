@@ -46,7 +46,7 @@ export interface DoctorAppointmentDocument extends Document {
     | "CANCELLED"
     | "EXPIRED";
 
-  paymentMethod: "RAZORPAY";
+  paymentMethod: "RAZORPAY" | "WALLET";
   transactionId?: string;
   queuePriority: number;
   isLate?: boolean; // patient arrived late
@@ -166,7 +166,7 @@ const DoctorAppointmentSchema = new Schema<DoctorAppointmentDocument>(
 
     paymentMethod: {
       type: String,
-      enum: ["RAZORPAY"],
+      enum: ["RAZORPAY", "WALLET"],
       required: true,
     },
 

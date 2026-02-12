@@ -3,11 +3,11 @@ import { calculateAge, calculateBMI } from "../../utils/patient.utils";
 export function mapPatientToDTO(response: any) {
   const { patientProfile, appoinment, dob, gender } = response;
 
-  const height = patientProfile.height ?? 0;
-  const weight = patientProfile.weight ?? 0;
+  const height = patientProfile?.height ?? 0;
+  const weight = patientProfile?.weight ?? 0;
 
   return {
-    id: patientProfile.userId,
+    id: patientProfile?.userId,
 
     fullName: `${appoinment.patientSnapshot.firstName} ${appoinment.patientSnapshot.lastName}`,
 
@@ -15,7 +15,7 @@ export function mapPatientToDTO(response: any) {
 
     gender: gender ?? "",
 
-    bloodGroup: patientProfile.bloodGroup ?? "",
+    bloodGroup: patientProfile?.bloodGroup ?? "",
 
     height,
 
@@ -30,11 +30,11 @@ export function mapPatientToDTO(response: any) {
 
     email: appoinment.patientSnapshot.email,
 
-    city: patientProfile.address?.city || appoinment.addressSnapshot?.city || "",
+    city: patientProfile?.address?.city || appoinment?.addressSnapshot?.city || "",
 
-    allergies: patientProfile.allergies ?? [],
+    allergies: patientProfile?.allergies ?? [],
 
-    chronicConditions: patientProfile.chronicConditions ?? [],
+    chronicConditions: patientProfile?.chronicConditions ?? [],
 
     visitType: appoinment.visitType,
 
@@ -42,6 +42,6 @@ export function mapPatientToDTO(response: any) {
 
     queue: appoinment.queuePriority,
 
-    status: appoinment.status,
+    status: appoinment?.status,
   };
 }

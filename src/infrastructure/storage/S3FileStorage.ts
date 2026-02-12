@@ -55,7 +55,7 @@ export class S3FileStorage implements IFileStorage {
     });
 
     return getSignedUrl(s3Client, command, {
-      expiresIn: 60,
+      expiresIn: 300,
     });
   }
 }

@@ -15,6 +15,8 @@ import { IUpdateMedicalRecordPercriptionUseCase } from "../../../domain/usecase/
 import { IGetMedicalHistoryUseCase } from "../../../domain/usecase/doctor/consultation/IGetMedicalHistoryUseCase";
 import { IGetMedicalRecordWithDoctorInfoUseCase } from "../../../domain/usecase/doctor/consultation/IMedicalRecordRepository";
 import { DoctorMessages } from "../../constants/message/doctor.message";
+import { CreateLabOrderUseCase } from "../../../applications/usecases/doctor/consultation/CreateLabOrderUseCase";
+import { GetMedicalRecordLabTestsUseCase } from "../../../applications/usecases/doctor/consultation/GetMedicalRecordLabTestsUseCase";
 
 export class DoctorConsultationController {
   constructor(
@@ -28,7 +30,9 @@ export class DoctorConsultationController {
     private readonly _EndConsultationOnlineUseCase: IEndConsultationOnlineUseCase,
     private readonly _UpdateMedicalRecordPercriptionUseCase: IUpdateMedicalRecordPercriptionUseCase,
     private readonly _GetMedicalHistoryUseCase: IGetMedicalHistoryUseCase,
-    private readonly _GetMedicalRecordWithDoctorInfoUseCase: IGetMedicalRecordWithDoctorInfoUseCase
+    private readonly _GetMedicalRecordWithDoctorInfoUseCase: IGetMedicalRecordWithDoctorInfoUseCase,
+    private readonly _CreateLabOrderUseCase: CreateLabOrderUseCase,
+    private readonly _GetMedicalRecordLabTestsUseCase: GetMedicalRecordLabTestsUseCase
   ) {}
 
   startConsultation = async (req: Request, res: Response) => {
@@ -43,14 +47,12 @@ export class DoctorConsultationController {
     const appointmentId = req.params.id;
     const result = await this._GetPatientOverViewUseCase.execute(appointmentId);
     const patientDTO = mapPatientToDTO(result);
-    console.log(patientDTO, "fdsnfnhdsfn");
     return ApiResponse.success(res, patientDTO);
   };
 
   saveQuickObservationNote = async (req: Request, res: Response) => {
     const { id: appointmentId } = req.params;
     const note = req.body?.observationNote;
-    console.log("does this work");
     const result = await this._SaveQuickNoteUseCase.execute(appointmentId, note);
 
     return ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
@@ -94,7 +96,7 @@ export class DoctorConsultationController {
 
     const result = await this._GetActiveDoctorOnlineConsultationUseCase.execute(doctorId!);
 
-    ApiResponse.success(res, result);
+    return ApiResponse.success(res, result);
   };
 
   EndConsultationOnline = async (req: Request, res: Response) => {
@@ -125,7 +127,7 @@ export class DoctorConsultationController {
       diagnosisKeyword: diagnosis as string,
     });
 
-    ApiResponse.success(res, result);
+    return ApiResponse.success(res, result);
   };
 
   GetMedicalRecordWithDoctorInfoUseCase = async (req: Request, res: Response) => {
@@ -135,6 +137,27 @@ export class DoctorConsultationController {
 
     const response = MedicalRecordPrescriptionMapper.toPrescriptionViewResponse(result);
 
-    ApiResponse.success(res, response);
+    return ApiResponse.success(res, response);
+  };
+
+  CreateLabOrder = async (req: Request, res: Response) => {
+    console.log(req.body);
+
+    const result = await this._CreateLabOrderUseCase.execute({
+      appointmentId: req.body.appointmentId,
+      action: req.body.action,
+      clinicalReason: req.body.clinicalReason,
+      tests: req.body.tests,
+    });
+
+    ApiResponse.success(res, null, result.message);
+  };
+
+  getLabTests = async (req: Request, res: Response) => {
+    const medicalRecordId = req.params.id;
+
+    const result = await this._GetMedicalRecordLabTestsUseCase.execute(medicalRecordId);
+
+    return ApiResponse.success(res, result);
   };
 }

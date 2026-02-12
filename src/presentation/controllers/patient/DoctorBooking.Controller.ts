@@ -78,7 +78,7 @@ export class DoctorBookingController {
       startTime,
     });
 
-    return res.status(200).json({
+    return res.status(HttpStatusCode.OK).json({
       success: true,
       message: PatientMessages.SLOT_UNLOCKED,
       expiresIn: 500,
@@ -104,7 +104,14 @@ export class DoctorBookingController {
   };
 
   checkout = async (req: Request, res: Response) => {
-    const { doctorId, date, startTime, billingDetails, visitType } = req.body;
+    const {
+      doctorId,
+      date,
+      startTime,
+      billingDetails,
+      visitType,
+      paymentMethod = "RAZORPAY",
+    } = req.body;
     const userId = req.user?.userId;
 
     const { firstName, lastName, phone, email, city, country, state, streetAddress, zipCode } =
@@ -118,9 +125,8 @@ export class DoctorBookingController {
       addressSnapshot: { city, country, state, street: streetAddress, zip: zipCode },
       patientId: userId as string,
       visitType,
+      paymentMethod,
     });
-
-    console.log(result);
 
     return res
       .status(HttpStatusCode.OK)

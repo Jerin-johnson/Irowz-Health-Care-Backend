@@ -1,3 +1,5 @@
+import { PaymentMethod } from "../../../domain/types/DoctorAppointment";
+
 export interface CheckoutInput {
   doctorId: string;
   patientId: string;
@@ -22,6 +24,8 @@ export interface CheckoutInput {
     street: string;
     apartment?: string;
   };
+
+  paymentMethod: PaymentMethod;
 
   notes?: string;
 }

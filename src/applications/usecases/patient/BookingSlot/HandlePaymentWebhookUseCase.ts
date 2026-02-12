@@ -1,12 +1,12 @@
 import { IDoctorSlotCache } from "../../../../domain/cache/DoctorSlot.cache";
 import { DomainEventPublisher } from "../../../../domain/events/event";
-import { IPaymentGateway } from "../../../../domain/payment/PaymentGateway";
+import { IExternalGateway } from "../../../../domain/payment/PaymentGateway";
 import { IDoctorAppointmentRepository } from "../../../../domain/repositories/IDoctorAppointmentRepository";
 import { IHandleVerifyPayment } from "../../../../domain/usecase/patient/BookingSlots/IHandleVerifyPayment";
 
 export class HandleVerifyPayment implements IHandleVerifyPayment {
   constructor(
-    private readonly _paymentGateway: IPaymentGateway,
+    private readonly _paymentGateway: IExternalGateway,
     private readonly _appointmentRepo: IDoctorAppointmentRepository,
     private readonly _slotCache: IDoctorSlotCache,
     private readonly _eventPublisher: DomainEventPublisher
@@ -20,10 +20,10 @@ export class HandleVerifyPayment implements IHandleVerifyPayment {
   }) {
     const { razorpayOrderId, razorpayPaymentId, razorpaySignature, appointmentId } = params;
 
-    const isValid = this._paymentGateway.verifyPaymentSignature({
-      razorpayOrderId,
-      razorpayPaymentId,
-      razorpaySignature,
+    const isValid = this._paymentGateway.verifySignature({
+      orderId: razorpayOrderId,
+      paymentId: razorpayPaymentId,
+      signature: razorpaySignature,
     });
 
     if (!isValid) {

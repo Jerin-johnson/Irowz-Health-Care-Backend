@@ -8,5 +8,5 @@ export interface ICheckoutResponse {
 }
 
 export interface ICheckoutUseCase {
-  execute(input: CheckoutInput): Promise<ICheckoutResponse>;
+  execute(input: CheckoutInput): Promise<ICheckoutResponse | { appointmentId: string }>;
 }

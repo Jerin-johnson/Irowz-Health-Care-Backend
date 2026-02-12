@@ -11,7 +11,7 @@ export interface BackendDoctorInfoDTO {
   name: string;
   email: string;
   phone: string;
-  specialization: string; // specialtyId (can be mapped later)
+  specialization: string;
   medicalRegistrationNumber: string;
   medicalCouncil: "MCI" | "NMC" | "STATE_MEDICAL_COUNCIL";
   experienceYears: number;
@@ -31,11 +31,25 @@ export interface Prescription {
   instructions?: string;
 }
 
+// labTests: {
+//     testName: string;
+//     description?: string;
+
+//     action: "Hospital" | "Outside";
+
+//     reportUrl?: string;
+
+//     status: "ORDERED" | "RESULT_UPLOADED" | "REVIEWED";
+
+//     orderedAt: Date;
+//     uploadedAt?: Date;
+//   }[];
+
 export interface LabTest {
   testName: string;
   description?: string;
   reportUrl?: string;
-  status: "ORDERED" | "RECEIVED";
+  status: "ORDERED" | "RESULT_UPLOADED" | "REVIEWED";
 }
 
 export interface MedicalRecordResponseDTO {

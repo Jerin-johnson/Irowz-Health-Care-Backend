@@ -2,8 +2,6 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import "reflect-metadata";
-
-// import { mongoSanitizeMiddleware } from "./presentation/middlewares/mongoSanitize.middleware";
 import { authRoute } from "./DI/auth";
 import { hospitalAdminRoutes } from "./DI/hospitalAdmin";
 import { errorHandler } from "./presentation/middlewares/errorHandle";
@@ -11,6 +9,8 @@ import { superAdminRoutes } from "./DI/superAdmin";
 import { doctorRoutes } from "./DI/doctor";
 import { patientRoutes } from "./DI/patient";
 import { API_ROUTES } from "./presentation/constants/routes/api.constants.routes";
+import { aiRoutes } from "./DI/ai";
+import { viewPrivateFileRoutes } from "./DI/PrivateFile";
 
 const app = express();
 
@@ -43,6 +43,8 @@ app.use(API_ROUTES.PATIENT, patientRoutes.register());
 app.use(API_ROUTES.HOSPITAL_ADMIN, hospitalAdminRoutes.register());
 app.use(API_ROUTES.DOCTOR, doctorRoutes.register());
 app.use(API_ROUTES.SUPER_ADMIN, superAdminRoutes.register());
+app.use("/api/ai", aiRoutes.register());
+app.use("/api/private", viewPrivateFileRoutes.register());
 app.use(errorHandler);
 
 export default app;
