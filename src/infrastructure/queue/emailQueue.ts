@@ -1,6 +1,6 @@
 import { Queue } from "bullmq";
-import { queueRedisConnection } from "../redis/ioredis.connection";
+import { redisIORedis } from "../redis/ioredis.connection";
 
 export const emailQueue = new Queue("email-queue", {
-  connection: queueRedisConnection,
+  connection: redisIORedis,
 });

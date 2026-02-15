@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import { queueRedisConnection } from "../../redis/ioredis.connection";
+import { redisIORedis } from "../../redis/ioredis.connection";
 import { EmailNotificationService } from "../../services/email.service";
 
 const emailService = new EmailNotificationService();
@@ -29,14 +29,14 @@ const worker = new Worker(
     }
   },
   {
-    connection: queueRedisConnection,
+    connection: redisIORedis,
   }
 );
 
 worker.on("completed", (job) => {
-  console.log("✅ Email job completed:", job.id);
+  console.log(" Email job completed:", job.id);
 });
 
 worker.on("failed", (job, err) => {
-  console.error("❌ Email job failed:", job?.id, err);
+  console.error(" Email job failed:", job?.id, err);
 });

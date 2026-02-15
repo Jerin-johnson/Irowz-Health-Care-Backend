@@ -16,8 +16,8 @@ export interface HospitalVerification {
   mimeType?: any;
   fileBuffer?: any;
   licenseDocumentKey: string;
-  latitude?: string;
-  longitude?: string;
+  latitude?: number;
+  longitude?: number;
   status: HospitalVerificationStatus;
   adminRemarks?: string;
   submittedAt: Date;

@@ -1,9 +1,11 @@
+import { CITY_COORDS_MAP } from "../../../ai/tools/geocode-city.tool";
 import {
   CreateHospitalVerificationRepository,
   IHospitalVerificationRepository,
 } from "../../../domain/repositories/IHospitalVerification.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 import { IFileStorage } from "../../../domain/storage/IFile.storage";
+import { geocodeCityState } from "../../../infrastructure/services/geo.coding.service";
 
 export class ResubmitHospitalVerificationUseCase {
   constructor(
@@ -46,6 +48,30 @@ export class ResubmitHospitalVerificationUseCase {
       mimeType,
     });
 
+    //location
+
+    let latitude: number | undefined;
+    let longitude: number | undefined;
+
+    const normalizedCity = city.toLowerCase().trim().replace(/\s+/g, "");
+    const quickCoords = CITY_COORDS_MAP[normalizedCity];
+
+    if (quickCoords) {
+      console.log("the qucik Coords exists", quickCoords);
+      latitude = quickCoords.lat;
+      longitude = quickCoords.lng;
+    }
+
+    if (!quickCoords) {
+      try {
+        const geo = await geocodeCityState(city, state);
+        latitude = geo.latitude;
+        longitude = geo.longitude;
+      } catch (err) {
+        console.error("Geocoding failed:", err);
+      }
+    }
+
     const result = await this._hospitalVerificationRepo.resumbit(verficationId as string, {
       hospitalAddress,
       pincode,
@@ -56,6 +82,8 @@ export class ResubmitHospitalVerificationUseCase {
       reviewedAt: undefined,
       updatedAt: new Date(),
       licenseDocumentKey: fileKey,
+      latitude: latitude || 0,
+      longitude: longitude || 0,
     });
 
     console.log(result);

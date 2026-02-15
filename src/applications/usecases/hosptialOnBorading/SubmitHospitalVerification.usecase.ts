@@ -8,6 +8,7 @@ import UserRoles from "../../../domain/constants/UserRole";
 import { ISubmitHospitalVerificationRequestUseCase } from "../../../domain/usecase/hospitalOnBoarding/ISubmitHospitalVerificationRequest.usecase";
 import { geocodeCityState } from "../../../infrastructure/services/geo.coding.service";
 import { IFileStorage } from "../../../domain/storage/IFile.storage";
+import { CITY_COORDS_MAP } from "../../../ai/tools/geocode-city.tool";
 
 export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificationRequestUseCase {
   constructor(
@@ -60,12 +61,23 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
     let latitude: number | undefined;
     let longitude: number | undefined;
 
-    try {
-      const geo = await geocodeCityState(city, state);
-      latitude = geo.latitude;
-      longitude = geo.longitude;
-    } catch (err) {
-      console.error("Geocoding failed:", err);
+    const normalizedCity = city.toLowerCase().trim().replace(/\s+/g, "");
+    const quickCoords = CITY_COORDS_MAP[normalizedCity];
+
+    if (quickCoords) {
+      console.log("the qucik Coords exists", quickCoords);
+      latitude = quickCoords.lat;
+      longitude = quickCoords.lng;
+    }
+
+    if (!quickCoords) {
+      try {
+        const geo = await geocodeCityState(city, state);
+        latitude = geo.latitude;
+        longitude = geo.longitude;
+      } catch (err) {
+        console.error("Geocoding failed:", err);
+      }
     }
 
     const licenseKey = `hospital-licenses/${HospitalAdminUser._id}.pdf`;
@@ -88,8 +100,8 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
       phone: phone,
       licenseDocumentKey: fileKey,
       submittedAt: new Date(),
-      latitude,
-      longitude,
+      latitude: latitude || 0,
+      longitude: longitude || 0,
     });
 
     return {

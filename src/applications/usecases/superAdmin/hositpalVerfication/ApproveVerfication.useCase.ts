@@ -69,7 +69,7 @@ export class ApproveVerficationRequest implements IApproveVerificationRequestUse
 
     //subscription plan assignment
 
-    const freeTrial = await this.planRepo.findByName("Free Trial");
+    const freeTrial = await this.planRepo.findByName("free trial");
 
     if (!freeTrial) {
       throw new Error("Free Trial plan missing in system");

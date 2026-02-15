@@ -34,7 +34,7 @@ export class HealthcareAgent {
 
   private isSimpleGreeting(query: string): boolean {
     const greetings =
-      /^(hi|hai|hello|hey|good morning|good evening|good afternoon|thanks|thank you|bye|goodbye|ok|okay|yes|no|sure)$/i;
+      /^(hi|hai|hello|hey|good morning|good evening|good afternoon|thanks|thank you|bye|goodbye)$/i;
     return greetings.test(query.trim());
   }
 

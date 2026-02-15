@@ -1,4 +1,4 @@
-import { IDoctorDashboardRepository } from "../../../../infrastructure/repositories/IDoctorDashboard.repo";
+import { IDoctorDashboardRepository } from "../../../../domain/repositories/IDoctorDashboard.repo";
 
 export class GetDoctorDashboardOverviewUseCase {
   constructor(private readonly repo: IDoctorDashboardRepository) {}
