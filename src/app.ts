@@ -17,16 +17,33 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173",
+//       "https://desire-introspectible-monroe.ngrok-free.dev",
+//       "https://detail-legislature-boating-jesse.trycloudflare.com",
+//       "http://localhost:3000",
+//       "https://irowz-health-care-frontend-a6ap-hf5v81rn3.vercel.app",
+//       "https://irowz-health-care-frontend-a6ap-hf5v81rn3.vercel.app",
+//     ],
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://desire-introspectible-monroe.ngrok-free.dev",
-      "https://detail-legislature-boating-jesse.trycloudflare.com",
+      "https://irowz-health-care-frontend-a6ap-hf5v81rn3.vercel.app",
     ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
+
+app.options("*", cors());
 
 app.use((req, res, next) => {
   console.log("---- Incoming Request ----");
