@@ -43,8 +43,6 @@ app.use(
   })
 );
 
-app.options("*", cors());
-
 app.use((req, res, next) => {
   console.log("---- Incoming Request ----");
   console.log("Method:", req.method);
@@ -62,6 +60,11 @@ app.use(API_ROUTES.DOCTOR, doctorRoutes.register());
 app.use(API_ROUTES.SUPER_ADMIN, superAdminRoutes.register());
 app.use("/api/ai", aiRoutes.register());
 app.use("/api/private", viewPrivateFileRoutes.register());
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
 app.use(errorHandler);
 
 export default app;
