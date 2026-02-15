@@ -36,9 +36,8 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://irowz-health-care-frontend-a6ap-hf5v81rn3.vercel.app",
+      "http://13.233.139.65",
     ],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
