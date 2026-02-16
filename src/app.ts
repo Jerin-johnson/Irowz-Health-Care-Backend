@@ -44,7 +44,7 @@ app.use("/api/ai", aiRoutes.register());
 app.use("/api/private", viewPrivateFileRoutes.register());
 
 app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
+  res.status(404).json({ message: "Route not found check" });
 });
 
 app.use(errorHandler);
