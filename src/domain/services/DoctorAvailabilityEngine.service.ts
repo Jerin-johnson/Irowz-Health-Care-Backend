@@ -1,6 +1,13 @@
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
 import { DoctorAvailability } from "../types/DoctorAvailability";
 import { Slot, AppointmentLike } from "../types/Slot";
 import { timeToMinutes, minutesToTime, getWeekDay } from "../utils/time.utils";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export class DoctorAvailabilityEngine {
   static compute(
@@ -38,11 +45,11 @@ export class DoctorAvailabilityEngine {
     }));
 
     let minStartMinutes = workStart;
-    const now = new Date();
-    const isToday = date === now.toISOString().split("T")[0];
+    const now = dayjs().tz("Asia/Kolkata");
+    const isToday = date === now.format("YYYY-MM-DD");
 
     if (isToday) {
-      const nowPlusBuffer = now.getHours() * 60 + now.getMinutes() + 10;
+      const nowPlusBuffer = now.hour() * 60 + now.minute() + 10;
 
       const alignedStart = Math.ceil(nowPlusBuffer / slotDuration) * slotDuration;
 
