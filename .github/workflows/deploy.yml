@@ -56,4 +56,5 @@ jobs:
 
 
             docker pull ${{ secrets.DOCKER_USERNAME }}/irowzcure-backend:latest
-            docker-compose up -d --remove-orphans
+            docker-compose down
+            docker-compose up -d
