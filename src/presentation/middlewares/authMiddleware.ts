@@ -50,3 +50,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     });
   }
 };
+
+export const skipOptions = (req: Request, res: Response, next: NextFunction) => {
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+};

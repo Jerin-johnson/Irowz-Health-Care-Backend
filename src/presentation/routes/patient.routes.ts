@@ -215,6 +215,14 @@ export class PatientRoutes {
       asyncHandler(this._MedicalRecordPatientController.GetPatientLabTests)
     );
 
+    //change password patient
+
+    this._router.patch(
+      "/password",
+      authMiddleware,
+      asyncHandler(this._PatientProfileController.changePatientPassword)
+    );
+
     return this._router;
   }
 }

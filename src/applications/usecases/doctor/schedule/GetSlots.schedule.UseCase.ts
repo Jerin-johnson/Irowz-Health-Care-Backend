@@ -35,7 +35,7 @@ export class GetSlotsScheduleUseCase implements IGetSlotsScheduleUseCase {
     today.setHours(0, 0, 0, 0);
 
     const maxBookingDate = new Date(today);
-    maxBookingDate.setDate(today.getDate() + 14);
+    maxBookingDate.setDate(today.getDate() + 7);
 
     if (new Date(date) > maxBookingDate) {
       return [];

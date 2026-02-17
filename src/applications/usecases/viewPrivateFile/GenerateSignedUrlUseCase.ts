@@ -1,6 +1,7 @@
 import { IFileStorage } from "../../../domain/storage/IFile.storage";
+import { IGenerateSignedUrlUseCase } from "../../../domain/usecase/privateFile/IGenerateSignedUrlUseCase";
 
-export class GenerateSignedUrlUseCase {
+export class GenerateSignedUrlUseCase implements IGenerateSignedUrlUseCase {
   constructor(private fileStorage: IFileStorage) {}
 
   async execute(key: string) {

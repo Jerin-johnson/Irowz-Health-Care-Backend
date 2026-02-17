@@ -4,12 +4,15 @@ import { IGetProfileUseCase } from "../../../domain/usecase/patient/Profile&sett
 import { IEditPatientProfileUseCase } from "../../../domain/usecase/patient/Profile&settings/IEditPatientProfileUseCase";
 import { IGetWalletUseCase } from "../../../domain/usecase/patient/wallet/IGetWalletUseCase";
 import { PatientMessages } from "../../constants/message/Patient.message";
+import { ResetPatientPasswordUseCase } from "../../../applications/usecases/patient/ProfileAndSetting/ChangePatientPasswordUseCase";
+import { CommonMessages } from "../../constants/message/CommonMessages";
 
 export class PatientProfileController {
   constructor(
     private _GetProfileUseCase: IGetProfileUseCase,
     private _EditPatientProfileUseCase: IEditPatientProfileUseCase,
-    private _GetWalletUseCase: IGetWalletUseCase
+    private _GetWalletUseCase: IGetWalletUseCase,
+    private _ResetPatientPasswordUseCase: ResetPatientPasswordUseCase
   ) {}
 
   getProfile = async (req: Request, res: Response) => {
@@ -35,5 +38,22 @@ export class PatientProfileController {
     const wallet = await this._GetWalletUseCase.execute(userId as string);
 
     return ApiResponse.success(res, wallet);
+  };
+
+  changePatientPassword = async (req: Request, res: Response) => {
+    const userId = req.user?.userId;
+
+    const newPassword = req.body?.newPassword;
+    const currentPassword = req.body?.currentPassword;
+
+    if (!newPassword || !currentPassword) throw new Error(CommonMessages.FIELDS_MISSING);
+
+    const result = await this._ResetPatientPasswordUseCase.execute(
+      userId as string,
+      currentPassword,
+      newPassword
+    );
+
+    return ApiResponse.success(res, null, result.message);
   };
 }

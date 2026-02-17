@@ -49,7 +49,7 @@ export class ConfirmDoctorAvailabilityChangeUseCase implements IConfirmDoctorAva
     // Mark appointments
     await this.appointmentRepo.markAvailabilityAffected(appointmentIds);
 
-    //  Create notifications (DB)
+    //  notification creationn
     for (const appt of affectedAppointments) {
       await this.notificationRepo.create({
         userId: String(appt.patientId),

@@ -1,9 +1,9 @@
 import { Response, Request } from "express";
-import { GenerateSignedUrlUseCase } from "../../../applications/usecases/viewPrivateFile/GenerateSignedUrlUseCase";
 import { ApiResponse } from "../../utils/common.response.model";
+import { IGenerateSignedUrlUseCase } from "../../../domain/usecase/privateFile/IGenerateSignedUrlUseCase";
 
 export class ViewPrivateFileController {
-  constructor(private _GenerateSignedUrlUseCase: GenerateSignedUrlUseCase) {}
+  constructor(private _GenerateSignedUrlUseCase: IGenerateSignedUrlUseCase) {}
 
   GetSignedUrlForPrivateFile = async (req: Request, res: Response) => {
     const key = req.query?.key;

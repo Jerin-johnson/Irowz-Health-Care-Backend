@@ -24,6 +24,7 @@ import { GetPatientLabTestsUseCase } from "../applications/usecases/patient/Medi
 import { GetMedicalHistoryPatientUseCase } from "../applications/usecases/patient/MedicalRecord/GetPatientMedicalRecord";
 import { GetPatientPercriptionWithDoctorInfoUseCase } from "../applications/usecases/patient/MedicalRecord/GetPatientPrecriptionWithDoctorInfo.UseCase";
 import { GetPatientNotifcationUseCase } from "../applications/usecases/patient/notification/PatientNotifcation";
+import { ResetPatientPasswordUseCase } from "../applications/usecases/patient/ProfileAndSetting/ChangePatientPasswordUseCase";
 import { EditPatientProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/EditPatientProfileUseCase";
 import { GetProfileUseCase } from "../applications/usecases/patient/ProfileAndSetting/GetProfile.UseCase";
 import { GetWalletUseCase } from "../applications/usecases/patient/wallet/GetWalletUseCase";
@@ -57,6 +58,7 @@ import {
   walletRepo,
 } from "./repositers";
 import {
+  passwordService,
   paymentProviderFactory,
   razorpayGateway,
   s3FileStorage,
@@ -152,10 +154,16 @@ const editPatientProfileUseCase = new EditPatientProfileUseCase(
 
 const getWalletUseCase = new GetWalletUseCase(walletRepo);
 
+const resetPatientPasswordUseCase = new ResetPatientPasswordUseCase(
+  mongoUserRepository,
+  passwordService
+);
+
 const patientProfileController = new PatientProfileController(
   getProfileUseCase,
   editPatientProfileUseCase,
-  getWalletUseCase
+  getWalletUseCase,
+  resetPatientPasswordUseCase
 );
 
 const getPatientQueueStatusUseCase = new GetPatientQueueStatusUseCase(
