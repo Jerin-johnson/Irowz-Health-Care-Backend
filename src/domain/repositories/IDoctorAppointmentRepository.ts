@@ -69,4 +69,6 @@ export interface IDoctorAppointmentRepository {
   save(appointment: DoctorAppointmentDocument): Promise<DoctorAppointmentDocument>;
 
   markAvailabilityAffected(appointmentIds: string[]): Promise<void>;
+
+  findByUserIdCompelted(userId: string): Promise<DoctorAppointmentDocument | null>;
 }

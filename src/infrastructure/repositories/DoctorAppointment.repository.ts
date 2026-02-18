@@ -274,4 +274,7 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
       }
     );
   }
+  async findByUserIdCompelted(userId: string): Promise<DoctorAppointmentDocument | null> {
+    return await DoctorAppointmentModel.findOne({ patientId: userId, status: "COMPLETED" });
+  }
 }

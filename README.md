@@ -41,7 +41,7 @@ AI:       Google Gemini + Pinecone Vector DB
 
 ```bash
 git clone <your-repo>
-cd healthcare-saas
+cd Irowz-Health-Care-Backend
 cp .env.example .env
 # Fill .env with your credentials
 npm install

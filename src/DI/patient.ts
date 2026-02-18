@@ -134,7 +134,11 @@ export const doctorListingController = new DoctorListingController(
   getDoctorProfileUseCase
 );
 
-const postReviewUseCase = new PostReviewUseCase(doctorReviewRepository, doctorRepo);
+const postReviewUseCase = new PostReviewUseCase(
+  doctorReviewRepository,
+  doctorRepo,
+  doctorAppointmentRepository
+);
 
 const getReviewUseCase = new GetReviewUseCase(doctorReviewRepository);
 
