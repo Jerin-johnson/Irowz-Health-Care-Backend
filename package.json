@@ -15,7 +15,9 @@
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "lint:check": "eslint . --max-warnings=0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "tests:load": "artillery run patient-browse-stress.yml --output browse.json",
+    "tests:stress": "artillery run patient-load.yml --output browse.json"
   },
   "keywords": [],
   "author": "",

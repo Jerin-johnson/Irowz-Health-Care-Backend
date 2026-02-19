@@ -21,7 +21,7 @@ export class DoctorAppointmentController {
       doctorId as string,
       date as string
     );
-    ApiResponse.success(res, result);
+    return ApiResponse.success(res, result);
   };
 
   getAppointmentById = async (req: Request, res: Response) => {

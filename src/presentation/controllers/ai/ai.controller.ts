@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { AiMessage } from "../../../ai/types/ai.types";
-import { AiUseCase } from "../../../applications/usecases/ai/ai.use-case";
 import { HttpStatusCode } from "axios";
+import { IAiUseCase } from "../../../domain/usecase/ai/ai.types";
 
 export class AiController {
-  constructor(private aiUseCase: AiUseCase) {}
+  constructor(private aiUseCase: IAiUseCase) {}
   chat = async (req: Request, res: Response): Promise<void> => {
     try {
       const { question, prevMessages = [] } = req.body as {

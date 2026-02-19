@@ -71,4 +71,6 @@ export interface IDoctorAppointmentRepository {
   markAvailabilityAffected(appointmentIds: string[]): Promise<void>;
 
   findByUserIdCompelted(userId: string): Promise<DoctorAppointmentDocument | null>;
+
+  checkBookingForPaticularDoctor(doctorId: string, patientId: string): Promise<boolean>;
 }

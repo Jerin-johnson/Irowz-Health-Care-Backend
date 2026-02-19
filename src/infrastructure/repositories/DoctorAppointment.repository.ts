@@ -277,4 +277,19 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
   async findByUserIdCompelted(userId: string): Promise<DoctorAppointmentDocument | null> {
     return await DoctorAppointmentModel.findOne({ patientId: userId, status: "COMPLETED" });
   }
+
+  async checkBookingForPaticularDoctor(doctorId: string, patientId: string): Promise<boolean> {
+    const checkCancellationFOrPaticularDoctor = await DoctorAppointmentModel.countDocuments({
+      doctorId,
+      patientId,
+      status: "CANCELLED",
+    });
+
+    console.log(checkCancellationFOrPaticularDoctor);
+
+    if (checkCancellationFOrPaticularDoctor > 5) {
+      return false;
+    }
+    return true;
+  }
 }
