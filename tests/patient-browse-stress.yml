@@ -1,0 +1,23 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 20
+      arrivalRate: 100 # warm up
+    - duration: 30
+      arrivalRate: 300 # busy traffic
+    - duration: 30
+      arrivalRate: 600 # heavy spike (1000+ concurrent active)
+  ensure:
+    maxResponseTime: 800 # fail if API slower than 800ms
+
+scenarios:
+  - name: "Browse doctors & check slots"
+
+    flow:
+      # Doctors listing
+      - get:
+          url: "/api/patient/doctors"
+
+      # Slot availability (real params)
+      - get:
+          url: "/api/patient/doctor/slot?id=6990133536cfcd9bb8713cba&date=2026-02-19"
