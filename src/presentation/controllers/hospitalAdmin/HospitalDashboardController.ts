@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { GetHospitalDashboardOverviewUseCase } from "../../../applications/usecases/hospitalAdmin/dashboard/HosptialAdminDashboardUseCase";
 import { ApiResponse } from "../../utils/common.response.model";
+import { IGetHospitalDashboardOverviewUseCase } from "../../../domain/usecase/hosptialAdmin/dashboard/IGetHospitalDashboardOverviewUseCase";
 
 export class HospitalDashboardController {
   constructor(
-    private readonly _GetHospitalDashboardOverviewUseCase: GetHospitalDashboardOverviewUseCase
+    private readonly _GetHospitalDashboardOverviewUseCase: IGetHospitalDashboardOverviewUseCase
   ) {}
 
   overview = async (req: Request, res: Response) => {

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { GetDoctorDashboardOverviewUseCase } from "../../../applications/usecases/doctor/dashboard/GetDoctorDashboardOverviewUseCase";
+import { IGetDoctorDashboardOverviewUseCase } from "../../../domain/usecase/doctor/dashborad/IGetDoctorDashboardOverviewUseCase";
 
 export class DoctorDashboardController {
   constructor(
-    private readonly _GetDoctorDashboardOverviewUseCase: GetDoctorDashboardOverviewUseCase
+    private readonly _GetDoctorDashboardOverviewUseCase: IGetDoctorDashboardOverviewUseCase
   ) {}
   overview = async (req: Request, res: Response) => {
     const doctorId = req.user?.doctorId;

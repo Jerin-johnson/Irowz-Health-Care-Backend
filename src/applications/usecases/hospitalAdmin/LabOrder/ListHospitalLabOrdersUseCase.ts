@@ -1,6 +1,7 @@
 import { IHospitalLabOrderRepository } from "../../../../domain/repositories/IHospitalLabOrderRepository";
+import { IListHospitalLabOrdersUseCase } from "../../../../domain/usecase/hosptialAdmin/labOrders/IListHospitalLabOrdersUseCase";
 
-export class ListHospitalLabOrdersUseCase {
+export class ListHospitalLabOrdersUseCase implements IListHospitalLabOrdersUseCase {
   constructor(private readonly _hospitalLabRepo: IHospitalLabOrderRepository) {}
 
   async execute(params: {

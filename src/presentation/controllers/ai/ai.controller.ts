@@ -12,7 +12,7 @@ export class AiController {
         prevMessages?: AiMessage[];
       };
 
-      const userId = req.user?.userId; // from your auth middleware
+      const userId = req.user?.userId;
 
       if (!question || typeof question !== "string") {
         res

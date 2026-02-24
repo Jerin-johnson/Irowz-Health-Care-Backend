@@ -1,9 +1,10 @@
 import { IHospitalLabOrderRepository } from "../../../../domain/repositories/IHospitalLabOrderRepository";
 import { IMedicalRecordRepository } from "../../../../domain/repositories/IMedicalRecordRepository";
 import { IFileStorage } from "../../../../domain/storage/IFile.storage";
+import { IUploadHospitalLabTestUseCase } from "../../../../domain/usecase/hosptialAdmin/labOrders/IUploadHospitalLabTestUseCase";
 import { UploadHospitalLabResultInput } from "../../../dtos/hosptial/labOrder.dto";
 
-export class UploadHospitalLabTestUseCase {
+export class UploadHospitalLabTestUseCase implements IUploadHospitalLabTestUseCase {
   constructor(
     private readonly hospitalRepo: IHospitalLabOrderRepository,
     private readonly medicalRepo: IMedicalRecordRepository,

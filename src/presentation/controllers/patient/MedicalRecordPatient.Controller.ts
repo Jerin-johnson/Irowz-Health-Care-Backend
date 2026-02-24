@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import { GetMedicalHistoryPatientUseCase } from "../../../applications/usecases/patient/MedicalRecord/GetPatientMedicalRecord";
 import { ApiResponse } from "../../utils/common.response.model";
-import { GetPatientPercriptionWithDoctorInfoUseCase } from "../../../applications/usecases/patient/MedicalRecord/GetPatientPrecriptionWithDoctorInfo.UseCase";
 import { MedicalRecordPrescriptionMapper } from "../../../applications/dtos/doctor/MedicalRecordPrescription.mapper";
-import { GetPatientLabTestsUseCase } from "../../../applications/usecases/patient/MedicalRecord/GetPatientLabReports";
+import { IGetMedicalHistoryPatientUseCase } from "../../../domain/usecase/patient/medicalRecord/IGetMedicalHistoryPatientUseCase";
+import { IGetPatientPercriptionWithDoctorInfoUseCase } from "../../../domain/usecase/patient/medicalRecord/IGetPatientPrescriptionWithDoctorInfoUseCase";
+import { IGetPatientLabTestsUseCase } from "../../../domain/usecase/patient/medicalRecord/IGetPatientLabTestsUseCase";
 
 export class MedicalRecordPatientController {
   constructor(
-    private _GetMedicalHistoryPatientUseCase: GetMedicalHistoryPatientUseCase,
-    private _GetPatientPercriptionWithDoctorInfoUseCase: GetPatientPercriptionWithDoctorInfoUseCase,
-    private _GetPatientLabTestsUseCase: GetPatientLabTestsUseCase
+    private _GetMedicalHistoryPatientUseCase: IGetMedicalHistoryPatientUseCase,
+    private _GetPatientPercriptionWithDoctorInfoUseCase: IGetPatientPercriptionWithDoctorInfoUseCase,
+    private _GetPatientLabTestsUseCase: IGetPatientLabTestsUseCase
   ) {}
 
   GetMedicalHistoryPatient = async (req: Request, res: Response) => {

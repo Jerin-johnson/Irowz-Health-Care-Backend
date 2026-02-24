@@ -5,9 +5,10 @@ import {
 } from "../../../domain/repositories/IHospitalVerification.repo";
 import { IUserRepository } from "../../../domain/repositories/IUser.repo";
 import { IFileStorage } from "../../../domain/storage/IFile.storage";
+import { IResubmitHospitalVerificationUseCase } from "../../../domain/usecase/hospitalOnBoarding/IResubmitHospitalVerificationUseCase";
 import { geocodeCityState } from "../../../infrastructure/services/geo.coding.service";
 
-export class ResubmitHospitalVerificationUseCase {
+export class ResubmitHospitalVerificationUseCase implements IResubmitHospitalVerificationUseCase {
   constructor(
     private _userRepo: IUserRepository,
     private _hospitalVerificationRepo: IHospitalVerificationRepository,

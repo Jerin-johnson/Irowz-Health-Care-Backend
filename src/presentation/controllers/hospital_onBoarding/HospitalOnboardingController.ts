@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { ISubmitHospitalVerificationRequestUseCase } from "../../../domain/usecase/hospitalOnBoarding/ISubmitHospitalVerificationRequest.usecase";
-import { ResubmitHospitalVerificationUseCase } from "../../../applications/usecases/hosptialOnBorading/ReSumbitHospitalVerification.useCase";
 import { ICheckHospitalVerificationStatusByIdUseCase } from "../../../domain/usecase/hospitalOnBoarding/ICheckHospitalVerificationStatusById.usecase";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 import { ApiResponse } from "../../utils/common.response.model";
 import { CommonMessages } from "../../constants/message/CommonMessages";
 import { HospitalOnboardingMessages } from "../../constants/message/HospitalOnboardingMessages";
+import { IResubmitHospitalVerificationUseCase } from "../../../domain/usecase/hospitalOnBoarding/IResubmitHospitalVerificationUseCase";
 
 export class HospitalOnBoradingController {
   constructor(
     private SubmitHospitalVerificationUseCase: ISubmitHospitalVerificationRequestUseCase,
-    private ResubmitHospitalVerificationUseCase: ResubmitHospitalVerificationUseCase,
+    private ResubmitHospitalVerificationUseCase: IResubmitHospitalVerificationUseCase,
     private checkStatusBYId: ICheckHospitalVerificationStatusByIdUseCase
   ) {}
 

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { GetPatientDashboardOverviewUseCase } from "../../../applications/usecases/patient/dashboard/GetPatientDashboardOverviewUseCase";
 import { HttpStatusCode } from "axios";
+import { IGetPatientDashboardOverviewUseCase } from "../../../domain/usecase/patient/dashboard/IGetPatientDashboardOverviewUseCase";
 
 export class PatientDashboardController {
   constructor(
-    private readonly _GetPatientDashboardOverviewUseCase: GetPatientDashboardOverviewUseCase
+    private readonly _GetPatientDashboardOverviewUseCase: IGetPatientDashboardOverviewUseCase
   ) {}
   overview = async (req: Request, res: Response) => {
     const userId = req.user?.userId;
@@ -12,7 +12,7 @@ export class PatientDashboardController {
 
     const dashboard = await this._GetPatientDashboardOverviewUseCase.execute(patientId!, userId!);
 
-    res.status(HttpStatusCode.Ok).json({
+    return res.status(HttpStatusCode.Ok).json({
       success: true,
       data: dashboard,
     });

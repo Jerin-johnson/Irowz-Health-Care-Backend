@@ -29,6 +29,6 @@ export class DoctorAppointmentController {
 
     const result = await this._GetAppoinmentBYIdUseCase.execute(id);
 
-    ApiResponse.success(res, result);
+    return ApiResponse.success(res, result);
   };
 }

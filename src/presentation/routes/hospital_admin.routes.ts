@@ -89,6 +89,7 @@ export class HospitalAdminRoutes {
     );
 
     // -------- Doctor management --------
+
     this.router.post(
       HOSPITAL_ADMIN_ROUTES.DOCTOR,
       subscriptionPlanChecker,
@@ -100,6 +101,8 @@ export class HospitalAdminRoutes {
       HOSPITAL_ADMIN_ROUTES.DOCTOR,
       asyncHandler(this._DoctorMangmentController.getDoctors)
     );
+
+    this.router.get("/doctor-view", asyncHandler(this._DoctorMangmentController.ViewDoctorDetails));
 
     this.router.patch(
       HOSPITAL_ADMIN_ROUTES.DOCTOR_TOGGLE_STATUS,

@@ -15,8 +15,8 @@ import { IUpdateMedicalRecordPercriptionUseCase } from "../../../domain/usecase/
 import { IGetMedicalHistoryUseCase } from "../../../domain/usecase/doctor/consultation/IGetMedicalHistoryUseCase";
 import { IGetMedicalRecordWithDoctorInfoUseCase } from "../../../domain/usecase/doctor/consultation/IMedicalRecordRepository";
 import { DoctorMessages } from "../../constants/message/doctor.message";
-import { CreateLabOrderUseCase } from "../../../applications/usecases/doctor/consultation/CreateLabOrderUseCase";
-import { GetMedicalRecordLabTestsUseCase } from "../../../applications/usecases/doctor/consultation/GetMedicalRecordLabTestsUseCase";
+import { ICreateLabOrderUseCase } from "../../../domain/usecase/doctor/consultation/ICreateLabOrderUseCase";
+import { IGetMedicalRecordLabTestsUseCase } from "../../../domain/usecase/doctor/consultation/IGetMedicalRecordLabTestsUseCase";
 
 export class DoctorConsultationController {
   constructor(
@@ -31,8 +31,8 @@ export class DoctorConsultationController {
     private readonly _UpdateMedicalRecordPercriptionUseCase: IUpdateMedicalRecordPercriptionUseCase,
     private readonly _GetMedicalHistoryUseCase: IGetMedicalHistoryUseCase,
     private readonly _GetMedicalRecordWithDoctorInfoUseCase: IGetMedicalRecordWithDoctorInfoUseCase,
-    private readonly _CreateLabOrderUseCase: CreateLabOrderUseCase,
-    private readonly _GetMedicalRecordLabTestsUseCase: GetMedicalRecordLabTestsUseCase
+    private readonly _CreateLabOrderUseCase: ICreateLabOrderUseCase,
+    private readonly _GetMedicalRecordLabTestsUseCase: IGetMedicalRecordLabTestsUseCase
   ) {}
 
   startConsultation = async (req: Request, res: Response) => {

@@ -37,6 +37,7 @@ import { GetHospitalDashboardOverviewUseCase } from "../applications/usecases/ho
 import { ListHospitalLabOrdersUseCase } from "../applications/usecases/hospitalAdmin/LabOrder/ListHospitalLabOrdersUseCase";
 import { UploadHospitalLabTestUseCase } from "../applications/usecases/hospitalAdmin/LabOrder/UploadHospitalLabTestUseCase";
 import { HospitalLabAdminController } from "../presentation/controllers/hospitalAdmin/LabOrderMangment.Controller";
+import { HosptialAdminViewDoctorUseCase } from "../applications/usecases/hospitalAdmin/doctorMangement/HosptialAdminViewDoctorUseCase";
 
 const submitHositalVerficationRequest = new SubmitHositalVerficationRequest(
   mongoUserRepository,
@@ -93,10 +94,13 @@ const blockOrUnblockDoctorUseCase = new BlockOrUnblockDoctorUseCase(
   mongoUserRepository
 );
 
+const hosptialAdminViewDoctorUseCase = new HosptialAdminViewDoctorUseCase(doctorRepo);
+
 const doctorMangmentController = new DoctorMangmentController(
   adminCreateDoctorUseCase,
   getAllDoctorUseCase,
-  blockOrUnblockDoctorUseCase
+  blockOrUnblockDoctorUseCase,
+  hosptialAdminViewDoctorUseCase
 );
 
 const getActivePlansForListingHospitalAdminUseCase =

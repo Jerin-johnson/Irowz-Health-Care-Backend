@@ -6,12 +6,15 @@ import { IBlockOrUnblockDoctorUseCase } from "../../../domain/usecase/hosptialAd
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 import { HospitalAdminMessages } from "../../constants/message/HospitalAdminMessages";
 import { CommonMessages } from "../../constants/message/CommonMessages";
+import { IHosptialAdminViewDoctorUseCase } from "../../../domain/usecase/hosptialAdmin/doctorMangement/IHosptialAdminViewDoctorUseCase";
+import { ApiResponse } from "../../utils/common.response.model";
 
 export class DoctorMangmentController {
   constructor(
     private readonly _AdminCreateDoctorUseCase: IAdminCreateDoctorUseCase,
     private readonly _getAllDoctorUseCase: IGetAllDoctorUseCase,
-    private readonly _BlockOrUnblockDoctorUseCase: IBlockOrUnblockDoctorUseCase
+    private readonly _BlockOrUnblockDoctorUseCase: IBlockOrUnblockDoctorUseCase,
+    private readonly _HosptialAdminViewDoctorUseCase: IHosptialAdminViewDoctorUseCase
   ) {}
 
   createDoctor = async (req: Request, res: Response) => {
@@ -102,5 +105,13 @@ export class DoctorMangmentController {
       success: true,
       ...result,
     });
+  };
+
+  ViewDoctorDetails = async (req: Request, res: Response) => {
+    const doctorId = req.query.id;
+
+    const result = await this._HosptialAdminViewDoctorUseCase.execute(doctorId as string);
+
+    return ApiResponse.success(res, result);
   };
 }

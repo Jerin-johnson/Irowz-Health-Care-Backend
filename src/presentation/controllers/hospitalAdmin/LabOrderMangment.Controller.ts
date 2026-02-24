@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { ListHospitalLabOrdersUseCase } from "../../../applications/usecases/hospitalAdmin/LabOrder/ListHospitalLabOrdersUseCase";
-import { UploadHospitalLabTestUseCase } from "../../../applications/usecases/hospitalAdmin/LabOrder/UploadHospitalLabTestUseCase";
 import { ApiResponse } from "../../utils/common.response.model";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
+import { IListHospitalLabOrdersUseCase } from "../../../domain/usecase/hosptialAdmin/labOrders/IListHospitalLabOrdersUseCase";
+import { IUploadHospitalLabTestUseCase } from "../../../domain/usecase/hosptialAdmin/labOrders/IUploadHospitalLabTestUseCase";
 
 export class HospitalLabAdminController {
   constructor(
-    private readonly _ListHospitalLabOrdersUseCase: ListHospitalLabOrdersUseCase,
-    private readonly _UploadHospitalLabTestUseCase: UploadHospitalLabTestUseCase
+    private readonly _ListHospitalLabOrdersUseCase: IListHospitalLabOrdersUseCase,
+    private readonly _UploadHospitalLabTestUseCase: IUploadHospitalLabTestUseCase
   ) {}
 
   listLabOrders = async (req: Request, res: Response) => {

@@ -1,8 +1,9 @@
 import { IMedicalRecordRepository } from "../../../../domain/repositories/IMedicalRecordRepository";
 import { IHospitalLabOrderRepository } from "../../../../domain/repositories/IHospitalLabOrderRepository";
 import { CreateLabOrderInput } from "../../../dtos/doctor/CreateLabOrder.dto";
+import { ICreateLabOrderUseCase } from "../../../../domain/usecase/doctor/consultation/ICreateLabOrderUseCase";
 
-export class CreateLabOrderUseCase {
+export class CreateLabOrderUseCase implements ICreateLabOrderUseCase {
   constructor(
     private readonly _medicalRepo: IMedicalRecordRepository,
     private readonly _hospitalRepo: IHospitalLabOrderRepository

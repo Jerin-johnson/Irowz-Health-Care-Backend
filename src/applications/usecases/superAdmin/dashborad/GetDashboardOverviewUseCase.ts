@@ -15,6 +15,7 @@ export class GetFullDashboardOverviewUseCase implements IGetFullDashboardOvervie
       expiringSoon,
       newHospitalsThisMonth,
       monthlyRevenueGraph,
+      userTrends,
     ] = await Promise.all([
       this.repo.getTotalUsers(),
       this.repo.getTotalDoctors(),
@@ -25,6 +26,7 @@ export class GetFullDashboardOverviewUseCase implements IGetFullDashboardOvervie
       this.repo.getExpiringSoon(7),
       this.repo.getNewHospitalsThisMonth(),
       this.repo.getMonthlyRevenueGraph(),
+      this.repo.getUserTrendsByRole(),
     ]);
 
     const lastMonthRevenue =
@@ -51,6 +53,7 @@ export class GetFullDashboardOverviewUseCase implements IGetFullDashboardOvervie
       },
       charts: {
         monthlyRevenue: monthlyRevenueGraph,
+        userTrends,
       },
     };
   }

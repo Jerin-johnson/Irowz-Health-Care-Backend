@@ -34,13 +34,6 @@ export class CheckoutUseCase implements ICheckoutUseCase {
       throw new Error("Slot lock expired or does not belong to this user");
     }
 
-    const isCancelledCountForPaticularDoctorExced =
-      await this._DoctorAppoinmentRepo.checkBookingForPaticularDoctor(doctorId, patientId!);
-
-    if (isCancelledCountForPaticularDoctorExced) {
-      throw new Error("You already cancelled more than 5 times");
-    }
-
     const slotBlocked = await this._DoctorAppoinmentRepo.exists(doctorId, date, startTime);
 
     if (slotBlocked) {

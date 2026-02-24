@@ -100,4 +100,60 @@ export class SuperAdminDashboardRepo implements ISuperAdminDashboardRepo {
       amount: r.total,
     }));
   }
+
+  async getUserTrendsByRole(): Promise<{
+    patients: { month: string; count: number }[];
+    doctors: { month: string; count: number }[];
+    hospitals: { month: string; count: number }[];
+  }> {
+    const aggregated = await User.aggregate([
+      {
+        $group: {
+          _id: {
+            month: { $month: "$createdAt" },
+            role: "$role",
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
+    ]);
+
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const patients: { month: string; count: number }[] = [];
+    const doctors: { month: string; count: number }[] = [];
+    const hospitals: { month: string; count: number }[] = [];
+
+    for (const row of aggregated) {
+      const monthName = months[row._id.month - 1];
+
+      if (row._id.role === UserRoles.PATIENT) {
+        patients.push({ month: monthName, count: row.count });
+      }
+
+      if (row._id.role === UserRoles.DOCTOR) {
+        doctors.push({ month: monthName, count: row.count });
+      }
+
+      if (row._id.role === UserRoles.HOSPITAL_ADMIN) {
+        hospitals.push({ month: monthName, count: row.count });
+      }
+    }
+
+    return { patients, doctors, hospitals };
+  }
 }
