@@ -1,4 +1,4 @@
-import { PatientProfileDTO } from "../../../../applications/dtos/patient/PatientProfileOutputDto";
+import { PatientProfileDTO } from "../../../../applications/mapper/patientProfile.mapper";
 
 export interface IGetProfileUseCase {
   execute(userId: string): Promise<PatientProfileDTO>;

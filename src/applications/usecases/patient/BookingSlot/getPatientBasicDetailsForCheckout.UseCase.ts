@@ -1,6 +1,6 @@
 import { IDoctorRepository } from "../../../../domain/repositories/IDoctor.repo";
 import { IUserRepository } from "../../../../domain/repositories/IUser.repo";
-import { userMapperForCheckout } from "../../../dtos/patient/CheckoutUserBasic";
+import { userMapperForCheckout } from "../../../mapper/checkoutUser.mapper";
 
 export class GetPatientBasicDetailsForCheckoutUseCase {
   constructor(

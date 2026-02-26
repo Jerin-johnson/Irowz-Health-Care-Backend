@@ -24,7 +24,7 @@ export class SearchSpecialtiesTool {
                 : `Found ${specialties.length} specialties.`,
           });
         } catch (err: any) {
-          return JSON.stringify({ success: false, error: err.message });
+          return JSON.stringify({ success: false, error: err?.message });
         }
       },
       {

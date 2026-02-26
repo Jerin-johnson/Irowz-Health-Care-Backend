@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 import { IDoctorAvailabilityRepository } from "../../domain/repositories/IDoctorAvailabilityRepository";
 import { DoctorAvailability } from "../../domain/types/DoctorAvailability";
 import { DoctorAvailabilityModel } from "../database/mongo/models/DoctorAvailabilityModel";
-import { DoctorAvailabilityMapper } from "../../applications/dtos/doctor/doctorAvalablityMapper";
+import { DoctorAvailabilityMapper } from "../../applications/mapper/doctorAvalabilty.mapper";
 
 export class MongoDoctorAvailabilityRepository implements IDoctorAvailabilityRepository {
   async findByDoctorId(doctorId: string): Promise<DoctorAvailability | null> {

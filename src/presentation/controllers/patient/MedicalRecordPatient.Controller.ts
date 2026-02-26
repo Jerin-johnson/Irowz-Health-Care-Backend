@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { ApiResponse } from "../../utils/common.response.model";
-import { MedicalRecordPrescriptionMapper } from "../../../applications/dtos/doctor/MedicalRecordPrescription.mapper";
 import { IGetMedicalHistoryPatientUseCase } from "../../../domain/usecase/patient/medicalRecord/IGetMedicalHistoryPatientUseCase";
 import { IGetPatientPercriptionWithDoctorInfoUseCase } from "../../../domain/usecase/patient/medicalRecord/IGetPatientPrescriptionWithDoctorInfoUseCase";
 import { IGetPatientLabTestsUseCase } from "../../../domain/usecase/patient/medicalRecord/IGetPatientLabTestsUseCase";
+import { MedicalRecordPrescriptionMapper } from "../../../applications/mapper/medicalRecord.mapper";
 
 export class MedicalRecordPatientController {
   constructor(

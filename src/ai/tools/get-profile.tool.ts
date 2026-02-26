@@ -1,7 +1,7 @@
 // import * as z from "zod";
 import { tool } from "@langchain/core/tools";
 import { IGetProfileUseCase } from "../../domain/usecase/patient/Profile&settings/IGetProfileUseCase";
-import { PatientProfileDTO } from "../../applications/dtos/patient/PatientProfileOutputDto";
+import { PatientProfileDTO } from "../../applications/mapper/patientProfile.mapper";
 
 export class GetProfileTool {
   constructor(private useCase: IGetProfileUseCase) {} // Manual new in factory

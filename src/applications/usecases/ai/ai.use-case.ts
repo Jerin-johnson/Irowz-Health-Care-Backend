@@ -16,7 +16,7 @@ export class AiUseCase implements IAiUseCase {
         lastMessages: prevMessages,
       });
       return reply;
-    } catch (err: any) {
+    } catch (err) {
       console.error("AiUseCase error:", err);
       return "Sorry, something went wrong. Try again later.";
     }

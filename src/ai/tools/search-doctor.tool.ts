@@ -37,7 +37,7 @@ export class SearchDoctorsTool {
                 ? "No doctors found — try different search?"
                 : `Found ${result.items.length} doctors.`,
           });
-        } catch (err: any) {
+        } catch (err) {
           return JSON.stringify({ success: false, error: err.message });
         }
       },

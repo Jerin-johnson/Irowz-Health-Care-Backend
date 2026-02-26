@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { ApiResponse } from "../../utils/common.response.model";
 import { mapPatientToDTO } from "../../../applications/dtos/doctor/consultationPatientMapper";
 import { GetActiveDoctorOnlineConsultationUseCase } from "../../../applications/usecases/doctor/consultation/online/GetActiveDoctorConsultationUseCase";
-import { MedicalRecordPrescriptionMapper } from "../../../applications/dtos/doctor/MedicalRecordPrescription.mapper";
 import { HttpStatusCode } from "../../../domain/constants/HttpStatusCode";
 import { IStartConsultationUseCase } from "../../../domain/usecase/doctor/consultation/IStartConsultationUseCase";
 import { IGetPatientOverviewUseCase } from "../../../domain/usecase/doctor/consultation/IGetPatientOverviewUseCase";
@@ -17,6 +16,7 @@ import { IGetMedicalRecordWithDoctorInfoUseCase } from "../../../domain/usecase/
 import { DoctorMessages } from "../../constants/message/doctor.message";
 import { ICreateLabOrderUseCase } from "../../../domain/usecase/doctor/consultation/ICreateLabOrderUseCase";
 import { IGetMedicalRecordLabTestsUseCase } from "../../../domain/usecase/doctor/consultation/IGetMedicalRecordLabTestsUseCase";
+import { MedicalRecordPrescriptionMapper } from "../../../applications/mapper/medicalRecord.mapper";
 
 export class DoctorConsultationController {
   constructor(

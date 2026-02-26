@@ -1,5 +1,5 @@
-import { IPatientProfile } from "../../../domain/types/IPatientProfile";
-import { UserResponse } from "../../../domain/types/IUser.types";
+import { IPatientProfile } from "../../domain/types/IPatientProfile";
+import { UserResponse } from "../../domain/types/IUser.types";
 
 export interface PatientProfileDTO {
   fullName: string;

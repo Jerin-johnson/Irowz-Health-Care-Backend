@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
-import { DoctorAvailabilityDocument } from "../../../infrastructure/database/mongo/models/DoctorAvailabilityModel";
-import { DoctorAvailability } from "../../../domain/types/DoctorAvailability";
+import { DoctorAvailabilityDocument } from "../../infrastructure/database/mongo/models/DoctorAvailabilityModel";
+import { DoctorAvailability } from "../../domain/types/DoctorAvailability";
 
 export class DoctorAvailabilityMapper {
   static toDomain(doc: DoctorAvailabilityDocument): DoctorAvailability {

@@ -1,6 +1,6 @@
 import { IDoctorReviewRepository } from "../../../../domain/repositories/IDoctorReviewRepository";
 import { IGetReviewUseCase } from "../../../../domain/usecase/patient/DoctorReview/IGetReviewUseCase";
-import { mapDoctorReviews } from "../../../dtos/patient/DoctorReviewOutput";
+import { mapDoctorReviews } from "../../../mapper/doctorReview.mapper";
 
 export class GetReviewUseCase implements IGetReviewUseCase {
   constructor(private readonly _doctorReviewRepo: IDoctorReviewRepository) {}
