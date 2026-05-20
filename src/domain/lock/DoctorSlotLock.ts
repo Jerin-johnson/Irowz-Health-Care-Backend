@@ -12,7 +12,7 @@ export interface IDoctorSlotLock {
     date: string,
     startTime: string,
     reason?: string
-  ): Promise<any>;
+  ): Promise<void>;
 
   unlockSlot(doctorId: string, date: string, startTime: string): Promise<void>;
 

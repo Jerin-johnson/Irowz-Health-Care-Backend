@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IHospitalSpecialtyRepository } from "../../../../domain/repositories/IHospitalSpecaility.repo";
 import { IAddHospitalSpecialtyUseCase } from "../../../../domain/usecase/hosptialAdmin/specialityMangement/IAddHospitalSpecialtyUseCase.usecase";
 import { IHospitalSpecialty } from "../../../../infrastructure/database/mongo/models/HospitalSpeciality.model";
@@ -30,7 +31,7 @@ export class AddHospitalSpecialtyUseCase implements IAddHospitalSpecialtyUseCase
     }
 
     const specialty = await this.specialtyRepository.create({
-      hospitalId: data.hospitalId as any,
+      hospitalId: new Types.ObjectId(data.hospitalId),
       name: data.name,
       description: data.description,
       symptoms: normalizedSymptoms,

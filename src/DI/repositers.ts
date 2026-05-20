@@ -1,9 +1,9 @@
-import { HospitalVerificationRepositoryImpl } from "../infrastructure/repositories/HospitalVerification.repository";
+import { HospitalVerificationRepository } from "../infrastructure/repositories/HospitalVerification.repository";
 import { MongoUserRepository } from "../infrastructure/repositories/user.repo.mongo";
-import { HospitalRepositoryImpl } from "../infrastructure/repositories/Hospital.repository";
+import { HospitalRepository } from "../infrastructure/repositories/Hospital.repository";
 // import { HospitalSpecialtyModel } from "../infrastructure/database/mongo/models/HospitalSpeciality.model";
-import { HospitalSpecialtyRepositoryImpl } from "../infrastructure/repositories/HospitalSpeciality.repo";
-import { DoctorRepositoryImpl } from "../infrastructure/repositories/Doctor.repository";
+import { HospitalSpecialtyRepository } from "../infrastructure/repositories/HospitalSpeciality.repo";
+import { DoctorRepository } from "../infrastructure/repositories/Doctor.repository";
 import { MongoDoctorAvailabilityRepository } from "../infrastructure/repositories/DoctorAvailability.Repository";
 import { DoctorAppointmentRepository } from "../infrastructure/repositories/DoctorAppointment.repository";
 import { DoctorSearchMongoRepository } from "../infrastructure/repositories/DoctorSearch.repository";
@@ -22,10 +22,10 @@ import { HospitalLabOrderRepository } from "../infrastructure/repositories/Hospi
 // import { NotificationRepository } from "../infrastructure/repositories/notification/NotificationRepository";
 
 export const mongoUserRepository = new MongoUserRepository();
-export const hosptialVerficatinRepo = new HospitalVerificationRepositoryImpl();
-export const hosptialRepository = new HospitalRepositoryImpl();
-export const hospitalSpecialityRepo = new HospitalSpecialtyRepositoryImpl();
-export const doctorRepo = new DoctorRepositoryImpl();
+export const hosptialVerficatinRepo = new HospitalVerificationRepository();
+export const hosptialRepository = new HospitalRepository();
+export const hospitalSpecialityRepo = new HospitalSpecialtyRepository();
+export const doctorRepo = new DoctorRepository();
 export const doctorAvailabilityRepository = new MongoDoctorAvailabilityRepository();
 export const doctorAppointmentRepository = new DoctorAppointmentRepository();
 export const doctorSearchMongoRepository = new DoctorSearchMongoRepository();

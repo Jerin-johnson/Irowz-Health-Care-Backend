@@ -1,8 +1,13 @@
-import { IHospitalRepository } from "../../domain/repositories/IHospital.repo";
+import {
+  Hospital,
+  HospitalFilterOptions,
+  HospitalPaginationOptions,
+  IHospitalRepository,
+} from "../../domain/repositories/IHospital.repo";
 import { HospitalModel } from "../database/mongo/models/Hospital.model";
 
-export class HospitalRepositoryImpl implements IHospitalRepository {
-  async create(data: any) {
+export class HospitalRepository implements IHospitalRepository {
+  async create(data: Omit<Hospital, "id" | "createdAt" | "updatedAt">) {
     const hospital = await HospitalModel.create(data);
     return this.map(hospital);
   }
@@ -30,8 +35,16 @@ export class HospitalRepositoryImpl implements IHospitalRepository {
     });
   }
 
-  async getPaginated(filters: any, pagination: any) {
-    const query: any = {};
+  async getPaginated(
+    filters: HospitalFilterOptions,
+    pagination: HospitalPaginationOptions
+  ): Promise<{
+    data: Hospital[];
+    total: number;
+    totalHospitals: number;
+    IsActiveHospitalCount: number;
+  }> {
+    const query: Record<string, unknown> = {};
 
     if (filters.isActive != undefined) query.isActive = filters.isActive;
     if (filters.city) query.city = filters.city;
@@ -58,13 +71,20 @@ export class HospitalRepositoryImpl implements IHospitalRepository {
     return { data, total, totalHospitals, IsActiveHospitalCount };
   }
 
-  async update(id: string, data: any): Promise<any> {
-    return await HospitalModel.updateOne({ userId: id }, { data });
+  async update(id: string, data: Partial<Hospital>): Promise<Hospital | null> {
+    const hospital = await HospitalModel.updateOne({ userId: id }, { data });
+    return hospital ? this.map(hospital) : null;
   }
 
-  async findByHospitalId(hospitalId: string): Promise<any> {
+  async findByHospitalId(hospitalId: string): Promise<Hospital | null> {
     return await HospitalModel.findOne({ _id: hospitalId });
   }
+
+  // async findByHospitalId(hospitalId: string) {
+  //   const hospital = await HospitalModel.findById(hospitalId).lean<HospitalLean>();
+
+  //   return hospital ? this.map(hospital) : null;
+  // }
 
   private map(doc: any) {
     return {

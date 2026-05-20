@@ -1,6 +1,12 @@
-import { HospitalVerificationModel } from "../database/mongo/models/HospitalVerification.model";
 import {
+  HospitalVerificationDocument,
+  HospitalVerificationModel,
+} from "../database/mongo/models/HospitalVerification.model";
+import {
+  CreateHospitalVerificationInput,
   HospitalVerification,
+  HospitalVerificationLean,
+  HospitalVerificationQuery,
   HospitalVerificationStatus,
   IHospitalVerificationRepository,
   ResumbitHospitalVerficationRepository,
@@ -8,8 +14,8 @@ import {
 import mongoose from "mongoose";
 import { HosptialRequestVerficationStatus } from "../../domain/constants/HosptialRequestVerficationStatus";
 
-export class HospitalVerificationRepositoryImpl implements IHospitalVerificationRepository {
-  async create(data: any) {
+export class HospitalVerificationRepository implements IHospitalVerificationRepository {
+  async create(data: CreateHospitalVerificationInput) {
     const record = await HospitalVerificationModel.create(data);
     return this.map(record);
   }
@@ -66,11 +72,13 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
   async resumbit(
     verficationId: string,
     input: Partial<ResumbitHospitalVerficationRepository>
-  ): Promise<HospitalVerification> {
+  ): Promise<HospitalVerification | null> {
     const record = await HospitalVerificationModel.findOneAndUpdate(
       { _id: verficationId },
       { ...input }
     );
+
+    if (!record) return null;
     return this.map(record);
   }
 
@@ -116,8 +124,21 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
     });
   }
 
-  async getPaginated(filters: any, pagination: any) {
-    const query: any = {};
+  async getPaginated(
+    filters: {
+      search?: string;
+      status?: HosptialRequestVerficationStatus;
+      city?: string;
+    },
+    pagination: {
+      skip: number;
+      limit: number;
+    }
+  ): Promise<{
+    data: HospitalVerificationLean[];
+    total: number;
+  }> {
+    const query: HospitalVerificationQuery = {};
 
     if (filters.status) query.status = filters.status;
     if (filters.city) query.city = filters.city;
@@ -134,14 +155,14 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
         .skip(pagination.skip)
         .limit(pagination.limit)
         .sort({ submittedAt: -1 })
-        .lean(),
+        .lean<HospitalVerificationLean[]>(),
       HospitalVerificationModel.countDocuments(query),
     ]);
 
     return { data, total };
   }
 
-  private map(doc: any) {
+  private map(doc: HospitalVerificationDocument): HospitalVerification {
     return {
       _id: doc._id.toString(),
       userId: doc.userId.toString(),
@@ -160,8 +181,8 @@ export class HospitalVerificationRepositoryImpl implements IHospitalVerification
       adminRemarks: doc.adminRemarks,
       submittedAt: doc.submittedAt,
       reviewedAt: doc.reviewedAt,
-      createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
+      createdAt: doc.createdAt as string,
+      updatedAt: doc.updatedAt as string,
     };
   }
 }

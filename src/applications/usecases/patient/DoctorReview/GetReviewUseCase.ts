@@ -9,7 +9,7 @@ export class GetReviewUseCase implements IGetReviewUseCase {
     | {
         id: string;
         patientName: string;
-        date: any;
+        date: string | Date;
         rating: number;
         comment: string;
       }[]
@@ -21,7 +21,7 @@ export class GetReviewUseCase implements IGetReviewUseCase {
     return mapDoctorReviews(result) as {
       id: string;
       patientName: string;
-      date: any;
+      date: string;
       rating: number;
       comment: string;
     }[];

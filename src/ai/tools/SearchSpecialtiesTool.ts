@@ -23,8 +23,9 @@ export class SearchSpecialtiesTool {
                 ? "No specialties available"
                 : `Found ${specialties.length} specialties.`,
           });
-        } catch (err: any) {
-          return JSON.stringify({ success: false, error: err?.message });
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : "";
+          return JSON.stringify({ success: false, error: message });
         }
       },
       {

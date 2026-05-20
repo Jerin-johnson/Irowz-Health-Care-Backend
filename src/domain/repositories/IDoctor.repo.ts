@@ -4,6 +4,30 @@ import {
   DoctorLean,
 } from "../../infrastructure/database/mongo/models/Doctor.model";
 
+export interface PaginatedDoctorResult {
+  _id: Types.ObjectId;
+
+  user: {
+    _id: Types.ObjectId;
+    name: string;
+    email: string;
+    phone: string;
+  };
+
+  specialty: {
+    _id: Types.ObjectId;
+    name: string;
+    description?: string;
+  };
+
+  experienceYears: number;
+  consultationFee: number;
+  averageRating: number;
+  isActive: boolean;
+
+  createdAt: Date;
+}
+
 export interface IDoctorRepository {
   create(data: Partial<DoctorDocument>): Promise<DoctorDocument>;
 
@@ -25,7 +49,10 @@ export interface IDoctorRepository {
     }
   ): Promise<DoctorDocument[]>;
 
-  toggleStatus(doctorId: Types.ObjectId | string, isActive: boolean): Promise<any>;
+  toggleStatus(
+    doctorId: Types.ObjectId | string,
+    isActive: boolean
+  ): Promise<DoctorDocument | null>;
   getPaginated(
     filters: {
       hospitalId: string;
@@ -38,7 +65,7 @@ export interface IDoctorRepository {
       limit: number;
     }
   ): Promise<{
-    data: any[];
+    data: PaginatedDoctorResult[];
     total: number;
     totalDoctorCount: number;
     activeDoctorCount: number;

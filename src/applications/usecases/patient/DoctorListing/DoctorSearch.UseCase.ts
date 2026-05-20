@@ -1,3 +1,4 @@
+// import { Doc } from "zod/v4/core";
 import { IDoctorAvailabilityRepository } from "../../../../domain/repositories/IDoctorAvailabilityRepository";
 import { IDoctorSearchRepository } from "../../../../domain/repositories/IDoctorSearchRepo";
 import { IDoctorSearchUseCase } from "../../../../domain/usecase/patient/DoctorListing/IDoctorSearchUseCase";
@@ -5,6 +6,7 @@ import {
   DoctorSearchQueryDTO,
   DoctorSearchResponseDTO,
 } from "../../../dtos/patient/doctor.search.Dto";
+// import { DoctorAvailability } from "../../../../domain/types/DoctorAvailability";
 
 const DAY_ORDER = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
@@ -38,13 +40,9 @@ export class DoctorSearchUseCase implements IDoctorSearchUseCase {
       let availableDays: string[] = [];
 
       if (availability) {
-        availableDays = availability.weeklySchedule
-          .filter((d: any) => d.isWorking)
-          .map((d: any) => d.day);
+        availableDays = availability.weeklySchedule.filter((d) => d.isWorking).map((d) => d.day);
 
-        isAvailableToday = availability.weeklySchedule.some(
-          (d: any) => d.day === today && d.isWorking
-        );
+        isAvailableToday = availability.weeklySchedule.some((d) => d.day === today && d.isWorking);
       }
 
       return {

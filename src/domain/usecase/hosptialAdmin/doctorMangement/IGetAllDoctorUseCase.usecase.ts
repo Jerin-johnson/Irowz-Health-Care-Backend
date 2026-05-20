@@ -1,3 +1,5 @@
+import { PaginatedDoctorResult } from "../../../repositories/IDoctor.repo";
+
 export interface IGetAllDoctorUseCase {
   execute(input: {
     hospitalId: string;
@@ -7,7 +9,7 @@ export interface IGetAllDoctorUseCase {
     page?: number;
     limit?: number;
   }): Promise<{
-    data: any[];
+    data: PaginatedDoctorResult[];
     stats: {
       totalDoctorCount: number;
       activeDoctorCount: number;

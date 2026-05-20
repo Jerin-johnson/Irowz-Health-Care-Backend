@@ -25,8 +25,9 @@ export class GetAvailableSlotsTool {
                 ? "No slots available on this date."
                 : `Found ${slots.filter((s) => s.available).length} available slots.`,
           });
-        } catch (err: any) {
-          return JSON.stringify({ success: false, error: err.message });
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : "";
+          return JSON.stringify({ success: false, error: message });
         }
       },
       {

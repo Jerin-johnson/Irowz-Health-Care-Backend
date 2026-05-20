@@ -15,6 +15,8 @@ export interface HospitalVerificationDocument extends Document {
   licenseDocumentKey: string;
   status: "PENDING" | "APPROVED" | "REJECTED";
   adminRemarks?: string;
+  createdAt?: string;
+  updatedAt?: string;
 
   submittedAt: Date;
   reviewedAt?: Date;

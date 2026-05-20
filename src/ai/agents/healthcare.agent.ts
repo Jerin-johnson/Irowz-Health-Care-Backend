@@ -126,10 +126,11 @@ export class HealthcareAgent {
 
       console.log("the response", response);
       return response;
-    } catch (error: any) {
-      console.error(`Error (${Date.now() - startTime}ms):`, error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "";
+      console.error(`Error (${Date.now() - startTime}ms):`, message);
 
-      if (error.message?.includes("Timeout")) {
+      if (message.includes("Timeout")) {
         return "I'm taking too long to process this. Could you try asking in a simpler way?";
       }
 

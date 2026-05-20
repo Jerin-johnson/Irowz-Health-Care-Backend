@@ -1,8 +1,9 @@
-import { Types } from "mongoose";
-import { IDoctorRepository } from "../../domain/repositories/IDoctor.repo";
+import { PipelineStage, Types } from "mongoose";
+// import type { FilterQuery } from "mongoose";
+import { IDoctorRepository, PaginatedDoctorResult } from "../../domain/repositories/IDoctor.repo";
 import { DoctorDocument, DoctorLean, DoctorModel } from "../database/mongo/models/Doctor.model";
 
-export class DoctorRepositoryImpl implements IDoctorRepository {
+export class DoctorRepository implements IDoctorRepository {
   async create(data: Partial<DoctorDocument>): Promise<DoctorDocument> {
     const doctor = new DoctorModel(data);
     return await doctor.save();
@@ -58,7 +59,7 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
       limit: number;
     }
   ): Promise<{
-    data: any[];
+    data: PaginatedDoctorResult[];
     total: number;
     totalDoctorCount: number;
     activeDoctorCount: number;
@@ -66,7 +67,7 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
     const { hospitalId, search, specialtyId, isActive } = filters;
     const { skip, limit } = pagination;
 
-    const matchStage: any = {
+    const matchStage: Record<string, unknown> = {
       hospitalId: new Types.ObjectId(hospitalId),
     };
 
@@ -88,7 +89,7 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
         }
       : null;
 
-    const pipeline: any[] = [
+    const pipeline: PipelineStage[] = [
       { $match: matchStage },
 
       // join user
@@ -152,7 +153,7 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
       search?: string;
     }
   ): Promise<DoctorDocument[]> {
-    const query: any = { hospitalId };
+    const query: Record<string, unknown> = { hospitalId };
 
     if (typeof options?.isActive === "boolean") {
       query.isActive = options.isActive;
@@ -173,7 +174,7 @@ export class DoctorRepositoryImpl implements IDoctorRepository {
     return await DoctorModel.find(query).sort({ createdAt: -1 }).populate("specialtyId");
   }
 
-  async toggleStatus(doctorId: Types.ObjectId, isActive: boolean): Promise<any> {
+  async toggleStatus(doctorId: Types.ObjectId, isActive: boolean): Promise<DoctorDocument | null> {
     const updatedDoctor = await DoctorModel.findByIdAndUpdate(
       doctorId,
       { $set: { isActive } },

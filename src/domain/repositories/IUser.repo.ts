@@ -33,7 +33,7 @@ export interface IUserRepository {
       resetPasswordToken: string;
       resetPasswordExpires: Date;
     }
-  ): Promise<any>;
+  ): Promise<{ success: boolean; matched: boolean }>;
 
   findOneByResetPasswordToken(resetPasswordToken: string): Promise<UserResponse | null>;
 

@@ -83,9 +83,9 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
     const licenseKey = `hospital-licenses/${HospitalAdminUser._id}.pdf`;
 
     const fileKey = await this.fileStorage.uploadPrivatePdf({
-      buffer: fileBuffer,
+      buffer: fileBuffer as Buffer,
       key: licenseKey,
-      mimeType,
+      mimeType: mimeType as string,
     });
 
     const HospitalVerficationRequest = await this.HosptialVerficatinRepo.create({
@@ -108,7 +108,7 @@ export class SubmitHositalVerficationRequest implements ISubmitHospitalVerificat
       data: {
         userId: HospitalAdminUser._id,
         role: HospitalAdminUser.role,
-        verificationId: HospitalVerficationRequest._id,
+        verificationId: HospitalVerficationRequest._id as string,
         name: HospitalVerficationRequest.hospitalName,
         city: HospitalVerficationRequest.city,
         email: HospitalVerficationRequest.officialEmail,

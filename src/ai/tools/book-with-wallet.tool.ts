@@ -93,8 +93,9 @@ export class BookWithWalletTool {
             data: result,
             message: "Booking successful with wallet deduction.",
           });
-        } catch (err: any) {
-          return JSON.stringify({ success: false, error: err.message });
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : "";
+          return JSON.stringify({ success: false, error: message });
         }
       },
       {

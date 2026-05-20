@@ -1,12 +1,28 @@
+import { Types } from "mongoose";
+
 export interface DoctorReviewResponse {
   id: string;
   patientName: string;
-  date: any;
+  date: string | Date;
   rating: number;
   comment: string;
 }
 
-export const mapDoctorReviews = (reviews: any[]): DoctorReviewResponse[] => {
+interface ReviewMapperInput {
+  _id: Types.ObjectId | string;
+
+  updatedAt: Date | string;
+
+  rating: number;
+
+  comment: string;
+
+  patientId?: {
+    name?: string;
+  };
+}
+
+export const mapDoctorReviews = (reviews: ReviewMapperInput[]): DoctorReviewResponse[] => {
   return reviews.map((review) => ({
     id: review._id.toString(),
     patientName: review.patientId?.name ?? "Anonymous",

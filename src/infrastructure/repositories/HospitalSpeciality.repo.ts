@@ -4,8 +4,12 @@ import {
   HospitalSpecialtyModel,
   IHospitalSpecialty,
 } from "../database/mongo/models/HospitalSpeciality.model";
+import {
+  HospitalSpecialtyQuery,
+  PaginatedHospitalSpecialty,
+} from "../../domain/types/DoctorSpeciality";
 
-export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyRepository {
+export class HospitalSpecialtyRepository implements IHospitalSpecialtyRepository {
   async create(
     data: Omit<IHospitalSpecialty, "_id" | "createdAt" | "updatedAt">
   ): Promise<IHospitalSpecialty> {
@@ -25,7 +29,7 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
       search?: string;
     }
   ): Promise<IHospitalSpecialty[]> {
-    const filter: any = {
+    const filter: HospitalSpecialtyQuery = {
       hospitalId,
     };
 
@@ -90,12 +94,12 @@ export class HospitalSpecialtyRepositoryImpl implements IHospitalSpecialtyReposi
       limit: number;
     }
   ): Promise<{
-    data: any[];
+    data: PaginatedHospitalSpecialty[];
     total: number;
     totalSpecialityCount: number;
     activeSpecialityCount: number;
   }> {
-    const query: any = { hospitalId: filters.hospitalId };
+    const query: HospitalSpecialtyQuery = { hospitalId: filters.hospitalId };
 
     if (filters.search) {
       query.name = {

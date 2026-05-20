@@ -1,3 +1,5 @@
+import { PatientSnapshot } from "./DoctorAppointment";
+
 export interface Slot {
   startTime: string;
   endTime: string;
@@ -10,5 +12,5 @@ export interface AppointmentLike {
   endTime: string; // HH:mm
   status: "BOOKED" | "PENDING";
   vistType?: string;
-  patientSnapshot?: any;
+  patientSnapshot?: PatientSnapshot;
 }

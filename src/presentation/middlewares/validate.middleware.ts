@@ -2,7 +2,8 @@ import { ZodSchema } from "zod";
 import { Request, Response, NextFunction } from "express";
 
 export const validate =
-  (schema: ZodSchema) => (req: Request, res: Response, next: NextFunction) => {
+  <T>(schema: ZodSchema<T>) =>
+  (req: Request, res: Response, next: NextFunction) => {
     const dataToValidate = {
       body: req.body,
       file: req.file,

@@ -1,8 +1,9 @@
 import { Server } from "socket.io";
+import { Server as HttpServer } from "http";
 
 let io: Server | null = null;
 
-export const initSocket = (httpServer: any) => {
+export const initSocket = (httpServer: HttpServer) => {
   io = new Server(httpServer, {
     cors: { origin: "*" },
   });

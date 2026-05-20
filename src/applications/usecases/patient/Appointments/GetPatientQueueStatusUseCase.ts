@@ -14,8 +14,10 @@ import { timeToMinutes } from "../../../../domain/utils/time.utils";
 //   | "CANCELLED"
 //   | "NO_SHOW";
 
-function getTodayDay(): "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN" {
-  return ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][new Date().getDay()] as any;
+type WeekDay = "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN";
+
+function getTodayDay(): WeekDay {
+  return ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"][new Date().getDay()] as WeekDay;
 }
 
 type DoctorStatus = "NOT_STARTED" | "CONSULTING" | "ON_LUNCH_BREAK";

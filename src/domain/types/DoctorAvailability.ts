@@ -31,3 +31,22 @@ export interface DoctorAvailability {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type WeekDay = "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN";
+
+export interface WorkingHours {
+  start: string;
+  end: string;
+}
+
+export interface BreakTime {
+  start: string;
+  end: string;
+}
+
+export interface WeeklyScheduleItem {
+  day: WeekDay;
+  isWorking: boolean;
+  workingHours?: WorkingHours;
+  breakTime?: BreakTime;
+}

@@ -11,6 +11,19 @@ interface DoctorProfileInput {
   consultationFee: number | string;
 }
 
+interface DoctorProfileUpdatePayload {
+  experienceYears?: number;
+  consultationFee?: number;
+  bio?: string;
+}
+
+interface UserUpdatePayload {
+  _id?: string;
+  name: string;
+  phone: string;
+  profileImage?: string;
+}
+
 export class EditDoctorProfileUseCase {
   constructor(
     private readonly userRepo: IUserRepository,
@@ -25,7 +38,7 @@ export class EditDoctorProfileUseCase {
     input: DoctorProfileInput,
     file?: Express.Multer.File
   ) {
-    const doctorProfileUpdate: any = {};
+    const doctorProfileUpdate: DoctorProfileUpdatePayload = {};
 
     if (input.experienceYears) {
       doctorProfileUpdate.experienceYears = Number(input.experienceYears);
@@ -38,7 +51,7 @@ export class EditDoctorProfileUseCase {
       doctorProfileUpdate.bio = input.bio;
     }
 
-    const userUpdate: any = {
+    const userUpdate: UserUpdatePayload = {
       name: input.fullName,
       phone: input.mobile,
     };

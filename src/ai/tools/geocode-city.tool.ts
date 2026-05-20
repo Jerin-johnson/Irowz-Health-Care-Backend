@@ -135,8 +135,9 @@ export class GeocodeCityTool {
             suggestion:
               "Try a larger nearby city (e.g., Ernakulam instead of small village), or provide approximate lat/long.",
           });
-        } catch (err: any) {
-          logger.error(`GeocodeCityTool failed for ${city}: ${err.message}`);
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : "";
+          logger.error(`GeocodeCityTool failed for ${city}: ${message}`);
           return JSON.stringify({
             success: false,
             error: "Geocoding service is having issues right now.",

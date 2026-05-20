@@ -21,6 +21,15 @@ export interface PatientProfileInputDTO {
   chronicConditions?: [string];
 }
 
+interface UserUpdatePayload {
+  _id?: string;
+  name: string;
+  phone: string;
+  dob: Date;
+  gender: string;
+  profileImage?: string;
+}
+
 export class EditPatientProfileUseCase implements IEditPatientProfileUseCase {
   constructor(
     private readonly _UserRepo: IUserRepository,
@@ -30,10 +39,10 @@ export class EditPatientProfileUseCase implements IEditPatientProfileUseCase {
   ) {}
 
   async execute(userId: string, input: PatientProfileInputDTO, file?: Express.Multer.File) {
-    const userUpdate: any = {
+    const userUpdate: UserUpdatePayload = {
       name: input.fullName,
       phone: input.mobile,
-      dob: input.dateOfBirth,
+      dob: new Date(input.dateOfBirth),
       gender: input.gender,
     };
 

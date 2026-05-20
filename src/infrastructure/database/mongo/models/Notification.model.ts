@@ -1,4 +1,6 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, Types, ObjectId } from "mongoose";
+
+export type NotificationMetadata = Record<string, string | number | boolean | ObjectId | null>;
 
 export interface NotificationDocument {
   _id?: Types.ObjectId;
@@ -8,7 +10,7 @@ export interface NotificationDocument {
   title: string;
   message: string;
 
-  metadata?: Record<string, any>;
+  metadata?: NotificationMetadata;
 
   isRead: boolean;
 

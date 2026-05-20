@@ -3,9 +3,9 @@ import { CreateHospitalVerificationRepository } from "../../repositories/IHospit
 export interface ISubmitHospitalVerificationRequestUseCase {
   execute(input: CreateHospitalVerificationRepository): Promise<{
     data: {
-      userId: any;
+      userId: string;
       role: string;
-      verificationId: any;
+      verificationId: string;
       name: string;
       city: string;
       email: string;

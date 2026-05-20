@@ -65,7 +65,7 @@ export class MongoUserRepository implements IUserRepository {
   async saveForgetPasswordToken(
     email: string,
     data: { resetPasswordToken: string; resetPasswordExpires: Date }
-  ): Promise<any> {
+  ): Promise<{ success: boolean; matched: boolean }> {
     const result = await User.updateOne({ email }, { $set: data });
 
     return {

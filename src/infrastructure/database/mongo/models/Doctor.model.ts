@@ -1,4 +1,9 @@
 import { Schema, model, Document, Types } from "mongoose";
+
+interface GeoPoint {
+  type: "Point";
+  coordinates: [number, number];
+}
 export interface DoctorDocument extends Document {
   userId: Types.ObjectId | string;
   hospitalId:
@@ -28,7 +33,7 @@ export interface DoctorDocument extends Document {
   totalReviews: number;
 
   isActive: boolean;
-  location?: any;
+  location?: GeoPoint;
 
   createdAt: Date;
   updatedAt: Date;

@@ -1,6 +1,9 @@
 import { ObjectId, Types } from "mongoose";
 import { INotificationRepository } from "../../../domain/repositories/notifications/INotificationRepository";
-import { NotificationModel } from "../../database/mongo/models/Notification.model";
+import {
+  NotificationMetadata,
+  NotificationModel,
+} from "../../database/mongo/models/Notification.model";
 
 export class NotificationRepository implements INotificationRepository {
   async create(data: {
@@ -8,7 +11,7 @@ export class NotificationRepository implements INotificationRepository {
     type: string;
     title: string;
     message: string;
-    metadata?: any;
+    metadata?: NotificationMetadata;
   }) {
     const normalizedData = {
       userId: typeof data.userId === "string" ? new Types.ObjectId(data.userId) : data.userId,

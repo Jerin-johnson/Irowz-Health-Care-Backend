@@ -23,8 +23,9 @@ export class GetProfileTool {
             complete: !!profile.city && !!profile.state && !!profile.fullName,
             message: profile ? "Profile ready" : "Profile incomplete — ask for missing fields.",
           });
-        } catch (err: any) {
-          return JSON.stringify({ success: false, error: err.message });
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : "";
+          return JSON.stringify({ success: false, error: message });
         }
       },
       {

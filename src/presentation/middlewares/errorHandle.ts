@@ -22,6 +22,6 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 
   return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
     success: false,
-    message: "Internal server error",
+    message: err.message || "An unexpected error occurred. Please try again later.",
   });
 };

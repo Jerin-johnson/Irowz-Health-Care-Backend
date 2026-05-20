@@ -4,7 +4,10 @@ import {
   DoctorReviewModel,
 } from "../database/mongo/models/DoctorReview.model";
 import { BaseRepository } from "./base/Base.repository";
-import { IDoctorReviewRepository } from "../../domain/repositories/IDoctorReviewRepository";
+import {
+  DoctorReviewLean,
+  IDoctorReviewRepository,
+} from "../../domain/repositories/IDoctorReviewRepository";
 
 export class DoctorReviewRepository
   extends BaseRepository<
@@ -62,10 +65,12 @@ export class DoctorReviewRepository
     };
   }
 
-  async findReviewsByDoctorId(doctorId: string) {
-    return DoctorReviewModel.find({ doctorId }).populate({
-      path: "patientId",
-      select: "name",
-    });
+  async findReviewsByDoctorId(doctorId: string): Promise<DoctorReviewLean[]> {
+    return DoctorReviewModel.find({ doctorId })
+      .populate({
+        path: "patientId",
+        select: "name",
+      })
+      .lean<DoctorReviewLean[]>();
   }
 }

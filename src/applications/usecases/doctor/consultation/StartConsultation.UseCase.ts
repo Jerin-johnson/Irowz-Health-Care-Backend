@@ -74,6 +74,10 @@ export class StartConsultationUseCase implements IStartConsultationUseCase {
 
     const updated = await this._appointmentRepo.startConsultation(appointmentId);
 
+    if (!updated) {
+      throw new Error("Failed to start consultation");
+    }
+
     let medicalRecord = await this._medicalRecordRepo.findByAppointmentId(String(updated._id));
 
     if (!medicalRecord) {

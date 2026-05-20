@@ -1,3 +1,5 @@
+import { PaginatedHospitalSpecialty } from "../../../types/DoctorSpeciality";
+
 export interface IGetAllSpecialtyUseCase {
   execute(input: {
     hospitalId: string;
@@ -7,7 +9,7 @@ export interface IGetAllSpecialtyUseCase {
     page: number;
     limit: number;
   }): Promise<{
-    data: any[];
+    data: PaginatedHospitalSpecialty[];
     activeSpecialityCount: number;
     totalSpecialityCount: number;
     pagination: {

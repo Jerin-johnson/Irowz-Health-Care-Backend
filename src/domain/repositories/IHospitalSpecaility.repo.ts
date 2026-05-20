@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { IHospitalSpecialty } from "../../infrastructure/database/mongo/models/HospitalSpeciality.model";
+import { PaginatedHospitalSpecialty } from "../types/DoctorSpeciality";
 export interface IHospitalSpecialtyRepository {
   create(
     data: Omit<IHospitalSpecialty, "_id" | "createdAt" | "updatedAt">
@@ -38,7 +39,7 @@ export interface IHospitalSpecialtyRepository {
       limit: number;
     }
   ): Promise<{
-    data: any[];
+    data: PaginatedHospitalSpecialty[];
     total: number;
     totalSpecialityCount: number;
     activeSpecialityCount: number;

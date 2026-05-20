@@ -12,12 +12,17 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
     date: string
   ): Promise<
     {
-      _id?: any;
+      _id?: string | Types.ObjectId;
       startTime: string;
       endTime: string;
       status: "BOOKED" | "PENDING";
       visitType?: string;
-      patientSnapshot?: any;
+      patientSnapshot?: {
+        firstName: string;
+        lastName: string;
+        phone: string;
+        email: string;
+      };
     }[]
   > {
     const result = await DoctorAppointmentModel.find({
@@ -27,12 +32,17 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
     }).select("startTime endTime status _id visitType patientSnapshot");
 
     return result as {
-      _id?: any;
+      _id?: string | Types.ObjectId;
       startTime: string;
       endTime: string;
       status: "BOOKED" | "PENDING";
       visitType?: string;
-      patientSnapshot?: any;
+      patientSnapshot?: {
+        firstName: string;
+        lastName: string;
+        phone: string;
+        email: string;
+      };
     }[];
   }
 
@@ -64,7 +74,7 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
     return !!result;
   }
 
-  async create(input: Partial<DoctorAppointment>): Promise<any> {
+  async create(input: Partial<DoctorAppointment>): Promise<DoctorAppointmentDocument> {
     const appoinement = new DoctorAppointmentModel(input);
 
     return appoinement.save();

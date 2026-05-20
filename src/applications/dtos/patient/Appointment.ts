@@ -45,7 +45,59 @@ export interface AppointmentResponseDTO {
   updatedAt: Date;
 }
 
-export const mapAppointmentToResponse = (appointment: any) => {
+interface AppointmentMapperInput {
+  _id: string | { toString(): string };
+
+  doctorId?: {
+    _id?: string | { toString(): string };
+
+    userId?: {
+      name?: string;
+      profileImage?: string;
+    };
+  };
+
+  patientId: string | { toString(): string };
+
+  date: string | Date;
+
+  startTime: string;
+
+  endTime: string;
+
+  timezone: string;
+
+  visitType: string;
+
+  patientSnapshot: unknown;
+
+  isRescheduleAppointment?: boolean;
+
+  consultationFee?: number;
+
+  discountAmount?: number;
+
+  taxAmount?: number;
+
+  totalAmount?: number;
+
+  status?: string;
+
+  availabilityAffected?: {
+    isAffected?: boolean;
+    reason?: string;
+  };
+
+  cancelledAt?: Date | null;
+
+  cancelReason?: string;
+
+  createdAt?: Date;
+
+  updatedAt?: Date;
+}
+
+export const mapAppointmentToResponse = (appointment: AppointmentMapperInput) => {
   const doctorUser = appointment.doctorId?.userId;
 
   const fullName = doctorUser?.name || "Doctor";

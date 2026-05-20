@@ -17,7 +17,7 @@ export class BlockOrUnblockDoctorUseCase implements IBlockOrUnblockDoctorUseCase
 
     if (!result) throw new Error("cannot able to change the status of the doctor");
 
-    const user = await this.UserRepo.BlockByUserId(result.userId, !finalStatus);
+    const user = await this.UserRepo.BlockByUserId(result.userId as string, !finalStatus);
 
     console.log("user is ", user);
 

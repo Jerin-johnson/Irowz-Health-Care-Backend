@@ -20,8 +20,9 @@ export class UnlockSlotTool {
             success: result.unlocked,
             message: "Slot unlocked.",
           });
-        } catch (err: any) {
-          return JSON.stringify({ success: false, error: err.message });
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : "";
+          return JSON.stringify({ success: false, error: message });
         }
       },
       {

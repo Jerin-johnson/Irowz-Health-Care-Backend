@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { DoctorAppointmentDocument } from "../../infrastructure/database/mongo/models/DoctorAppointmentModel";
 import {
   AppointmentFilterDTO,
@@ -11,18 +12,23 @@ export interface IDoctorAppointmentRepository {
     date: string
   ): Promise<
     {
-      _id?: any;
+      _id?: string | Types.ObjectId;
       startTime: string;
       endTime: string;
       status: "BOOKED" | "PENDING";
       visitType?: string;
-      patientSnapshot?: any;
+      patientSnapshot?: {
+        firstName: string;
+        lastName: string;
+        phone: string;
+        email: string;
+      };
     }[]
   >;
 
   exists(doctorId: string, date: string, startTime: string): Promise<boolean>;
 
-  create(input: Partial<DoctorAppointment>): Promise<any>;
+  create(input: Partial<DoctorAppointment>): Promise<DoctorAppointmentDocument>;
 
   attachPaymentOrder(appointmentId: string, razorpayOrderId: string): Promise<void>;
 
@@ -42,19 +48,19 @@ export interface IDoctorAppointmentRepository {
     patientId: string,
     date: string,
     startTime: string
-  ): Promise<any>;
+  ): Promise<DoctorAppointmentDocument | null>;
 
   getDoctorAppointmentsForDay(doctorId: string, date: string): Promise<DoctorAppointmentDocument[]>;
 
   findActiveConsultation(doctorId: string, date: string): Promise<DoctorAppointmentDocument | null>;
 
-  startConsultation(appointmentId: string): Promise<any>;
+  startConsultation(appointmentId: string): Promise<DoctorAppointmentDocument | null>;
 
   getNextPatients(
     doctorId: string,
     date: string,
     limit: number
-  ): Promise<Partial<DoctorAppointment>[] | any>;
+  ): Promise<DoctorAppointmentDocument[]>;
 
   findAppointmentsByPatient(filters: AppointmentFilterDTO): Promise<AppointmentListResult>;
 

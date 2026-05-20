@@ -1,7 +1,7 @@
 export interface DomainEvent {
   type: string;
   occurredAt: Date;
-  payload: any;
+  payload: object;
 }
 
 export const ConsultationEvents = {
@@ -10,5 +10,5 @@ export const ConsultationEvents = {
 };
 
 export interface DomainEventPublisher {
-  publish(event: { type: string; payload: any }): Promise<void>;
+  publish(event: { type: string; payload: object }): Promise<void>;
 }
