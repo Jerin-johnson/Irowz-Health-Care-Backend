@@ -17,6 +17,8 @@ export interface HospitalDocument extends Document {
   isBlocked?: boolean;
   verifiedAt?: Date;
   isActive: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const HospitalSchema = new Schema(

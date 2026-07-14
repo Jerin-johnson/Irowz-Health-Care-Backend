@@ -3,6 +3,14 @@ import crypto from "crypto";
 import { IExternalGateway } from "../../domain/payment/PaymentGateway";
 import dotenv from "dotenv";
 dotenv.config();
+
+interface RazorpayError {
+  error?: {
+    description?: string;
+  };
+
+  message?: string;
+}
 export class RazorpayGateway implements IExternalGateway {
   private client: Razorpay;
 
@@ -27,9 +35,17 @@ export class RazorpayGateway implements IExternalGateway {
         amount: Number(order.amount),
         currency: order.currency,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("RAZORPAY ERROR:", error);
-      throw new Error(error?.error?.description || error.message);
+      const razorpayError = error as RazorpayError;
+
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+
+      throw new Error(
+        razorpayError.error?.description || razorpayError.message || "Payment gateway error"
+      );
     }
   }
 
@@ -42,7 +58,7 @@ export class RazorpayGateway implements IExternalGateway {
     return generatedSignature === input.signature;
   }
 
-  // verifySignature({ orderId, paymentId, signature }: any): boolean {
+  // verifySignature({ orderId, paymentId, signature }): boolean {
   //   const generated = crypto
   //     .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
   //     .update(`${orderId}|${paymentId}`)

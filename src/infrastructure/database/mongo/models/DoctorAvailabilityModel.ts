@@ -1,4 +1,5 @@
 import { Types, Schema, model } from "mongoose";
+import { WeeklySchedule } from "../../../../domain/types/WeeklySchdule.types";
 
 export interface DoctorAvailabilityDocument extends Document {
   _id?: Types.ObjectId;
@@ -69,7 +70,7 @@ const DoctorAvailabilitySchema = new Schema(
       type: [WeeklyScheduleSchema],
       required: true,
       validate: {
-        validator: (v: any[]) => v.length === 7,
+        validator: (v: WeeklySchedule[]) => v.length === 7,
         message: "Weekly schedule must have 7 days",
       },
     },

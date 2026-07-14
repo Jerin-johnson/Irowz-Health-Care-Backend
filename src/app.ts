@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://irowzelite.shop", "https://www.irowzelite.shop"],
+    origin: ["http://localhost:5173", "https://irowzcure.shop", "https://www.irowzcure.shop"],
     credentials: true,
   })
 );

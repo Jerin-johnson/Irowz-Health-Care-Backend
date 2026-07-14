@@ -38,7 +38,7 @@ export class HospitalLabOrderRepository implements IHospitalLabOrderRepository {
     limit: number;
     status?: "PENDING" | "RESULT_UPLOADED";
   }) {
-    const filter: any = {
+    const filter: { hospitalId: Types.ObjectId; status?: "PENDING" | "RESULT_UPLOADED" } = {
       hospitalId: new Types.ObjectId(params.hospitalId),
     };
 

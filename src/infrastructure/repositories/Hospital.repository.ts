@@ -4,7 +4,11 @@ import {
   HospitalPaginationOptions,
   IHospitalRepository,
 } from "../../domain/repositories/IHospital.repo";
-import { HospitalModel } from "../database/mongo/models/Hospital.model";
+import { HospitalDocument, HospitalModel } from "../database/mongo/models/Hospital.model";
+
+import { FlattenMaps } from "mongoose";
+
+type HospitalLean = FlattenMaps<HospitalDocument>;
 
 export class HospitalRepository implements IHospitalRepository {
   async create(data: Omit<Hospital, "id" | "createdAt" | "updatedAt">) {
@@ -72,7 +76,7 @@ export class HospitalRepository implements IHospitalRepository {
   }
 
   async update(id: string, data: Partial<Hospital>): Promise<Hospital | null> {
-    const hospital = await HospitalModel.updateOne({ userId: id }, { data });
+    const hospital = await HospitalModel.findOneAndUpdate({ userId: id }, { data }, { new: true });
     return hospital ? this.map(hospital) : null;
   }
 
@@ -86,7 +90,7 @@ export class HospitalRepository implements IHospitalRepository {
   //   return hospital ? this.map(hospital) : null;
   // }
 
-  private map(doc: any) {
+  private map(doc: HospitalDocument | HospitalLean): Hospital {
     return {
       id: doc._id.toString(),
       userId: doc.userId.toString(),

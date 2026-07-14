@@ -1,6 +1,8 @@
 import { Schema, model, Types, ObjectId } from "mongoose";
 
-export type NotificationMetadata = Record<string, string | number | boolean | ObjectId | null>;
+export type NotificationMetadata =
+  | Record<string, string | number | boolean | ObjectId | null>
+  | string;
 
 export interface NotificationDocument {
   _id?: Types.ObjectId;

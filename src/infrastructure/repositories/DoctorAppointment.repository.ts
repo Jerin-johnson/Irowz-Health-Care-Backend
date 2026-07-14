@@ -171,7 +171,7 @@ export class DoctorAppointmentRepository implements IDoctorAppointmentRepository
   async findAppointmentsByPatient(filters: AppointmentFilterDTO) {
     const { patientId, status, date, page = 1, limit = 10 } = filters;
 
-    const query: any = {
+    const query: { patientId: Types.ObjectId; status?: string; date?: string } = {
       patientId: new Types.ObjectId(patientId),
     };
 

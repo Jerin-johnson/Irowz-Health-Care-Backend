@@ -1,7 +1,10 @@
 import { Types } from "mongoose";
 import { IDoctorAvailabilityRepository } from "../../domain/repositories/IDoctorAvailabilityRepository";
 import { DoctorAvailability } from "../../domain/types/DoctorAvailability";
-import { DoctorAvailabilityModel } from "../database/mongo/models/DoctorAvailabilityModel";
+import {
+  DoctorAvailabilityDocument,
+  DoctorAvailabilityModel,
+} from "../database/mongo/models/DoctorAvailabilityModel";
 import { DoctorAvailabilityMapper } from "../../applications/mapper/doctorAvalabilty.mapper";
 
 export class MongoDoctorAvailabilityRepository implements IDoctorAvailabilityRepository {
@@ -44,7 +47,7 @@ export class MongoDoctorAvailabilityRepository implements IDoctorAvailabilityRep
       doctorId: { $in: doctorIds },
     }).lean();
 
-    const map = new Map<string, any>();
+    const map = new Map<string, DoctorAvailabilityDocument>();
     records.forEach((r) => {
       map.set(r.doctorId.toString(), r);
     });

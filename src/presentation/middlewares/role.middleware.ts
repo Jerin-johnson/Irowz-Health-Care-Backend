@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 
 export function authorizeRoles(...allowedRoles: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = (req as any).user;
+    const user = req.user;
 
     if (!user) return res.status(401).json({ message: "Unauthorized" });
 

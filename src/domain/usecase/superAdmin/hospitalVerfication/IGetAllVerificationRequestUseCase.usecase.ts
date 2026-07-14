@@ -1,4 +1,5 @@
 import { HosptialRequestVerficationStatus } from "../../../constants/HosptialRequestVerficationStatus";
+import { HospitalVerificationLean } from "../../../repositories/IHospitalVerification.repo";
 
 export interface IGetAllVerificationRequestUseCase {
   execute(input: {
@@ -8,7 +9,7 @@ export interface IGetAllVerificationRequestUseCase {
     page: number;
     limit: number;
   }): Promise<{
-    data: any[];
+    data: HospitalVerificationLean[];
     pagination: {
       total: number;
       page: number;

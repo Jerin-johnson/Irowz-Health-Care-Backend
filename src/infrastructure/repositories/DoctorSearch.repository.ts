@@ -1,3 +1,4 @@
+import { PipelineStage } from "mongoose";
 import {
   DoctorSearchQueryDTO,
   DoctorSearchRawDTO,
@@ -24,7 +25,7 @@ export class DoctorSearchMongoRepository implements IDoctorSearchRepository {
 
     const skip = (page - 1) * limit;
 
-    const pipeline: any[] = [];
+    const pipeline: PipelineStage[] = [];
 
     if (lat !== undefined && lng !== undefined && radiusKm !== undefined) {
       pipeline.push({
@@ -124,7 +125,7 @@ export class DoctorSearchMongoRepository implements IDoctorSearchRepository {
       });
     }
 
-    let sortStage: any = { averageRating: -1 };
+    let sortStage: Record<string, 1 | -1> = { averageRating: -1 };
 
     if (query.sortBy === "price") {
       sortStage = {

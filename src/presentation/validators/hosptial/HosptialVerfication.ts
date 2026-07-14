@@ -26,5 +26,8 @@ export const hospitalVerificationBodySchema = z.object({
     pincode: z.string().regex(/^\d{6}$/, "Invalid pincode"),
   }),
 
-  file: z.any().refine(Boolean, "License document is required"),
+  // file: z.any().refine(Boolean, "License document is required"),
+  file: z.instanceof(File, {
+    message: "License document is required",
+  }),
 });

@@ -13,6 +13,28 @@ import {
 import { DoctorModel } from "../database/mongo/models/Doctor.model";
 import User from "../database/mongo/models/User.model";
 import { HospitalModel } from "../database/mongo/models/Hospital.model";
+import { DoctorInfoDTO } from "../../domain/usecase/doctor/consultation/IMedicalRecordRepository";
+
+type PopulatedDoctor = {
+  userId?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+  };
+
+  specialtyId?: string;
+
+  medicalRegistrationNumber?: string;
+  medicalCouncil?: string;
+  experienceYears?: number;
+
+  hospitalId?: {
+    name?: string;
+    city?: string;
+    state?: string;
+    address?: string;
+  };
+};
 
 export class MedicalRecordRepository implements IMedicalRecordRepository {
   async createDraft(data: {
@@ -59,9 +81,20 @@ export class MedicalRecordRepository implements IMedicalRecordRepository {
     page,
     limit,
   }: FindMedicalRecordsQuery): Promise<PaginatedMedicalRecords> {
-    const filter: any = {
+    const filter = {
       patientId,
       status: "LOCKED",
+    } as {
+      patientId: string | ObjectId;
+      status: string;
+      visitDate?: {
+        $gte?: Date;
+        $lte?: Date;
+      };
+      diagnosisSummary?: {
+        $regex: string;
+        $options: string;
+      };
     };
 
     if (fromDate || toDate) {
@@ -115,7 +148,7 @@ export class MedicalRecordRepository implements IMedicalRecordRepository {
 
   async findMedicalRecordWithDoctorAndHospital(
     recordId: string
-  ): Promise<{ medicalRecord: MedicalRecordDocument; doctorInfo: any } | null> {
+  ): Promise<{ medicalRecord: MedicalRecordDocument; doctorInfo: DoctorInfoDTO } | null> {
     const record = await MedicalRecordModel.findById(recordId)
       .populate({
         path: "doctorId",
@@ -137,7 +170,7 @@ export class MedicalRecordRepository implements IMedicalRecordRepository {
 
     if (!record) return null;
 
-    const doctor: any = record.doctorId;
+    const doctor = record.doctorId as PopulatedDoctor;
 
     const doctorInfo = {
       name: doctor?.userId?.name,

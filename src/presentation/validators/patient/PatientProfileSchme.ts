@@ -33,7 +33,11 @@ export const patientProfileSchema = z.object({
   }),
 
   // optional file support (profile image)
-  file: z.any().optional(),
+  // file: z.any().optional(),
 
-  files: z.any().optional(),
+  file: z.instanceof(File, {
+    message: "License document is required",
+  }),
+
+  // files: z.any().optional(),
 });

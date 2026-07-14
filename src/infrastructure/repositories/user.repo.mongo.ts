@@ -7,6 +7,30 @@ import {
 import { createUser, updateUser, UserResponse } from "../../domain/types/IUser.types";
 import User from "../database/mongo/models/User.model";
 
+type UserFilter = {
+  role?: string;
+
+  isVerified?: boolean;
+  isBlocked?: boolean;
+
+  $or?: {
+    name?: {
+      $regex: string;
+      $options: string;
+    };
+
+    email?: {
+      $regex: string;
+      $options: string;
+    };
+
+    phone?: {
+      $regex: string;
+      $options: string;
+    };
+  }[];
+};
+
 export class MongoUserRepository implements IUserRepository {
   async create(user: createUser): Promise<UserResponse | null> {
     const doc = new User({
@@ -90,7 +114,7 @@ export class MongoUserRepository implements IUserRepository {
     const { page, limit } = pagination;
     const skip = (page - 1) * limit;
 
-    const filter: any = {};
+    const filter: UserFilter = {};
 
     if (role) {
       filter.role = role.toUpperCase();

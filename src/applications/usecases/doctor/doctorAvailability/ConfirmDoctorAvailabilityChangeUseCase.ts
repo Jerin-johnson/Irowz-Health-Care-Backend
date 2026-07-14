@@ -57,7 +57,7 @@ export class ConfirmDoctorAvailabilityChangeUseCase implements IConfirmDoctorAva
         title: "Appointment requires your action",
         message: `Your appointment on ${appt.date} at ${appt.startTime} is affected due to a change in doctor availability.`,
         metadata: {
-          appointmentId: appt._id,
+          appointmentId: String(appt._id),
           doctorId,
         },
       });

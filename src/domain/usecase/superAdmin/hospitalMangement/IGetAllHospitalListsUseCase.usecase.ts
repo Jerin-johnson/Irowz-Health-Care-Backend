@@ -1,3 +1,5 @@
+import { Hospital } from "../../../repositories/IHospital.repo";
+
 export interface IGetAllHospitalListsUseCase {
   execute(input: {
     search?: string;
@@ -6,7 +8,7 @@ export interface IGetAllHospitalListsUseCase {
     page: number;
     limit: number;
   }): Promise<{
-    data: any[];
+    data: Hospital[];
     totalHospitals: number;
     IsActiveHospitalCount: number;
     pagination: {

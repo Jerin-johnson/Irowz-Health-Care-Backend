@@ -10,12 +10,12 @@ export class ApiResponse {
     });
   }
 
-  static error(res: Response, message: string, statusCode: number, code?: string, errors?: any) {
+  static error(res: Response, message: string, statusCode: number, code?: string) {
     return res.status(statusCode).json({
       success: false,
       message,
       code,
-      errors,
+      // errors,
     });
   }
 }
