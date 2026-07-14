@@ -7,5 +7,5 @@ export interface GetPatientPrescriptionWithDoctorInfoResponse {
 }
 
 export interface IGetPatientPercriptionWithDoctorInfoUseCase {
-  execute(recordId: string): Promise<GetPatientPrescriptionWithDoctorInfoResponse>;
+  execute(recordId: string): Promise<any>;
 }

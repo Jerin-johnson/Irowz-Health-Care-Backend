@@ -31,7 +31,8 @@ export class DoctorAvailabilityController {
       doctorId as string
     );
 
-    return ApiResponse.success(res, availability);
+    ApiResponse.success(res, availability);
+    return;
   };
 
   checkEditConfilt = async (req: Request, res: Response) => {
@@ -44,7 +45,8 @@ export class DoctorAvailabilityController {
       req.body.weeklySchedule
     );
 
-    return ApiResponse.success(res, availability);
+    ApiResponse.success(res, availability);
+    return;
   };
 
   confirmAvailabilityChange = async (req: Request, res: Response) => {
@@ -74,6 +76,7 @@ export class DoctorAvailabilityController {
       timezone,
     });
 
-    return ApiResponse.success(res, result, DoctorMessages.AVAILABILITY_UPDATED);
+    ApiResponse.success(res, result, DoctorMessages.AVAILABILITY_UPDATED);
+    return;
   };
 }

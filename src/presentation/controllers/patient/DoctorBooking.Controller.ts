@@ -54,17 +54,20 @@ export class DoctorBookingController {
     });
 
     if (!result.locked) {
-      return res.status(HttpStatusCode.CONFLICT).json({
+      res.status(HttpStatusCode.CONFLICT).json({
         success: false,
         message: PatientMessages.SLOT_TAKEN,
       });
+      return;
     }
 
-    return res.status(HttpStatusCode.OK).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       message: PatientMessages.SLOT_LOCKED,
       expiresIn: 500,
     });
+
+    return;
   };
 
   unLockDoctorSlot = async (req: Request, res: Response) => {
@@ -78,11 +81,13 @@ export class DoctorBookingController {
       startTime,
     });
 
-    return res.status(HttpStatusCode.OK).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       message: PatientMessages.SLOT_UNLOCKED,
       expiresIn: 500,
     });
+
+    return;
   };
 
   getPatientBasicDetailsForCheckout = async (req: Request, res: Response) => {
@@ -128,9 +133,10 @@ export class DoctorBookingController {
       paymentMethod,
     });
 
-    return res
+    res
       .status(HttpStatusCode.OK)
       .json({ success: true, data: result, message: PatientMessages.APPOINTMENT_CREATED });
+    return;
   };
 
   verifyPayment = async (req: Request, res: Response) => {
@@ -147,10 +153,12 @@ export class DoctorBookingController {
       appointmentId,
     });
 
-    return res.status(HttpStatusCode.OK).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       message: PatientMessages.PAYMENT_VERIFIED,
     });
+
+    return;
   };
 
   apponitmentSuccess = async (req: Request, res: Response) => {
@@ -158,9 +166,11 @@ export class DoctorBookingController {
 
     const result = await this._ApponintmentSuccessOrFailureUseCase.execute(id);
 
-    return res.status(HttpStatusCode.OK).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       data: result,
     });
+
+    return;
   };
 }

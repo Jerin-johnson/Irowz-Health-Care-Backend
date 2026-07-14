@@ -56,7 +56,7 @@ export class GetSlotsScheduleUseCase implements IGetSlotsScheduleUseCase {
       lockedSlots
     );
 
-    const bookedSlots: DoctorSchudleSlot[] = appointments.map((a) => ({
+    const bookedSlots: DoctorSchudleSlot[] = appointments.map((a: any) => ({
       startTime: a.startTime,
       endTime: a.endTime,
       status: "booked",

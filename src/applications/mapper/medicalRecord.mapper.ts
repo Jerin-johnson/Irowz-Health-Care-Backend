@@ -1,12 +1,7 @@
-import {
-  GetMedicalRecordWithDoctorInfoResultDTO,
-  PrescriptionViewResponseDTO,
-} from "../dtos/doctor/MedicalRecordPrescription.mapper";
+import { PrescriptionViewResponseDTO } from "../dtos/doctor/MedicalRecordPrescription.mapper";
 
 export class MedicalRecordPrescriptionMapper {
-  static toPrescriptionViewResponse(
-    data: GetMedicalRecordWithDoctorInfoResultDTO
-  ): PrescriptionViewResponseDTO {
+  static toPrescriptionViewResponse(data: any): PrescriptionViewResponseDTO {
     const { medicalRecord, doctorInfo } = data;
 
     return {
@@ -23,7 +18,7 @@ export class MedicalRecordPrescriptionMapper {
         observationNotes: medicalRecord.observationNotes,
         clinicalObservations: medicalRecord.clinicalObservations,
 
-        prescriptions: medicalRecord.prescriptions.map((p) => ({
+        prescriptions: medicalRecord.prescriptions.map((p: any) => ({
           medicineName: p.medicineName,
           dosage: p.dosage,
           frequency: p.frequency,
@@ -31,7 +26,7 @@ export class MedicalRecordPrescriptionMapper {
           instructions: p.instructions,
         })),
 
-        labTests: medicalRecord.labTests.map((l) => ({
+        labTests: medicalRecord.labTests.map((l: any) => ({
           testName: l.testName,
           description: l.description,
           reportUrl: l.reportUrl,

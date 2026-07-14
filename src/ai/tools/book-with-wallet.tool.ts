@@ -15,7 +15,7 @@ class GetWalletBalanceUseCase {
 
 export class BookWithWalletTool {
   constructor(
-    private checkoutUseCase: ICheckoutUseCase,
+    private checkoutUseCase: any,
     private walletUseCase = new GetWalletBalanceUseCase()
   ) {}
 

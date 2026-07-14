@@ -46,7 +46,7 @@ interface MapPatientToDTOInput {
   };
 }
 
-export function mapPatientToDTO(response: MapPatientToDTOInput) {
+export function mapPatientToDTO(response: any) {
   const { patientProfile, appoinment, dob, gender } = response;
 
   const height = patientProfile?.height ?? 0;

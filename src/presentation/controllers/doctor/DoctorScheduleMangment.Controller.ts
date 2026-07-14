@@ -19,7 +19,8 @@ export class DoctorScheduleMangmentController {
     if (!doctorId) throw new Error(CommonMessages.INVALID_REQUEST);
 
     const slots = await this._GetSlotsScheduleUseCase.execute(doctorId, date as string);
-    return ApiResponse.success(res, slots);
+    ApiResponse.success(res, slots);
+    return;
   };
 
   blockSlots = async (req: Request, res: Response) => {
@@ -28,6 +29,7 @@ export class DoctorScheduleMangmentController {
     if (!startTime || !date) throw new Error(CommonMessages.INVALID_REQUEST);
 
     await this._BlockDoctorSlotUseCase.execute(doctorId as string, date, startTime);
-    return ApiResponse.success(res);
+    ApiResponse.success(res);
+    return;
   };
 }

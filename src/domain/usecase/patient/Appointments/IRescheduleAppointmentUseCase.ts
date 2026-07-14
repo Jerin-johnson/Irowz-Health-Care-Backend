@@ -10,5 +10,5 @@ export interface IRescheduleAppointmentUseCase {
     newDate: string,
     newStartTime: string,
     newEndTime: string
-  ): Promise<IRescheduleAppointmentResponse>;
+  ): Promise<any>;
 }

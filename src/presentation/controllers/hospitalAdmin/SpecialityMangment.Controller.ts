@@ -24,7 +24,8 @@ export class SpecialtyMangmentController {
     const hospitalId = req.user?.hospitalId;
 
     if (!hospitalId) {
-      return ApiResponse.error(res, CommonMessages.INVALID_REQUEST, HttpStatusCode.UNAUTHORIZED);
+      ApiResponse.error(res, CommonMessages.INVALID_REQUEST, HttpStatusCode.UNAUTHORIZED);
+      return;
     }
 
     const specialty = await this.createHospitalSpecialtyUseCase.execute({
@@ -34,11 +35,12 @@ export class SpecialtyMangmentController {
       symptoms,
     });
 
-    return res.status(HttpStatusCode.CREATED).json({
+    res.status(HttpStatusCode.CREATED).json({
       success: true,
       message: HospitalAdminMessages.SPECIALTY_CREATED,
       data: specialty,
     });
+    return;
   };
 
   getAllHospitalSpeciality = async (req: Request, res: Response) => {
@@ -46,7 +48,8 @@ export class SpecialtyMangmentController {
     const hosptialId = req.user?.hospitalId;
 
     if (!hosptialId) {
-      return ApiResponse.error(res, CommonMessages.INVALID_REQUEST, HttpStatusCode.UNAUTHORIZED);
+      ApiResponse.error(res, CommonMessages.INVALID_REQUEST, HttpStatusCode.UNAUTHORIZED);
+      return;
     }
 
     let isActivePresent = false;

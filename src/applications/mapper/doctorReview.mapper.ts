@@ -8,21 +8,21 @@ export interface DoctorReviewResponse {
   comment: string;
 }
 
-interface ReviewMapperInput {
-  _id: Types.ObjectId | string;
+// interface ReviewMapperInput {
+//   _id: Types.ObjectId | string;
 
-  updatedAt: Date | string;
+//   updatedAt: Date | string;
 
-  rating: number;
+//   rating: number;
 
-  comment: string;
+//   comment: string;
 
-  patientId?: {
-    name?: string;
-  };
-}
+//   patientId?: {
+//     name?: string;
+//   };
+// }
 
-export const mapDoctorReviews = (reviews: ReviewMapperInput[]): DoctorReviewResponse[] => {
+export const mapDoctorReviews = (reviews: any[]): DoctorReviewResponse[] => {
   return reviews.map((review) => ({
     id: review._id.toString(),
     patientName: review.patientId?.name ?? "Anonymous",

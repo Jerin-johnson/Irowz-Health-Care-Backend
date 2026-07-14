@@ -21,7 +21,8 @@ export class DoctorAppointmentController {
       doctorId as string,
       date as string
     );
-    return ApiResponse.success(res, result);
+    ApiResponse.success(res, result);
+    return;
   };
 
   getAppointmentById = async (req: Request, res: Response) => {
@@ -29,6 +30,7 @@ export class DoctorAppointmentController {
 
     const result = await this._GetAppoinmentBYIdUseCase.execute(id);
 
-    return ApiResponse.success(res, result);
+    ApiResponse.success(res, result);
+    return;
   };
 }

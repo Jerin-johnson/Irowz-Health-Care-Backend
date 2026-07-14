@@ -24,7 +24,7 @@ export class WalletTool {
             data: wallet,
             message: "Get wallet useCase",
           });
-        } catch (err) {
+        } catch (err: any) {
           console.log(err);
           return JSON.stringify({ success: false, error: err.message });
         }

@@ -18,9 +18,10 @@ export class HospitalOnBoradingController {
     const { body, file } = req;
 
     if (!file) {
-      return res
+      res
         .status(HttpStatusCode.BAD_REQUEST)
         .json({ message: HospitalOnboardingMessages.LICENSE_PDF_REQUIRED });
+      return;
     }
     const result = await this.SubmitHospitalVerificationUseCase.execute({
       ...body,
@@ -28,11 +29,13 @@ export class HospitalOnBoradingController {
       mimeType: file.mimetype,
     });
 
-    return res.json({
+    res.json({
       success: true,
       ...result,
       message: HospitalOnboardingMessages.VERIFICATION_SUBMITTED,
     });
+
+    return;
   };
 
   ressubmitVerficationRequest = async (req: Request, res: Response) => {
@@ -40,11 +43,12 @@ export class HospitalOnBoradingController {
     const verficationId = req.params.id;
 
     if (!file) {
-      return ApiResponse.error(
+      ApiResponse.error(
         res,
         HospitalOnboardingMessages.LICENSE_PDF_REQUIRED,
         HttpStatusCode.BAD_REQUEST
       );
+      return;
     }
 
     const result = this.ResubmitHospitalVerificationUseCase.execute(verficationId, {
@@ -52,17 +56,20 @@ export class HospitalOnBoradingController {
       fileBuffer: file.buffer,
       mimeType: file.mimetype,
     });
-    return res.json({ success: true, ...result });
+    res.json({ success: true, ...result });
+    return;
   };
 
   checkStatusById = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
-      return ApiResponse.error(res, CommonMessages.INVALID_REQUEST, HttpStatusCode.BAD_REQUEST);
+      ApiResponse.error(res, CommonMessages.INVALID_REQUEST, HttpStatusCode.BAD_REQUEST);
+      return;
     }
     const result = await this.checkStatusBYId.execute(id);
 
-    return res.status(HttpStatusCode.OK).json({ success: true, ...result });
+    res.status(HttpStatusCode.OK).json({ success: true, ...result });
+    return;
   };
 }

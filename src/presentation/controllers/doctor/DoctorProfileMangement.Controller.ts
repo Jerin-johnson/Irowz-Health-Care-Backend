@@ -20,7 +20,8 @@ export class DoctorProfileMangementController {
 
     const responseDto = DoctorProfileMapper.toView(doctor);
 
-    return res.status(HttpStatusCode.OK).json({ success: true, data: responseDto });
+    res.status(HttpStatusCode.OK).json({ success: true, data: responseDto });
+    return;
   };
 
   resetDoctorPassword = async (req: Request, res: Response) => {
@@ -37,7 +38,8 @@ export class DoctorProfileMangementController {
       newPassword
     );
 
-    return res.status(HttpStatusCode.OK).json({ success: true, ...result });
+    res.status(HttpStatusCode.OK).json({ success: true, ...result });
+    return;
   };
 
   editDoctorProfile = async (req: Request, res: Response) => {
@@ -50,6 +52,7 @@ export class DoctorProfileMangementController {
       req.body,
       req.file
     );
-    return res.status(HttpStatusCode.OK).json({ success: true, ...result });
+    res.status(HttpStatusCode.OK).json({ success: true, ...result });
+    return;
   };
 }

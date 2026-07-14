@@ -29,7 +29,7 @@ export interface PaginatedDoctorResult {
 }
 
 export interface IDoctorRepository {
-  create(data: Partial<DoctorDocument>): Promise<DoctorDocument>;
+  create(data: any): Promise<DoctorDocument>;
 
   updateById(
     doctorId: Types.ObjectId | string,

@@ -22,7 +22,8 @@ export class HospitalLabAdminController {
 
     console.log("the result", result);
 
-    return ApiResponse.success(res, result);
+    ApiResponse.success(res, result);
+    return;
   };
 
   uploadLabReport = async (req: Request, res: Response) => {
@@ -38,6 +39,7 @@ export class HospitalLabAdminController {
       mimeType: req.file.mimetype,
     });
 
-    return ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
+    ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
+    return;
   };
 }

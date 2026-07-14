@@ -13,6 +13,7 @@ export class HospitalDashboardController {
 
     const dashboard = await this._GetHospitalDashboardOverviewUseCase.execute(hospitalId!, userId!);
 
-    return ApiResponse.success(res, dashboard);
+    ApiResponse.success(res, dashboard);
+    return;
   };
 }

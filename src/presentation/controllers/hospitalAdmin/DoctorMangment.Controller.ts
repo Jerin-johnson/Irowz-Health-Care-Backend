@@ -39,11 +39,12 @@ export class DoctorMangmentController {
 
     const result = await this._AdminCreateDoctorUseCase.execute(dto);
 
-    return res.status(HttpStatusCode.CREATED).json({
+    res.status(HttpStatusCode.CREATED).json({
       success: true,
       message: HospitalAdminMessages.DOCTOR_CREATED,
       data: result,
     });
+    return;
   };
 
   getDoctors = async (req: Request, res: Response) => {
@@ -67,11 +68,13 @@ export class DoctorMangmentController {
       isActive: isActive !== undefined ? isActive === "true" : undefined,
     });
 
-    return res.status(HttpStatusCode.OK).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       message: HospitalAdminMessages.DOCTORS_FETCHED,
       ...data,
     });
+
+    return;
   };
 
   //   editSpecialty = async (req: Request, res: Response) => {
@@ -101,10 +104,11 @@ export class DoctorMangmentController {
       status: String(isActive),
     });
 
-    return res.status(HttpStatusCode.OK).json({
+    res.status(HttpStatusCode.OK).json({
       success: true,
       ...result,
     });
+    return;
   };
 
   ViewDoctorDetails = async (req: Request, res: Response) => {
@@ -112,6 +116,7 @@ export class DoctorMangmentController {
 
     const result = await this._HosptialAdminViewDoctorUseCase.execute(doctorId as string);
 
-    return ApiResponse.success(res, result);
+    ApiResponse.success(res, result);
+    return;
   };
 }

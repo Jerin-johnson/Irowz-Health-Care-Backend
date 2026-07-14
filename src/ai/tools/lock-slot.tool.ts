@@ -24,7 +24,7 @@ export class LockSlotTool {
             success: result.locked,
             message: result.locked ? "Slot locked for 10 minutes." : "Lock failed — slot taken.",
           });
-        } catch (err) {
+        } catch (err: any) {
           return JSON.stringify({ success: false, error: err.message });
         }
       },

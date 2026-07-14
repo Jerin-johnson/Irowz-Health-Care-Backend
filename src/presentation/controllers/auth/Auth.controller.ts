@@ -60,7 +60,8 @@ export class AuthController {
 
   register = async (req: Request, res: Response) => {
     const result = await this._RegisterUseCase.execute(req.body);
-    return res.status(HttpStatusCode.CREATED).json({ success: true, ...result });
+    res.status(HttpStatusCode.CREATED).json({ success: true, ...result });
+    return;
   };
 
   verifyOtp = async (req: Request, res: Response) => {
@@ -105,7 +106,8 @@ export class AuthController {
       sameSite: "none",
     });
 
-    return res.json({ success: true, accessToken, user });
+    res.json({ success: true, accessToken, user });
+    return;
   };
 
   resendOtp = async (req: Request, res: Response) => {
@@ -113,14 +115,14 @@ export class AuthController {
     if (!email) throw new Error(AuthMessages.INVALID_REQUEST);
 
     const result = await this._ResendOtpUseCase.execute(email);
-    return res.json({ success: true, ...result });
+    res.json({ success: true, ...result });
+    return;
   };
 
   logout = async (req: Request, res: Response) => {
     res.clearCookie(AuthConstants.REFRESH_TOKEN);
-    return res
-      .status(HttpStatusCode.OK)
-      .json({ success: true, message: AuthMessages.LOGOUT_SUCCESS });
+    res.status(HttpStatusCode.OK).json({ success: true, message: AuthMessages.LOGOUT_SUCCESS });
+    return;
   };
 
   forgetPassword = async (req: Request, res: Response) => {
@@ -129,7 +131,8 @@ export class AuthController {
 
     const result = await this._ForgetPasswordUseCase.execute(email);
 
-    return ApiResponse.success(res, null, result.message);
+    ApiResponse.success(res, null, result.message);
+    return;
   };
 
   resetPassword = async (req: Request, res: Response) => {
@@ -138,6 +141,7 @@ export class AuthController {
     if (!token || !newPassword) throw new Error(AuthMessages.INVALID_REQUEST);
 
     const result = await this._ResetPasswordUseCase.execute(token, newPassword);
-    return ApiResponse.success(res, result.role, result.message);
+    ApiResponse.success(res, result.role, result.message);
+    return;
   };
 }

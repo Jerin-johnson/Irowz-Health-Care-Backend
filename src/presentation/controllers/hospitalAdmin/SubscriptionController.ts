@@ -19,13 +19,15 @@ export class HospitalADminSubscriptionController {
 
     const data = await this._GetActivePlansForListingHospitalAdminUseCase.execute(userId as string);
 
-    return ApiResponse.success(res, data, "fetched successfully", HttpStatusCode.OK);
+    ApiResponse.success(res, data, "fetched successfully", HttpStatusCode.OK);
+    return;
   };
 
   createOrder = async (req: Request, res: Response) => {
     const { planId } = req.body;
     const order = await this._CreateSubscriptionOrderUseCase.execute(planId);
-    return ApiResponse.success(res, order, "Order created successfully", HttpStatusCode.CREATED);
+    ApiResponse.success(res, order, "Order created successfully", HttpStatusCode.CREATED);
+    return;
   };
 
   confirmPayment = async (req: Request, res: Response) => {
@@ -42,6 +44,7 @@ export class HospitalADminSubscriptionController {
       superAdminId: process.env.SUPER_ADMIN_ID!,
     });
 
-    return ApiResponse.success(res, subscription);
+    ApiResponse.success(res, subscription);
+    return;
   };
 }

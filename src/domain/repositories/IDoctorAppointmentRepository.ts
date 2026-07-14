@@ -48,7 +48,7 @@ export interface IDoctorAppointmentRepository {
     patientId: string,
     date: string,
     startTime: string
-  ): Promise<DoctorAppointmentDocument | null>;
+  ): Promise<any | null>;
 
   getDoctorAppointmentsForDay(doctorId: string, date: string): Promise<DoctorAppointmentDocument[]>;
 

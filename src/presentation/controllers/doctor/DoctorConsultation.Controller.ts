@@ -40,14 +40,16 @@ export class DoctorConsultationController {
 
     const result = await this._StartConsultationUseCase.execute(appointmentId);
 
-    return ApiResponse.success(res, result, DoctorMessages.CONSULTATION_STARTED);
+    ApiResponse.success(res, result, DoctorMessages.CONSULTATION_STARTED);
+    return;
   };
 
   getPatientOverviewForConsulation = async (req: Request, res: Response) => {
     const appointmentId = req.params.id;
     const result = await this._GetPatientOverViewUseCase.execute(appointmentId);
     const patientDTO = mapPatientToDTO(result);
-    return ApiResponse.success(res, patientDTO);
+    ApiResponse.success(res, patientDTO);
+    return;
   };
 
   saveQuickObservationNote = async (req: Request, res: Response) => {
@@ -55,7 +57,8 @@ export class DoctorConsultationController {
     const note = req.body?.observationNote;
     const result = await this._SaveQuickNoteUseCase.execute(appointmentId, note);
 
-    return ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
+    ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
+    return;
   };
 
   completeConsultation = async (req: Request, res: Response) => {
@@ -67,7 +70,8 @@ export class DoctorConsultationController {
       doctorId as string
     );
 
-    return ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
+    ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
+    return;
   };
 
   MarkAsNoShow = async (req: Request, res: Response) => {
@@ -79,7 +83,8 @@ export class DoctorConsultationController {
       doctorId as string
     );
 
-    return ApiResponse.success(res, null, result.message);
+    ApiResponse.success(res, null, result.message);
+    return;
   };
 
   getVideoToken = async (req: Request, res: Response) => {
@@ -88,7 +93,8 @@ export class DoctorConsultationController {
 
     const result = await this._GetConsultationVideoTokenUseCase.execute(consultationId, doctorId);
 
-    return ApiResponse.success(res, result);
+    ApiResponse.success(res, result);
+    return;
   };
 
   getActiveDoctorConsultation = async (req: Request, res: Response) => {
@@ -96,13 +102,15 @@ export class DoctorConsultationController {
 
     const result = await this._GetActiveDoctorOnlineConsultationUseCase.execute(doctorId!);
 
-    return ApiResponse.success(res, result);
+    ApiResponse.success(res, result);
+    return;
   };
 
   EndConsultationOnline = async (req: Request, res: Response) => {
     const consultationId = req.body.consultationId;
     await this._EndConsultationOnlineUseCase.execute(consultationId);
-    return ApiResponse.success(res);
+    ApiResponse.success(res);
+    return;
   };
 
   savePercritption = async (req: Request, res: Response) => {
@@ -111,7 +119,8 @@ export class DoctorConsultationController {
       ...req.body,
       appointmentId,
     });
-    return ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
+    ApiResponse.success(res, null, result.message, HttpStatusCode.CREATED);
+    return;
   };
 
   GetMedicalHistory = async (req: Request, res: Response) => {
@@ -127,7 +136,8 @@ export class DoctorConsultationController {
       diagnosisKeyword: diagnosis as string,
     });
 
-    return ApiResponse.success(res, result);
+    ApiResponse.success(res, result);
+    return;
   };
 
   GetMedicalRecordWithDoctorInfoUseCase = async (req: Request, res: Response) => {
@@ -137,7 +147,8 @@ export class DoctorConsultationController {
 
     const response = MedicalRecordPrescriptionMapper.toPrescriptionViewResponse(result);
 
-    return ApiResponse.success(res, response);
+    ApiResponse.success(res, response);
+    return;
   };
 
   CreateLabOrder = async (req: Request, res: Response) => {
@@ -158,6 +169,7 @@ export class DoctorConsultationController {
 
     const result = await this._GetMedicalRecordLabTestsUseCase.execute(medicalRecordId);
 
-    return ApiResponse.success(res, result);
+    ApiResponse.success(res, result);
+    return;
   };
 }

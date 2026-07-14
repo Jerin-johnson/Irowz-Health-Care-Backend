@@ -19,9 +19,8 @@ export class DoctorReviewController {
 
     await this._PostReviewUseCase.execute({ ...req.body, patientId: userId });
 
-    return res
-      .status(HttpStatusCode.Ok)
-      .json({ success: true, message: PatientMessages.REVIEW_POSTED });
+    res.status(HttpStatusCode.Ok).json({ success: true, message: PatientMessages.REVIEW_POSTED });
+    return;
   };
 
   getDoctorReview = async (req: Request, res: Response) => {
@@ -29,6 +28,7 @@ export class DoctorReviewController {
 
     const data = await this._GetReviewUseCase.execute(doctorId);
 
-    return res.status(HttpStatusCode.Ok).json({ success: true, data: data });
+    res.status(HttpStatusCode.Ok).json({ success: true, data: data });
+    return;
   };
 }

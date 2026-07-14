@@ -22,7 +22,7 @@ export interface DoctorProfileViewDTO {
 }
 
 export class DoctorProfileMapper {
-  static toView(dto: DoctorLean): DoctorProfileViewDTO {
+  static toView(dto: any): DoctorProfileViewDTO {
     console.log(dto);
     return {
       id: String(dto._id),
