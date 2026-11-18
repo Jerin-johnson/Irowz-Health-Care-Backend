@@ -3,8 +3,20 @@ import redisIORedis from "./ioredis.connection";
 export const redisPublisher = redisIORedis.duplicate();
 export const redisSubscriber = redisIORedis.duplicate();
 
-redisPublisher.connect(() => {
-  console.log("the publiseher connected");
+redisPublisher.on("connect", () => {
+  console.log("Redis Publisher connected ✅");
+});
+
+redisPublisher.on("error", (err) => {
+  console.error("Redis Publisher error:", err);
+});
+
+redisSubscriber.on("connect", () => {
+  console.log("Redis Subscriber connected ✅");
+});
+
+redisSubscriber.on("error", (err) => {
+  console.error("Redis Subscriber error:", err);
 });
 // import Redis from "ioredis";
 // import dotenv from "dotenv";
